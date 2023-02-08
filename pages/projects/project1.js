@@ -56,12 +56,12 @@ export default function Project1() {
                         <div className="flex-auto">
                             <div className="mt-36 bg-[#58585857] shadow-lg rounded-lg border border-white border-opacity-10 bg-background_100  flex-col">
                                 <h1 className="filter-none text-xl lg:text-4xl font-bold text-white text-bold border-gray-600 mt-10 pt-10 text-start px-10">Overview 👀</h1>
-                                <h2 className="py-20 px-10 text-start text-xl text-white">Stop'Violence is a mobile application to identify the dangers of society in terms of harassment, etc... The project is initiated in the framework of the mobile development course of the Haute-École ARC (Neuchâtel, Switzerland).</h2>
+                                <h2 className="py-20 px-10 text-start text-xl text-white">Stop&apos;Violence is a mobile application to identify the dangers of society in terms of harassment, etc... The project is initiated in the framework of the mobile development course of the Haute-École ARC (Neuchâtel, Switzerland).</h2>
 
                                 <iframe className="px-5" id="ytplayer" type="text/html" width="640" height="360"
                                 src="http://www.youtube.com/embed/_wZubFPbSNA?autoplay=1&origin=http://example.com"
                                 frameborder="0"/>
-                                <h2 className="pt-5 text-start px-10 text-xl text-white">Trailer: don't forget to turn the volume up!</h2>
+                                <h2 className="pt-5 text-start px-10 text-xl text-white">Trailer: don&apos;t forget to turn the volume up!</h2>
 
                                 <h1 className="filter-none text-xl lg:text-4xl font-bold text-white text-bold border-gray-600 mt-10 pt-10 text-start px-10">Objective 🎯</h1>
 
