@@ -9,6 +9,7 @@ import { getRecentlyGames } from '../lib/steam';
 
 export async function getStaticProps() {
     const games = await getRecentlyGames();
+    console.log(games)
   
     return {
       props: {
