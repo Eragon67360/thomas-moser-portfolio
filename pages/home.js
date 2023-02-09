@@ -40,7 +40,7 @@ const DynamicPlayer = dynamic(() => import('../pages/player'), {
 const DynamicGames = dynamic(() => import('../pages/games'), {
   ssr: false,
 });
-DynamicGames
+
 const DynamicMusic = dynamic(() => import('../pages/music'), {
   ssr: false,
 });
@@ -179,7 +179,7 @@ export default function Portfolio({}) {
             <h1 className='text-center text-4xl text-white py-5 font-bold'>What I play</h1>
             <p className='text-md text-center text-gray-400 sm:text-lg'>My status.</p>
             <DynamicPlayer/>
-            <p className='text-md text-center text-gray-400 sm:text-lg'>The games I reccently played.</p>
+            <p className='text-md text-center text-gray-400 sm:text-lg'>The games I recently played.</p>
             <DynamicGames/>
             <h1 className='text-center text-4xl text-white py-5 font-bold'>What I&apos;m currently listening to.</h1>
             <p className='text-md text-center text-gray-400 sm:text-lg'>All the time, I like to listen to music on Deezer.</p>

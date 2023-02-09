@@ -30,6 +30,8 @@ export default async function handler(
 
   var ret = {}
   ret["steam"] = arr;
+  
+  res.setHeader("Cache-control","s-maxage=10, stale-while-revalidate")
 
   return res.status(200).json(ret);
 }

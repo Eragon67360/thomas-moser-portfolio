@@ -6,6 +6,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const response = await getPlayerSummaries();
+  res.setHeader("Cache-control","s-maxage=10, stale-while-revalidate")
 
   if (response.status != 200) {
     return res.status(200).json({
