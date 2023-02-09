@@ -1,14 +1,4 @@
 import 'tw-elements'
-import Image from 'next/image';
-
-import avatar from "../public/avatar.png";
-import { NextSeo } from 'next-seo';
-import design from '../public/design.png';
-import tools from '../public/tools.png';
-import music from '../public/music.png';
-import code from '../public/code.png';
-
-
 
 export default function Skillset(props) {
     const title = 'Skillset';

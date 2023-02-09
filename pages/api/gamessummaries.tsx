@@ -8,44 +8,28 @@ export default async function handler(
   const response = await getRecentlyGames();
   const content = response.response['games']
 
-  if (content.status != 200) {
-    return res.status(200).json({
-      steam: {
-        personastate: "Offline",
-      },
-    });
+
+  const getappid = content[0].appid;
+  const getname = content[0].name;
+  const getplaytime = content[0].playtime_forever;
+  const icon = content[0].img_icon_url;
+
+
+  const len = content.length;
+
+
+  let arr = [];
+  for (var i = 0; i < len; i++) {
+    arr[i] = [];
   }
 
-  const steam = await content.json();
-  if (steam.item === null) {
-    return res.status(200).json({
-      steam: {
-        personastate: "No data to fetch",
-      },
-    });
+  for (let i = 0; i < len; i++) {
+    const game=content[i]
+    arr[i] = game;
   }
-  const getPersonName = steam.response.players[0].personaname;
-  const getAvatar = steam.response.players[0].avatarfull;
-  const getStatus =
-    steam.response.players[0].personastate === 1
-      ? "Online 😆"
-      : steam.response.players[0].personastate === 2
-      ? "Busy 😐"
-      : steam.response.players[0].personastate === 3
-      ? "Away 🥱"
-      : "Offline 😴";
 
-  const getGames = !steam.response.players[0].gameextrainfo
-    ? false
-    : `Playing - ${steam.response.players[0].gameextrainfo} 😆`;
-  const getprofileUrl = steam.response.players[0].profileurl;
-  return res.status(200).json({
-    steam: {
-      getPersonName,
-      getAvatar,
-      getStatus,
-      getGames,
-      getprofileUrl,
-    },
-  });
+  var ret = {}
+  ret["steam"] = arr;
+
+  return res.status(200).json(ret);
 }
