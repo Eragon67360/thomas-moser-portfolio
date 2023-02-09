@@ -41,7 +41,7 @@ const Games = ({games}:  InferGetStaticPropsType<typeof getStaticProps>) => {
                 : data?.steam.getGames}
             </span>
           </p>
-          <h1 className='text-center text-4xl text-white py-5 font-bold'>What I'm currently listening to.</h1>
+          <h1 className='text-center text-4xl text-white py-5 font-bold'>What I&apos;m currently listening to.</h1>
           <p className='text-md text-gray-400 sm:text-lg'>All the time, I like to listen to music on Deezer.</p>
         </div>
 
