@@ -19,7 +19,7 @@ export default async function handler(
   if (steam.item === null) {
     return res.status(200).json({
       steam: {
-        personastate: "Offline",
+        personastate: "No data to fetch",
       },
     });
   }
