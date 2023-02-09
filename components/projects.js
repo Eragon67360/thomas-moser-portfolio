@@ -4,7 +4,8 @@ import chatgpt from '../public/chatgpt.png';
 import musescore from '../public/musescore.png';
 import portfolio from '../public/portfolio.png';
 import Image from 'next/image';
-import TechStack from './stack'
+import TechStack from './stack';
+import Link from "next/link";
 
 export default function Projects(props) {
     const title = 'Projects';
@@ -55,7 +56,7 @@ export default function Projects(props) {
                   <a key={index} className=' mb-5 max-w-none flex-none items-center justify-between lg:flex lg:flex-row-reverse'>
                   <div className='py-5 w-fit overflow-hidden rounded-md bg-background_100 lg:ml-10'>
                     <div className='group relative z-0'>
-                      <a href={item.link} target={item.target}>
+                      <Link href={item.link} target={item.target}>
                         <Image
                           className='rounded-sm relative z-10 translate-x-16 lg:translate-x-32 brightness-100 transition transition-brightness ease-in-out group-hover:brightness-50 group-hover:opacity-70 group-hover:scale-95 duration-300'
                           src={item.screenshot}
@@ -64,11 +65,11 @@ export default function Projects(props) {
                           alt={title}
                           
                         />
-                        <div class="absolute inset-0 flex justify-center items-center z-10 opacity-0 transition ease-in-out group-hover:opacity-100 group-hover:scale-110 group-hover:translate-x-20 duration-300">
-                          <p class="unselectable text-3xl">View project</p>
+                        <div className="absolute inset-0 flex justify-center items-center z-10 opacity-0 transition ease-in-out group-hover:opacity-100 group-hover:scale-110 group-hover:translate-x-20 duration-300">
+                          <p className="unselectable text-md md:text-lg lg:text-3xl">View project</p>
                         </div>
 
-                      </a>
+                      </Link>
                       
                     </div>
                   </div>

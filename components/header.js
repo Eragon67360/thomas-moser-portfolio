@@ -56,11 +56,11 @@ export default function Header() {
                 {navigation.map((item) => (
                   <a legacyBehavior key={item.name} href={item.href}>
                     {item.href === checkSlug ? (
-                      <a className='border-b-2 border-primary pb-4 text-white hover:border-indigo-400 hover:text-indigo-500'>
+                      <a className='border-b-2 border-primary pb-4 text-white hover:border-primary hover:text-primary'>
                         {item.name}
                       </a>
                     ) : (
-                      <a className='hover:border-b-2 pb-2 lg:pb-4 py-4 text-gray-300 hover:border-indigo-400 hover:text-indigo-500'>{item.name}</a>
+                      <a className={classNames(scrolled ? 'pb-1 lg:pb-2' : 'pb-2 lg:pb-4','hover:border-b-2 py-4 text-gray-300 hover:border-primary hover:text-primary transition-[pb] duration-500 ease-in-out')}>{item.name}</a>
                     )}
                   </a>
                 ))}
