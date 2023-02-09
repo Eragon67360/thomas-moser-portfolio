@@ -6,14 +6,21 @@ export const ScrollToTop = () => {
 
     var classNames = require('classnames');
     const [isVisible, setIsVisible] = useState(false)
+    const [isBottom, setIsBottom] = useState(false)
 
     const toggleVisibility = () => {
         if (window.pageYOffset > 300) {
-        setIsVisible(true)
+            setIsVisible(true)
         } else {
-        setIsVisible(false)
+            setIsVisible(false)
         }
+        if(document.height == window.pageYOffset + window.innerHeight){
+            setIsBottom(true)
+        } else {
+            setIsBottom(false)
+        } 
     }
+    
 
     const scrollToTop = () => {
         window.scrollTo({
@@ -31,7 +38,7 @@ export const ScrollToTop = () => {
     }, [])
 
     return (
-        <div className="fixed bottom-2 right-2 lg:bottom-20 lg:right-4">
+        <div className={classNames(isBottom ? "lg:bottom-20":"lg:bottom-2" ,"fixed bottom-2 right-2 lg:right-4")}>
         <button
             type="button"
             onClick={scrollToTop}
