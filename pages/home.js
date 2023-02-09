@@ -34,7 +34,11 @@ const Projects = dynamic(() => import('../components/projects'), {
 });
 
 
-const DynamicActivities = dynamic(() => import('../pages/activities'), {
+const DynamicGames = dynamic(() => import('../pages/games'), {
+  ssr: false,
+});
+
+const DynamicMusic = dynamic(() => import('../pages/music'), {
   ssr: false,
 });
 
@@ -169,7 +173,12 @@ export default function Portfolio({}) {
             <div className='text-center'>
               <h3 className=' unselectable inline-block text-3xl md:text-6xl lg:text-7xl py-4 bg-gradient-to-tr from-teal-500 via-violet-800 to-amber-300 text-transparent bg-clip-text'>Activities</h3>
             </div>
-            <DynamicActivities/>
+            <h1 className='text-center text-4xl text-white py-5 font-bold'>What I play</h1>
+            <p className='text-md text-center text-gray-400 sm:text-lg'>Sometimes, I like to play videogames.</p>
+            <DynamicGames/>
+            <h1 className='text-center text-4xl text-white py-5 font-bold'>What I&apos;m currently listening to.</h1>
+            <p className='text-md text-center text-gray-400 sm:text-lg'>All the time, I like to listen to music on Deezer.</p>
+            <DynamicMusic/>
             <div className='pt-100'>
 
             </div>
