@@ -18,10 +18,9 @@ export const ScrollToTop = () => {
             setIsBottom(true)
         } else {
             setIsBottom(false)
-        } 
+        }    
     }
-    
-
+   
     const scrollToTop = () => {
         window.scrollTo({
         top: 0,
@@ -38,7 +37,7 @@ export const ScrollToTop = () => {
     }, [])
 
     return (
-        <div className={classNames(isBottom ? "lg:bottom-20":"lg:bottom-2" ,"fixed bottom-2 right-2 lg:right-4")}>
+        <div className={classNames(isBottom ? "lg:bottom-20":"lg:bottom-2" ,"fixed right-2 lg:right-4")}>
         <button
             type="button"
             onClick={scrollToTop}

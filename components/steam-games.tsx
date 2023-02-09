@@ -13,7 +13,7 @@ export interface GameProps {
   items: GameListProps[];
 }
 
-const Games: React.FC<GameProps> = ({ items }) => {
+const Steam: React.FC<GameProps> = ({ items }) => {
   console.log(items)
   return (
     <section className='mb-16'>
@@ -49,4 +49,4 @@ const Games: React.FC<GameProps> = ({ items }) => {
   );
 };
 
-export default Games;
+export default Steam;
