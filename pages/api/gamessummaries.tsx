@@ -6,8 +6,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const response = await getRecentlyGames();
+  const content = response.response['games']
 
-  if (response.status != 200) {
+  if (content.status != 200) {
     return res.status(200).json({
       steam: {
         personastate: "Offline",
@@ -15,7 +16,7 @@ export default async function handler(
     });
   }
 
-  const steam = await response.json();
+  const steam = await content.json();
   if (steam.item === null) {
     return res.status(200).json({
       steam: {
