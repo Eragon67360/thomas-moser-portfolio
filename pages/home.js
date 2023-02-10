@@ -43,7 +43,11 @@ const DynamicGames = dynamic(() => import('../pages/games'), {
   ssr: false,
 });
 
-const DynamicMusic = dynamic(() => import('../pages/music'), {
+const DynamicDeezerProfile = dynamic(() => import('./deezeruser'), {
+  ssr: false,
+});
+
+const DynamicDeezerHistory = dynamic(() => import('./deezerhistory'), {
   ssr: false,
 });
 
@@ -164,14 +168,8 @@ export default function Portfolio({}) {
             </div>
           </section>
           
-          <section initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            id='know' className='pt-30' >
-            <div className='text-center'
-              initial="offscreen"
-              whileInView="onscreen"
-              viewport={{ once: true, amount: 0.8 }}>
+          <section id='know' className='pt-30' >
+            <div className='text-center'>
               <h3 className='unselectable text-center inline-block text-3xl md:text-6xl lg:text-7xl py-4 bg-gradient-to-tr from-teal-500 via-violet-800 to-amber-300 text-transparent bg-clip-text'>About me</h3>
               
               
@@ -200,8 +198,11 @@ export default function Portfolio({}) {
             <p className='text-md text-center text-gray-400 sm:text-lg'>The games I recently played.</p>
             <DynamicGames/>
             <h1 className='text-center text-4xl text-white py-5 font-bold'>What I&apos;m currently listening to.</h1>
-            <p className='text-md text-center text-gray-400 sm:text-lg'>All the time, I like to listen to music on Deezer.</p>
-            <DynamicMusic/>
+            
+            <p className='text-md text-center text-gray-400 sm:text-lg'>My status.</p>
+            <DynamicDeezerProfile/>
+            <p className='text-md text-center text-gray-400 sm:text-lg'>My last listened songs.</p>
+            <DynamicDeezerHistory className="flex items-center justify-center h-screen"/>            
             <div className='pt-100'>
 
             </div>
