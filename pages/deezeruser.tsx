@@ -1,6 +1,7 @@
 import useSWR from 'swr'
 import React from 'react';
 import {BiError} from 'react-icons/bi'
+import Image from 'next/image';
 
 const DeezerUser = () => {
   const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
@@ -16,13 +17,14 @@ const DeezerUser = () => {
               <div className="w-20 h-20 flex items-center justify-center rounded-lg">
                 {data?.deezer.getAvatar ? (
                   <a href={data?.deezer.getprofileUrl} target="_blank" rel='noreferrer noopener'>
-                  <img
+                  <Image
                     className="rounded-lg"
                     src={data?.deezer.getAvatar}
                     width={100}
                     height={100}
-                    alt="deezer profil picture"
-                  /></a>
+                    alt="deezer profil picture"></Image>
+                  
+                  </a>
                 ) : (
                   <div></div>
                 )}

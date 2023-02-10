@@ -1,6 +1,7 @@
 import useSWR from 'swr'
 import React from 'react';
 import {BiError} from 'react-icons/bi'
+import Image from 'next/image';
 
 const Player = () => {
   const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
@@ -14,7 +15,7 @@ const Player = () => {
             <div className="flex my-auto ml-5 mr-4">
               <div className="w-20 h-20 flex items-center justify-center rounded-lg">
                 {data?.steam.getAvatar ? (
-                  <img
+                  <Image
                     className="rounded-lg"
                     src={data?.steam.getAvatar}
                     width={100}

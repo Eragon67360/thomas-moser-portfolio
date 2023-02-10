@@ -10,13 +10,16 @@ const DeezerHistory = () => {
     return (
       <section className="mb-16 container grid grid-cols-3 gap-5">
         {data.data.slice(0,12).map((music, index) => (
-        <div className="rounded-lg items-center border border-white border-opacity-10">
+        <div key={index} className="rounded-lg items-center border border-white border-opacity-10">
           <div className="flex py-6 my-auto rounded-md">
           
             <div className="flex my-auto ml-5 mr-4">
               <div className="w-20 h-20 flex items-center justify-center rounded-lg">
                 {music.album.cover ? (
-                  <a href={music.preview} target="_blank" rel='noreferrer noopener'>
+                  <a href={music.preview}
+                  target="_blank"
+                  rel='noreferrer noopener'
+                  >
                   <img
                     className="rounded-lg"
                     src={music.album.cover}
