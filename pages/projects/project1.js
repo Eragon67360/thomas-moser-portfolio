@@ -3,6 +3,8 @@ import React from "react";
 import { NextSeo } from "next-seo";
 import { useState, useEffect } from "react";
 import { AnimatedName } from '../../components/layout/project1_float'
+import { motion } from "framer-motion"
+
 export default function Project1() {
 
     const title = "Card -- Stop'Violence"
@@ -31,7 +33,7 @@ export default function Project1() {
             <NextSeo title={title}/>
             <AnimatedName/>
             <div>
-                <main className='overflow-x-hidden snap-y snap-mandatory transition ease-in-out duration-1000 h-screen overflow-scroll bg-fixed bg-transparent bg-gradient-to-br from-[#040404] via-cyan-900 to-primary'>
+                <main className='overflow-x-hidden transition ease-in-out duration-1000 h-screen overflow-scroll bg-fixed bg-transparent bg-gradient-to-br from-[#040404] via-cyan-900 to-primary'>
                     <div className="snap-center h-screen duration-700">
                         <header className="h-screen bg-project1-bg transition-all ease-in-out duration-1000">
                             <div className="h-screen group relative z-0 flex items-center justify-center w-full transition-all ease-in-out duration-500">
@@ -58,8 +60,8 @@ export default function Project1() {
                                 <h1 className="filter-none text-xl lg:text-4xl font-bold text-white text-bold border-gray-600 mt-10 pt-10 text-start px-10">Overview 👀</h1>
                                 <h2 className="py-20 px-10 text-start text-xl text-white">Stop&apos;Violence is a mobile application to identify the dangers of society in terms of harassment, etc... The project is initiated in the framework of the mobile development course of the Haute-École ARC (Neuchâtel, Switzerland).</h2>
 
-                                <iframe className="px-5" id="ytplayer" type="text/html" width="640" height="360"
-                                src="http://www.youtube.com/embed/_wZubFPbSNA?autoplay=1&origin=http://example.com"/>
+                                <iframe className="px-5 align-middle" allow="fullscreen" allowfullscreen id="ytplayer" type="text/html" loading="lazy" width="800" height="450"
+                                    src="http://www.youtube.com/embed/_wZubFPbSNA?autoplay=1&origin=http://example.com"/>
                                 <h2 className="pt-5 text-start px-10 text-xl text-white">Trailer: don&apos;t forget to turn the volume up!</h2>
 
                                 <h1 className="filter-none text-xl lg:text-4xl font-bold text-white text-bold border-gray-600 mt-10 pt-10 text-start px-10">Objective 🎯</h1>
