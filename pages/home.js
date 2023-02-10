@@ -16,7 +16,7 @@ import CV from '../public/CV_Thomas_MOSER.pdf';
 import { useState } from 'react';
 
 import dynamic from 'next/dynamic';
-import { motion, useTransform, useViewportScroll } from "framer-motion";
+import { motion } from "framer-motion";
 
 
 const DynamicHeader = dynamic(() => import('../components/header'), {
@@ -139,7 +139,14 @@ export default function Portfolio({}) {
         <ScrollToTop />
         <Name/>
         <DynamicHeader />
-        <main className='snap-y snap-mandatory bg-fixed px-10 md:px-20 lg:px-40 bg-gradient-to-tl from-purple-900 via-sky-900 to-black text-white'>          
+        <motion.main
+          initial={{y: 25, opacity: 0}}
+          animate={{y: 0, opacity: 1}}
+          transition={{
+            delay: 0.2,
+            duration: 0.75,
+          }}
+          className='snap-y snap-mandatory bg-fixed px-10 md:px-20 lg:px-40 bg-gradient-to-tl from-purple-900 via-sky-900 to-black text-white'>          
           <section id='home' className='snap-center min-h-screen'>
             <div className='py-10'></div>
             <div className='text-center p-10 '>
@@ -245,7 +252,7 @@ export default function Portfolio({}) {
           </section>
           <div className=' h-20'></div>
           
-        </main>
+        </motion.main>
 
         <footer className="p-4 shadow md:flex md:items-center md:justify-between md:p-6 bg-gray-800">
           <span className="text-sm sm:text-center text-gray-400">© 2023 <a href="https://github.com/Eragon67360" className="hover:underline">Eragon67360</a>. All Rights Reserved.</span>

@@ -8,6 +8,7 @@ import { RxDotFilled } from 'react-icons/rx';
 import { useEffect, useState } from 'react'
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
 
 const navigation = [
   { name: 'Home', href: '#home' },
@@ -47,7 +48,13 @@ export default function Header() {
   }, [])
 
   return (
-      <div>
+      <motion.div
+        initial={{y: 25, opacity: 0}}
+        animate={{y: 0, opacity: 1}}
+        transition={{
+          duration: 0.75,
+        }}
+      >
       <header className={classNames(scrolled ? 'shadow-xl opacity-90' : 'false opacity-100','w-full backdrop-filter backdrop-blur-lg bg-gradient-to-r from-purple-900 via-sky-900 to-black background-animate fixed z-10 transition-[shadow,opacity] duration-500 ease-in-out')}>
         <div className='max-w-full mx-auto'>
           <div className={classNames(scrolled ? 'py-1 md:py-2' : 'py-2 md:py-4','justify-center flex max-w-screen-xl false mx-auto items-center px-8 transition-p ease-in-out duration-500 ')}>
@@ -72,7 +79,7 @@ export default function Header() {
       
 
     </header>
-      </div>
+      </motion.div>
 
   );
 
