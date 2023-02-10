@@ -181,7 +181,7 @@ export default function Portfolio({}) {
             <div             
               className="text-5xl flex flex-wrap justify-center gap-16 py-3">
                 {icons.map((item, index) =>(
-                  <a href={item.href} target="_blank" rel="noopener noreferrer">
+                  <a key={index} href={item.href} target="_blank" rel="noopener noreferrer">
                     <motion.div 
                       animate={{scale: [1,1.2,1]}}
                         transition={{
@@ -200,7 +200,6 @@ export default function Portfolio({}) {
             
             <div 
                 className='shadow-lg relative mx-auto bg-gradient-to-b from-teal-500 rounded-full w-80 h-80 mt-20 overflow-hidden md:h-96 md:w-96'>
-              
               <motion.div
                 animate={{y: [300,-50,0]}}
                 transition={{
