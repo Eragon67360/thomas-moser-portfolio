@@ -15,7 +15,7 @@ const Player = () => {
             <div className="flex my-auto ml-5 mr-4">
               <div className="w-20 h-20 flex items-center justify-center rounded-lg">
                 {data?.steam.getAvatar ? (
-                  <Image
+                  <img
                     className="rounded-lg"
                     src={data?.steam.getAvatar}
                     width={100}

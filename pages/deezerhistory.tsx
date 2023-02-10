@@ -25,7 +25,7 @@ const DeezerHistory = () => {
                     src={music.album.cover}
                     width={100}
                     height={100}
-                    alt="deezer profil picture"
+                    alt="deezer album picture"
                   /></a>
                 ) : (
                   <div></div>

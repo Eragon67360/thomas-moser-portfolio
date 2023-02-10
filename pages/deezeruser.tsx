@@ -17,12 +17,12 @@ const DeezerUser = () => {
               <div className="w-20 h-20 flex items-center justify-center rounded-lg">
                 {data?.deezer.getAvatar ? (
                   <a href={data?.deezer.getprofileUrl} target="_blank" rel='noreferrer noopener'>
-                  <Image
+                  <img
                     className="rounded-lg"
                     src={data?.deezer.getAvatar}
                     width={100}
                     height={100}
-                    alt="deezer profil picture"></Image>
+                    alt="deezer profil picture"/>
                   
                   </a>
                 ) : (
