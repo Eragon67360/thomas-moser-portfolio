@@ -148,19 +148,14 @@ export default function Portfolio({}) {
             </div>
 
             
-            <motion.div initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
+            <div             
               className="text-5xl flex flex-wrap justify-center gap-16 py-3">              
-              <a  href="https://github.com/Eragon67360" target="_blank" rel="noopener noreferrer">
-                <AiFillGithub/>
-
-                  </a>              
+              <a href="https://github.com/Eragon67360" target="_blank" rel="noopener noreferrer"><AiFillGithub/></a>              
               <a href="https://www.linkedin.com/in/thomas-moser67/" target="_blank" rel="noopener noreferrer"><AiFillLinkedin/></a>
               <a href="https://linktr.ee/thomasmoser" target="_blank" rel="noopener noreferrer"><SiLinktree/></a>
               <a href="https://www.youtube.com/channel/UC3IhL8CT3-xES72s_IRwuHw" target="_blank" rel="noopener noreferrer"><AiFillYoutube/></a>
               <a href="https://musescore.com/thomas_moser" target="_blank" rel="noopener noreferrer"><SiMusescore/></a>
-            </motion.div>
+            </div>
             
             
             <div className='shadow-lg relative mx-auto bg-gradient-to-b from-teal-500 rounded-full w-80 h-80 mt-20 overflow-hidden md:h-96 md:w-96'>
