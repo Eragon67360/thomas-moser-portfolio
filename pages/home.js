@@ -16,7 +16,7 @@ import CV from '../public/CV_Thomas_MOSER.pdf';
 import { useState } from 'react';
 
 import dynamic from 'next/dynamic';
-import { motion } from "framer-motion";
+import { motion,mount } from "framer-motion";
 
 
 const DynamicHeader = dynamic(() => import('../components/header'), {
@@ -104,6 +104,29 @@ export default function Portfolio({}) {
     }
     var logosClass = classNames((iScrollLevel==0)?'transition translate-y-0 duration-500':(((iScrollLevel==1)?'transition translate-y-16 duration-500' : (((iScrollLevel==2)?'transition translate-y-96 duration-500' : 'transition translate-y-96  duration-500')))),'text-5xl flex flex-wrap justify-center gap-16 py-3');
 
+    const icons = [
+      {
+        icon: <AiFillLinkedin/>,
+        href: "https://www.linkedin.com/in/thomas-moser67/",
+      },
+      {
+        icon: <AiFillGithub/>,
+        href: "https://github.com/Eragon67360",
+      },
+      {
+        icon: <SiLinktree/>,
+        href: "https://linktr.ee/thomasmoser",
+      },
+      {
+        icon: <AiFillYoutube/>,
+        href: "https://www.youtube.com/channel/UC3IhL8CT3-xES72s_IRwuHw",
+      },
+      {
+        icon: <SiMusescore/>,
+        href: "https://musescore.com/thomas_moser",
+      },
+
+    ]
 
     const icon = {
       hidden: {
@@ -127,7 +150,6 @@ export default function Portfolio({}) {
         }
     }, [])
 
-
   return (
     <div>
       <Head>
@@ -139,15 +161,14 @@ export default function Portfolio({}) {
         <ScrollToTop />
         <Name/>
         <DynamicHeader />
-        <motion.main
-          initial={{y: 25, opacity: 0}}
-          animate={{y: 0, opacity: 1}}
-          transition={{
-            delay: 0.2,
-            duration: 0.75,
-          }}
-          className='snap-y snap-mandatory bg-fixed px-10 md:px-20 lg:px-40 bg-gradient-to-tl from-purple-900 via-sky-900 to-black text-white'>          
-          <section id='home' className='snap-center min-h-screen'>
+        <main className='snap-y snap-mandatory bg-fixed px-10 md:px-20 lg:px-40 bg-gradient-to-tl from-purple-900 via-sky-900 to-black text-white'>          
+          <motion.section 
+            initial={{scale: 1}}
+            animate={{scale: [1,1.2,1]}}
+            transition={{
+              duration: 1,
+            }} 
+            id='home' className='snap-center min-h-screen'>
             <div className='py-10'></div>
             <div className='text-center p-10 '>
               <h2 className={classNames(isVisible ?  'opacity-0 transition-{text} -translate-x-96 ease-in-out duration-1000 text-xl md:text-3xl lg:text-4xl' : 'opacity-100 transition-{text} translate-x-0 ease-in-out duration-1000 text-3xl md:text-6xl lg:text-7xl', 'unselectable inline-block py-2 bg-gradient-to-tr from-teal-500 via-violet-800 to-amber-300 text-transparent bg-clip-text font-bold ')}>Thomas Moser</h2>
@@ -156,24 +177,45 @@ export default function Portfolio({}) {
                 Developer providing services for programming in embedded systems, software development...
                 And so much more!
               </p>
-            </div>
-
-            
+            </div>            
             <div             
-              className="text-5xl flex flex-wrap justify-center gap-16 py-3">              
-              <a href="https://github.com/Eragon67360" target="_blank" rel="noopener noreferrer"><AiFillGithub/></a>              
-              <a href="https://www.linkedin.com/in/thomas-moser67/" target="_blank" rel="noopener noreferrer"><AiFillLinkedin/></a>
-              <a href="https://linktr.ee/thomasmoser" target="_blank" rel="noopener noreferrer"><SiLinktree/></a>
-              <a href="https://www.youtube.com/channel/UC3IhL8CT3-xES72s_IRwuHw" target="_blank" rel="noopener noreferrer"><AiFillYoutube/></a>
-              <a href="https://musescore.com/thomas_moser" target="_blank" rel="noopener noreferrer"><SiMusescore/></a>
+              className="text-5xl flex flex-wrap justify-center gap-16 py-3">
+                {icons.map((item, index) =>(
+                  <a href={item.href} target="_blank" rel="noopener noreferrer">
+                    <motion.div 
+                      animate={{scale: [1,1.2,1]}}
+                        transition={{
+                          duration: 2,
+                          ease: "easeInOut",
+                          repeat: Infinity,
+                          repeatType: "loop",
+                        }}
+                      >
+                      {item.icon}
+                    </motion.div>
+                  </a>
+                ))}
             </div>
             
             
-            <div className='shadow-lg relative mx-auto bg-gradient-to-b from-teal-500 rounded-full w-80 h-80 mt-20 overflow-hidden md:h-96 md:w-96'>
-              <Image src={eragon}/>
+            <div 
+                className='shadow-lg relative mx-auto bg-gradient-to-b from-teal-500 rounded-full w-80 h-80 mt-20 overflow-hidden md:h-96 md:w-96'>
+              
+              <motion.div
+                animate={{y: [300,-50,0]}}
+                transition={{
+                  ease: "easeInOut",
+                  delay: 1,
+                  duration: 1,
+                }}
+                >
+                <Image src={eragon}/>
+
+              </motion.div>
+              
 
             </div>
-          </section>
+          </motion.section >
           
           <section id='know' className='pt-30' >
             <div className='text-center'>
@@ -252,7 +294,7 @@ export default function Portfolio({}) {
           </section>
           <div className=' h-20'></div>
           
-        </motion.main>
+        </main>
 
         <footer className="p-4 shadow md:flex md:items-center md:justify-between md:p-6 bg-gray-800">
           <span className="text-sm sm:text-center text-gray-400">© 2023 <a href="https://github.com/Eragon67360" className="hover:underline">Eragon67360</a>. All Rights Reserved.</span>

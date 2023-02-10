@@ -28,12 +28,12 @@ function Loading() {
 }
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
-
+  
   return (
   <>
   <AnimatePresence mode='wait'>
     <motion.div 
-      key={router.roteu}
+      key={router.route}
       initial="initialState"
       animate="animateState"
       exit="exitState"
