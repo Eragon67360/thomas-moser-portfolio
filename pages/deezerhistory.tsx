@@ -16,7 +16,7 @@ const DeezerHistory = () => {
             <div className="flex my-auto ml-5 mr-4">
               <div className="w-20 h-20 flex items-center justify-center rounded-lg">
                 {music.album.cover ? (
-                  <a href={music.preview} target="_blank">
+                  <a href={music.preview} target="_blank" rel='noreferrer noopener'>
                   <img
                     className="rounded-lg"
                     src={music.album.cover}

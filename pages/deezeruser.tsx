@@ -15,7 +15,7 @@ const DeezerUser = () => {
             <div className="flex my-auto ml-5 mr-4">
               <div className="w-20 h-20 flex items-center justify-center rounded-lg">
                 {data?.deezer.getAvatar ? (
-                  <a href={data?.deezer.getprofileUrl} target="_blank">
+                  <a href={data?.deezer.getprofileUrl} target="_blank" rel='noreferrer noopener'>
                   <img
                     className="rounded-lg"
                     src={data?.deezer.getAvatar}
