@@ -69,7 +69,7 @@ export default function Portfolio({}) {
       url: '/../public/app.png', title: "Stop' Violence", style: "text-center font-bold text-[#9369a5] text-xl md:text-3xl py-10 px-5", explanation: 'An Android app to help people, especially women, wherever they are. Developped with Android Studio (Java) and Love.',
     },
     {
-      url: '/../public/web2.png', title: "OpenAI Clone", style: "text-center font-bold dark:text-white text-gray-600 text-xl md:text-3xl py-10 px-5", explanation: 'AnChatGPT and DALL·E clone in one tool. Developped with Flet (Flutter for Python) and OpenAI API.',
+      url: '/../public/web2.png', title: "OpenAI Clone", style: "text-center font-bold text-white text-gray-600 text-xl md:text-3xl py-10 px-5", explanation: 'AnChatGPT and DALL·E clone in one tool. Developped with Flet (Flutter for Python) and OpenAI API.',
     },
     {
       url: '/../public/musescore.png', title: "Musescore", style: "text-center font-bold text-yellow-500 text-xl md:text-3xl py-10 px-5", explanation: 'Music creation with Musescore. Arrangements of existing songs/musics for duets, orchestra, etc...',
@@ -145,7 +145,7 @@ export default function Portfolio({}) {
             <div className='text-center p-10 '>
               <h2 className={classNames(isVisible ?  'opacity-0 transition-{text} -translate-x-96 ease-in-out duration-1000 text-xl md:text-3xl lg:text-4xl' : 'opacity-100 transition-{text} translate-x-0 ease-in-out duration-1000 text-3xl md:text-6xl lg:text-7xl', 'unselectable inline-block py-2 bg-gradient-to-tr from-teal-500 via-violet-800 to-amber-300 text-transparent bg-clip-text font-bold ')}>Thomas Moser</h2>
               <h3 className=' py-2 md:text-3xl lg:text-4xl'>Developer and Apprentice Designer</h3>
-              <p className='text-md py-5 leading-8 text-gray-800 dark:text-white md:text-xl lg:text-2xl max-w-lg mx-auto'>
+              <p className='text-md py-5 leading-8 text-white md:text-xl lg:text-2xl max-w-lg mx-auto'>
                 Developer providing services for programming in embedded systems, software development...
                 And so much more!
               </p>
@@ -211,7 +211,7 @@ export default function Portfolio({}) {
           <section id='contact' className='snap-start pt-30'>
             <div className='text-center'>
               <h1 className='inline-block text-3xl md:text-6xl lg:text-7xl py-4 bg-gradient-to-tr from-teal-500 via-violet-800 to-amber-300 text-transparent bg-clip-text'>Contact</h1>
-              <div className='text-md py-2 leading-8 text-gray-800 dark:text-white'>
+              <div className='text-md py-2 leading-8 text-white'>
                 How to reach me.
 
               </div>
@@ -247,10 +247,10 @@ export default function Portfolio({}) {
           
         </main>
 
-        <footer className="p-4 bg-white shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800">
-          <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://github.com/Eragon67360" className="hover:underline">Eragon67360</a>. All Rights Reserved.</span>
-          <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">Location: Strasbourg, FRANCE</span>
-          <ul className="flex flex-wrap items-center mt-3 text-sm text-gray-500 dark:text-gray-400 sm:mt-0">
+        <footer className="p-4 shadow md:flex md:items-center md:justify-between md:p-6 bg-gray-800">
+          <span className="text-sm sm:text-center text-gray-400">© 2023 <a href="https://github.com/Eragon67360" className="hover:underline">Eragon67360</a>. All Rights Reserved.</span>
+          <span className="text-sm sm:text-center text-gray-400">Location: Strasbourg, FRANCE</span>
+          <ul className="flex flex-wrap items-center mt-3 text-sm text-gray-400 sm:mt-0">
             <li>
               <a href="#" className="mr-4 hover:underline md:mr-6 ">About</a>
             </li>
