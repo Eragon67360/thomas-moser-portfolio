@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import React, {useEffect} from "react";
 import {BsFillMoonStarsFill} from 'react-icons/bs';
-import {AiFillTwitterCircle, AiFillLinkedin, AiFillYoutube, AiFillGithub, AiOutlineInstagram} from 'react-icons/ai';
+import {AiFillTwitterCircle, AiFillYoutube, AiFillGithub, AiOutlineInstagram, AiOutlineLinkedin} from 'react-icons/ai';
 import {SiMusescore,SiLinktree} from 'react-icons/si';
 import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
 import { RxDotFilled } from 'react-icons/rx';
@@ -106,24 +106,34 @@ export default function Portfolio({}) {
 
     const icons = [
       {
-        icon: <AiFillLinkedin/>,
-        href: "https://www.linkedin.com/in/thomas-moser67/",
-      },
-      {
         icon: <AiFillGithub/>,
         href: "https://github.com/Eragon67360",
+        name: "Github",
+        color: "group-hover:bg-gradient-to-tr from-[#ffa9c6] to-[#f434e2]",
       },
+      {
+        icon: <AiOutlineLinkedin/>,
+        href: "https://www.linkedin.com/in/thomas-moser67/",
+        name: "Linkedin",
+        color: "group-hover:bg-gradient-to-tr from-[#80ff72] to-[#5ec3d4]",
+      },      
       {
         icon: <SiLinktree/>,
         href: "https://linktr.ee/thomasmoser",
+        name: "Linktree",
+        color: "group-hover:bg-gradient-to-tr from-[#86be6b] to-[#1baf16]",
       },
       {
         icon: <AiFillYoutube/>,
         href: "https://www.youtube.com/channel/UC3IhL8CT3-xES72s_IRwuHw",
+        name: "YouTube",
+        color: "group-hover:bg-gradient-to-tr from-[#555555] to-[#ff0000]",
       },
       {
         icon: <SiMusescore/>,
         href: "https://musescore.com/thomas_moser",
+        name: "Musescore",
+        color: "group-hover:bg-gradient-to-tr from-[#56ccf2] to-[#2f80ed]",
       },
 
     ]
@@ -161,7 +171,7 @@ export default function Portfolio({}) {
         <ScrollToTop />
         <Name/>
         <DynamicHeader />
-        <main className='snap-y snap-mandatory bg-fixed px-10 md:px-20 lg:px-40 bg-gradient-to-tl from-purple-900 via-sky-900 to-black text-white'>          
+        <main className='snap-y snap-mandatory bg-fixed px-10 md:px-20 lg:px-40 bg-gradient-to-tl from-purple-900 via-sky-900 to-black text-white '>          
           <motion.section 
             initial={{scale: 1}}
             animate={{scale: [1,1.2,1]}}
@@ -179,20 +189,21 @@ export default function Portfolio({}) {
               </p>
             </div>            
             <div             
-              className="text-5xl flex flex-wrap justify-center gap-16 py-3">
+              className="flex flex-wrap justify-center gap-12 lg:gap-5 py-3">
                 {icons.map((item, index) =>(
                   <a key={index} href={item.href} target="_blank" rel="noopener noreferrer">
-                    <motion.div 
-                      animate={{scale: [1,1.2,1]}}
-                        transition={{
-                          duration: 2,
-                          ease: "easeInOut",
-                          repeat: Infinity,
-                          repeatType: "loop",
-                        }}
-                      >
-                      {item.icon}
-                    </motion.div>
+                    <div className='group z-0'>
+                      <div className={classNames("bg-white h-14 w-14 p-2 group-hover:w-40 rounded-full flex transition-{w} ease-in-out duration-500",`${item.color}`,'')}>
+                        <div className='opacity-0 text-2xl text-center hidden group-hover:block group-hover:opacity-100 uppercase text-slate-100 m-auto transition-opacity ease-in-out duration-500'>
+                          {item.name}
+                        </div>
+                        <div className='opacity-100 text-4xl group-hover:hidden text-gray-700 m-auto transition ease-in-out duration-500 group-hover:opacity-0 '>
+                          {item.icon}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    
                   </a>
                 ))}
             </div>

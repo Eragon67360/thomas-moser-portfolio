@@ -4,7 +4,6 @@ import chatgpt from '../public/chatgpt.png';
 import musescore from '../public/musescore.png';
 import portfolio from '../public/portfolio.png';
 import Image from 'next/image';
-import TechStack from './stack';
 import Link from "next/link";
 
 export default function Projects(props) {
