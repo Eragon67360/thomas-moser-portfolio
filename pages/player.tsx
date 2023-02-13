@@ -10,9 +10,9 @@ const Player = () => {
   if (data){
     return (
       <section className="mb-16 container">
-        <div className="rounded-lg items-center border border-white border-opacity-10">
-          <div className="flex py-6 my-auto rounded-md">
-            <div className="flex my-auto ml-5 mr-4">
+        <div className="rounded-lg">
+          <div className="flex py-6 rounded-md">
+            <div className="flex m-auto">
               <div className="w-20 h-20 flex items-center justify-center rounded-lg">
                 {data?.steam.getAvatar ? (
                   <img

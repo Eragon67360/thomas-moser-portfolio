@@ -252,15 +252,15 @@ export default function Portfolio({}) {
               <h3 className=' unselectable inline-block text-3xl md:text-6xl lg:text-7xl py-4 bg-gradient-to-tr from-teal-500 via-violet-800 to-amber-300 text-transparent bg-clip-text'>Activities</h3>
             </div>
             <h1 className='text-center text-4xl text-white py-5 font-bold'>What I play</h1>
-            <p className='text-md text-center text-gray-400 sm:text-lg'>My status.</p>
+            <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
             <DynamicPlayer/>
-            <p className='text-md text-center text-gray-400 sm:text-lg'>The games I recently played.</p>
+            <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>The games I recently played.</p>
             <DynamicGames/>
-            <h1 className='text-center text-4xl text-white py-5 font-bold'>What I&apos;m currently listening to.</h1>
+            <h1 className='text-center mt-24 text-4xl text-white py-5 font-bold'>What I&apos;m currently listening to.</h1>
             
-            <p className='text-md text-center text-gray-400 sm:text-lg'>My status.</p>
+            <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
             <DynamicDeezerProfile/>
-            <p className='text-md text-center text-gray-400 sm:text-lg'>My last listened songs.</p>
+            <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My last listened songs.</p>
             <DynamicDeezerHistory className="flex items-center justify-center h-screen"/>            
             <div className='pt-100'>
 
