@@ -74,7 +74,7 @@ export default function Header() {
               <div className='hidden text-lg md:text-2xl space-x-3 sm:pr-2 md:ml-10 md:space-x-12 md:pr-4 md:block' id='navbar-default'>
                 <ul className="flex flex-col p-4 mt-4 border  rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:text-lg md:font-medium md:border-0 md:bg-transparent ">
                   {navigation.map((item) => (
-                    <li>
+                    <li key={item.name}>
                       <a legacyBehavior key={item.name} href={item.href}>
                       {item.href === checkSlug ? (
                         <a className='border-b-2 border-primary pb-4 text-white hover:border-primary hover:text-primary'>
