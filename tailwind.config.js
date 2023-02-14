@@ -19,10 +19,12 @@ module.exports = {
         primary: '#b160ef',
       },
       fontFamily: {
-        burtons: "burtons"
+        burtons: "burtons",
+        montserrat: ['Montserrat'],
       },
       backgroundImage: {
-        'hero': "url('../public/hero_1.jpg')",
+        'hero_dark': "url('../public/hero_1.jpg')",
+        'hero_light': "url('../public/hero.jpg')",
         'project1-bg': "url('../public/mobile.jpg')",
       },
       transitionProperty:{
