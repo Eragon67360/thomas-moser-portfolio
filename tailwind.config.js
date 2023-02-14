@@ -21,6 +21,8 @@ module.exports = {
       fontFamily: {
         burtons: "burtons",
         montserrat: ['Montserrat'],
+        'display': ['Montserrat'],
+        'body': ['Montserrat'],
       },
       backgroundImage: {
         'hero_dark': "url('../public/hero_1.jpg')",
