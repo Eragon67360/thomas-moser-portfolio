@@ -116,12 +116,6 @@ export default function Portfolio({}) {
         href: "https://www.linkedin.com/in/thomas-moser67/",
         name: "Linkedin",
         color: "group-hover:bg-gradient-to-tr from-[#80ff72] to-[#5ec3d4]",
-      },      
-      {
-        icon: <SiLinktree/>,
-        href: "https://linktr.ee/thomasmoser",
-        name: "Linktree",
-        color: "group-hover:bg-gradient-to-tr from-[#86be6b] to-[#1baf16]",
       },
       {
         icon: <AiFillYoutube/>,

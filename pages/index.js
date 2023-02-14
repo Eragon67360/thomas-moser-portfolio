@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { motion } from "framer-motion";
 import NoSsr from "../components/NoSsr";
 import Script from 'next/script'
+import { IndexName } from "../components/layout/index_name";
 
 
 
@@ -83,18 +84,8 @@ export default function Home(){
   var min = Math.ceil(1);
   var max = Math.floor(11);
   var state = Math.floor(Math.random() * (max - min) + min);
-  console.log(state);
 
   const [randomNumber, setRandomNumber] = useState(state);
-  console.log(randomNumber);
-  // // Get random number
-  // useEffect(() => {
-  //   const fetchData = async () => {
-      
-  //   };
-  //   fetchData();
-    
-  // }, []);
   
 
   return (
@@ -105,11 +96,13 @@ export default function Home(){
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
+      
       <div
         data-mdb-ripple="true"
         className=" p-5 text-center flex flex-col h-screen bg-black bg-no-repeat bg-cover bg-center bg-fixed backdrop-filter brightness-100"        
       >
         <div className="m-auto">
+        <IndexName/>
           <div className=" d-flex justify-content-center  align-items-center h-100 ">
             <div className=" text-white brightness-100">
 
@@ -154,23 +147,21 @@ export default function Home(){
               </div>
 
               
-              <motion.div
-                initial={{display: "hidden"}}
-                animate={{}}
-                transition={{duration: 2, delay: 1}}
-
+              <div
                 className="flex py-5 justify-center items-center">
-                <Link type="button"
-                  href="/home"
+                
+                <Link
+                  type="button"
+                  href=""
                   passHref
-                  className="px-6 md:text-md lg:text-xl py-2 border-2 mx-2 bg-white border-white text-black font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:text-white hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
-                  data-mdb-ripple="true"
-                  data-mdb-ripple-color="light">
-                  Get started
+                  className="group scale-100 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium rounded-lg group bg-gradient-to-br from-green-400 to-red-500 transition-scale ease-in-out duration-300 bganimation hover:scale-125 hover:text-white text-white active:brightness-50">
+                  <span className="md:text-md lg:text-xl uppercase relative px-5 py-2.5  bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                    Get started
+                  </span>
                 </Link>
                 
 
-              </motion.div>
+              </div>
               
 
             </div>

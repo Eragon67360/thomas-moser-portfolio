@@ -1,4 +1,6 @@
 @tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --primary: #35363a;
@@ -46,8 +48,6 @@
 }
 
 
-@tailwind components;
-@tailwind utilities;
 
 html,
 body {  
@@ -65,7 +65,7 @@ a {
 }
 
 .text {
-  background: url(../public/hero.jpg);  
+  background: url(../public/hero_2.jpg);  
   font-size: 12.0em;
   text-transform: uppercase;
   font-family: 'Open Sans Pro', sans-serif;
@@ -175,6 +175,67 @@ a {
     background-position: 100% 50%;
   }
 }
+
+.bganimation {
+  background-size: 200%;
+
+  -webkit-animation: AnimationBG 5s ease infinite;
+  -moz-animation: AnimationBG 5s ease infinite;
+  animation: AnimationBG 5s ease infinite;
+}
+
+@keyframes AnimationBG {
+  
+  0% {
+    background-position: 0% 0%;    
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100%{
+    background-position: 0% 50%;
+  }
+}
+
+.box {
+  --border-size: 3px;
+  --border-angle: 0turn;
+  width: 60vmin;
+  height: 50vmin;
+  background-image: conic-gradient(
+      from var(--border-angle),
+      #213,
+      #112 50%,
+      #213
+    ),
+    conic-gradient(from var(--border-angle), transparent 20%, #08f, #f03);
+  background-size: calc(100% - (var(--border-size) * 2))
+      calc(100% - (var(--border-size) * 2)),
+    cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+
+  animation: bg-spin 3s linear infinite;
+  @keyframes bg-spin {
+    to {
+      --border-angle: 1turn;
+    }
+  }
+
+  
+}
+.box:hover {
+  animation-play-state: paused;
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0turn;
+}
+
+
+
 
 @-webkit-keyframes rotation {
   from {-webkit-transform: rotate(0deg);}

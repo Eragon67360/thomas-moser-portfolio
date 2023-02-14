@@ -34,6 +34,7 @@ module.exports = {
         cursor: 'cursor .6s linear infinite alternate',
         type: 'type 1.8s ease-out .8s 1 normal both',
         'type-reverse': 'type 1.8s ease-out 0s infinite alternate-reverse both',
+        'bg':'gradient 5s ease infinite',
       },
       keyframes: {
         type: {
@@ -48,6 +49,17 @@ module.exports = {
           '75%, 80%': { width: '8ch' },
           '85%, 90%': { width: '9ch' },
           '95%': { width: '10ch' },
+        },
+        'bg': {
+          "0%" :{
+              "background-position":" 0% 0%",
+          },
+          "50%": {
+              "background-position": "100% 100%",
+          },
+          "100%": {
+              "background-position": "0% 0%",
+          }
         },
       },
 
