@@ -2,6 +2,8 @@ import '../styles/globals.css'
 import { useRouter } from 'next/router';
 import { useState,useEffect } from 'react'
 import {motion, AnimatePresence} from "framer-motion"
+import { BrowserRouter as Router } from "react-router-dom";
+import AnimatedRoutes from "./AnimatedRoutes";
 
 function Loading() {
   const router = useRouter();
@@ -33,35 +35,13 @@ function MyApp({ Component, pageProps }) {
   <>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto&display=swap" rel="stylesheet"/>
 
-  <AnimatePresence mode='wait'>
-    <motion.div 
-      key={router.route}
-      initial="initialState"
-      animate="animateState"
-      exit="exitState"
-      transition={{
-        duration: 0.75,
-      }}
-      variants={{
-        initialState:{
-          opacity: 0,
-        },
-        animateState: {
-          opacity: 1,
-        },
-        exitState: {
-
-        },
-      }}
+    <div
+      key={router.route}      
+      
       className='base-page-size'>
-      <Loading/>
+        <Loading/>
       <Component {...pageProps} />
-    </motion.div>
-
-    
-
-  </AnimatePresence>
-
+      </div>
     
   </>)
 }

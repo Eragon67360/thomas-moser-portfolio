@@ -6,6 +6,8 @@ import { AnimatedName } from '../../components/layout/project1_float'
 import { motion } from "framer-motion"
 import YouTube from "react-youtube";
 import { render } from "react-dom";
+import { VideoReader } from "../../components/layout/video";
+
 
 export default function Project1 (){
 
@@ -16,6 +18,8 @@ export default function Project1 (){
         const title = "Card -- Stop'Violence"
 
         const [scrolled, setMore] = useState(false);
+        
+
         var classNames = require('classnames');
 
         const setScrolled = () => {
@@ -42,11 +46,19 @@ export default function Project1 (){
             }
         }, [])
 
+        
+
         return(
-            <div className="">
-                <NextSeo title={title}/>
+            <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="">
+                <NextSeo title={title}/>                
                 <AnimatedName/>
                 <div>
+                    <VideoReader/>
                     <main className='overflow-x-hidden transition ease-in-out duration-1000 h-screen overflow-scroll bg-fixed bg-transparent bg-gradient-to-br from-[#040404] via-cyan-900 to-primary'>
                         <div className="snap-center h-screen duration-700">
                             <header className="h-screen bg-project1-bg transition-all ease-in-out duration-1000">
@@ -73,12 +85,14 @@ export default function Project1 (){
                                 <div className="mt-12 bg-[#58585857] shadow-lg rounded-lg border border-white border-opacity-10 bg-background_100  flex-col">
                                     <h1 className="filter-none text-xl lg:text-4xl font-bold text-white text-bold border-gray-600 mt-10 pt-10 text-start px-10">Overview 👀</h1>
                                     <h2 className="py-20 px-10 text-start text-xl text-white">Stop&apos;Violence is a mobile application to identify the dangers of society in terms of harassment, etc... The project is initiated in the framework of the mobile development course of the Haute-École ARC (Neuchâtel, Switzerland).</h2>
-
-                                    {/* <iframe className="px-5 align-middle" allow="fullscreen" allowfullscreen id="ytplayer" type="text/html" loading="lazy" width="800" height="450"
-                                        src="http://www.youtube.com/embed/_wZubFPbSNA?autoplay=1&origin=http://example.com"/> */}
-                                    <YouTube className="mx-auto" videoId="_wZubFPbSNA" 
-                                        opts={opts} onReady={_onReady} />
-                                    <h2 className="pt-5 text-start px-10 text-xl text-white">Trailer: don&apos;t forget to turn the volume up!</h2>
+                                    
+                                    <div className="flex flex-col">
+                                        <YouTube className="mx-auto rounded-xl" videoId="_wZubFPbSNA" 
+                                            opts={opts} onReady={_onReady} />
+                                        <h2 className="mt-5 mx-auto text-start px-10 text-xl text-white">Trailer: don&apos;t forget to turn the volume up!</h2>                                    
+                                    </div>
+                                    
+                                    
 
                                     <h1 className="filter-none text-xl lg:text-4xl font-bold text-white text-bold border-gray-600 mt-10 pt-10 text-start px-10">Objective 🎯</h1>
 
@@ -111,7 +125,7 @@ export default function Project1 (){
 
                 </div>
                 
-            </div>
+            </motion.div>
             
         );
     }

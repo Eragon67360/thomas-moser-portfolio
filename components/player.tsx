@@ -6,7 +6,7 @@ import Image from 'next/image';
 const Player = () => {
   const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
   const { data } = useSWR('/api/playersummaries', fetcher);
-
+  
   if (data){
     return (
       <section className="mb-16 container">
