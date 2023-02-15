@@ -47,6 +47,7 @@ export function VideoReader(){
     return (
         <>
         <motion.div
+            initial={false}
             variants={variants}
             animate={videoVisible?'enter':'exit'}
 
