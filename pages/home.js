@@ -36,18 +36,18 @@ const Projects = dynamic(() => import('../components/projects'), {
 });
 
 
-const DynamicPlayer = dynamic(() => import('../pages/player'), {
+const DynamicPlayer = dynamic(() => import('../components/player'), {
   ssr: false,
 });
-const DynamicGames = dynamic(() => import('../pages/games'), {
-  ssr: false,
-});
-
-const DynamicDeezerProfile = dynamic(() => import('./deezeruser'), {
+const DynamicGames = dynamic(() => import('../components/games'), {
   ssr: false,
 });
 
-const DynamicDeezerHistory = dynamic(() => import('./deezerhistory'), {
+const DynamicDeezerProfile = dynamic(() => import('../components/deezeruser'), {
+  ssr: false,
+});
+
+const DynamicDeezerHistory = dynamic(() => import('../components/deezerhistory'), {
   ssr: false,
 });
 

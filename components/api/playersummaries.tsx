@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   const response = await getPlayerSummaries();
   res.setHeader("Cache-control","s-maxage=10, stale-while-revalidate")
-
+  console.log(response.status)
   if (response.status != 200) {
     return res.status(200).json({
       steam: {
