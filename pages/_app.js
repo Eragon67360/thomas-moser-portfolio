@@ -3,7 +3,6 @@ import { useRouter } from 'next/router';
 import { useState,useEffect } from 'react'
 import {motion, AnimatePresence} from "framer-motion"
 import { BrowserRouter as Router } from "react-router-dom";
-import AnimatedRoutes from "./AnimatedRoutes";
 
 function Loading() {
   const router = useRouter();
