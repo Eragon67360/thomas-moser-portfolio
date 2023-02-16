@@ -52,13 +52,17 @@ export function VideoReader(){
             animate={videoVisible?'enter':'exit'}
 
         id="videoreader" className={classNames(videoVisible?"flex":"flex","z-20 flex-col fixed transition-all ease-in-out ")}>
-            <button onClick={() => {setVideoVisibility(false)}} className="bg-gray-600 z-20 opacity-90 text-white text-end p-5 hover:text-primary font-montserrat">
+            <button onClick={() => {setVideoVisibility(false)}} className="bg-transparent z-20 opacity-90 text-white text-end p-5 hover:text-primary font-montserrat">
                 Close
             </button>
-            <div id="reader" className={`fixed z-10 flex flex-col h-screen w-screen bg-gray-600 opacity-90`}>            
-                <YouTube className="rever m-auto rounded-xl bg-black opacity-100 filter-none backdrop-filter-none" videoId="_wZubFPbSNA" 
-                    opts={opts} onReady={_onReady} />
-            </div>            
+            <div id="reader" className={`fixed z-10 flex flex-col h-screen w-screen bg-gray-600/75`}>
+                <div className="z-20 m-auto bg-none">
+                    <YouTube className="" videoId="_wZubFPbSNA" 
+                        opts={opts} onReady={_onReady} />
+
+                </div>
+                
+            </div>
         </motion.div>
         
         <div className={classNames(videoVisible?"":"","fixed bottom-0 left-0 z-10")}>

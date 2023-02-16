@@ -87,9 +87,7 @@ export default function Project1 (){
                                     <h2 className="py-20 px-10 text-start text-xl text-white">Stop&apos;Violence is a mobile application to identify the dangers of society in terms of harassment, etc... The project is initiated in the framework of the mobile development course of the Haute-École ARC (Neuchâtel, Switzerland).</h2>
                                     
                                     <div className="flex flex-col">
-                                        <YouTube className="mx-auto rounded-xl" videoId="_wZubFPbSNA" 
-                                            opts={opts} onReady={_onReady} />
-                                        <h2 className="mt-5 mx-auto text-start px-10 text-xl text-white">Trailer: don&apos;t forget to turn the volume up!</h2>                                    
+                                    
                                     </div>
                                     
                                     
