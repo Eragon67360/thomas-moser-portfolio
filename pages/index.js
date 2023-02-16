@@ -62,8 +62,8 @@ export default function Home(){
       line3: "", 
     },
     "quote11" : {
-      line1: "“If you have knowledge,.”",
-      line2: "let others light their candles in it.",
+      line1: "“If you have knowledge,",
+      line2: "let others light their candles in it.”",
       line3: "Margareth Fuller", 
     }
   }
