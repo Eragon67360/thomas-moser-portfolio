@@ -107,7 +107,7 @@ export default function Home(){
       <div
         data-mdb-ripple="true"
         data-mdb-ripple-color="primary"
-        className=" p-5 text-center flex flex-col h-screen bg-black bg-no-repeat bg-cover bg-center bg-fixed backdrop-filter brightness-100"        
+        className=" p-5 text-center flex flex-col h-screen w-screen bg-black bg-no-repeat bg-cover bg-center bg-fixed backdrop-filter brightness-100"        
       >
         <div className="m-auto flex flex-col">
         <IndexName/>
@@ -173,7 +173,7 @@ export default function Home(){
                   href="/home"
                   passHref
                   className="group scale-100 relative m-auto flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium rounded-lg bg-gradient-to-br from-green-400 to-red-500 transition-scale ease-in-out duration-300 bganimation hover:scale-125 hover:text-white text-white active:brightness-50">
-                  <span className="md:text-md lg:text-xl uppercase relative px-5 py-2.5  bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                  <span className="md:text-md lg:text-xl uppercase relative px-5 py-2.5 bg-gray-900 rounded-md group-hover:bg-opacity-0">
                     Get started
                   </span>
                 </Link>
