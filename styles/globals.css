@@ -64,18 +64,6 @@ a {
   text-decoration: none;
 }
 
-.text {
-  background: url(../public/hero_2.jpg);  
-  font-size: 12.0em;
-  text-transform: uppercase;
-  font-family: 'Open Sans Pro', sans-serif;
-  background-size: cover;
-  background-repeat: no-repeat;
-
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
 
 * {
   box-sizing: border-box;
