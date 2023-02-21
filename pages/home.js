@@ -193,7 +193,7 @@ export default function Portfolio({}) {
                   <a key={index} href={item.href} target="_blank" rel="noopener noreferrer">
                     <div className='group z-0'>
                       <div className={classNames("bg-white h-14 w-14 p-2 group-hover:w-40 rounded-full flex transition-{w} ease-in-out duration-500",`${item.color}`,'')}>
-                        <div className='opacity-0 text-2xl text-center hidden group-hover:block group-hover:opacity-100 uppercase text-slate-100 m-auto transition-opacity ease-in-out duration-500'>
+                        <div className='opacity-0 text-lg group-hover:text-2xl text-center group-hover:text-start hidden group-hover:block group-hover:opacity-100 uppercase text-slate-100 m-auto transition-{text-align} ease-in-out duration-500'>
                           {item.name}
                         </div>
                         <div className='opacity-100 text-4xl group-hover:hidden text-gray-700 m-auto transition ease-in-out duration-500 group-hover:opacity-0 '>
