@@ -25,7 +25,7 @@ function Activities() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className='h-[99vh] overflow-y-hidden bg-bg_gradient bg-no-repeat bg-cover'>
+            <div className='h-screen border border-transparent bg-bg_gradient bg-no-repeat bg-cover'>
                 <div className='m-10 p-10 rounded-xl bg-gray-400/30'>
 
                     <h1 className='text-center text-4xl text-white py-5 font-bold'>What I play</h1>
