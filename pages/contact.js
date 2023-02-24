@@ -56,7 +56,7 @@ function Contact() {
                     </div>
 
                     <div className="my-auto">
-                        <a href="http://maps.google.com/?q=2 rue de Munster, 67100 Strasbourg" target="_blank" title="Open map in a new tab">
+                        <a href="http://maps.google.com/?q=2 rue de Munster, 67100 Strasbourg" target="_blank" rel="noopener noreferrer" title="Open map in a new tab">
                             <Image className="border" src={"/maps.jpg"} height={500} width={500} alt="Maps link"/>
                         </a>
                     </div>

@@ -1,20 +1,10 @@
 import Head from 'next/head';
-import React, {useEffect} from "react";
-import {BsFillMoonStarsFill} from 'react-icons/bs';
-import {AiFillTwitterCircle, AiFillYoutube, AiFillGithub, AiOutlineInstagram, AiOutlineLinkedin} from 'react-icons/ai';
-import {SiMusescore,SiLinktree} from 'react-icons/si';
-import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
-import { RxDotFilled } from 'react-icons/rx';
+import React from "react";
+import {AiFillYoutube, AiFillGithub, AiOutlineLinkedin} from 'react-icons/ai';
+import {SiMusescore} from 'react-icons/si';
 import Link from 'next/link';
-import Image from 'next/image';
-import eragon from '../public/eragon.png';
 
-// import CV from '../public/CV_Thomas_MOSER.pdf';
-
-import { useState } from 'react';
-
-import dynamic from 'next/dynamic';
-import { motion,mount } from "framer-motion";
+import { motion } from "framer-motion";
 
 function HomePage() {
     const classNames = require("classnames");
@@ -64,7 +54,7 @@ function HomePage() {
                 <main className="h-[95vh] px-20 pt-32 font-montserrat flex flex-col text-slate-200">
                     <div className='flex'>
                         <div className='flex flex-col'>
-                            <div className="unselectable py-12 text-7xl  font-bold">Hey there! I'm <span className='text-primary'>Thomas Moser</span></div>
+                            <div className="unselectable py-12 text-7xl  font-bold">{"Hey there! I'm"} <span className='text-primary'>Thomas Moser</span></div>
                             <div className='py-12 text-2xl'>Developer providing services for programming in embedded systems, software development... And so much more!</div>
                         </div>
 
