@@ -1,48 +1,51 @@
 import '../styles/globals.css'
-import { useRouter } from 'next/router';
-import { useState,useEffect } from 'react'
-import {motion, AnimatePresence} from "framer-motion"
-import { BrowserRouter as Router } from "react-router-dom";
+import '../styles/nprogress.css';
+import Layout from '../components/layout/layout'
 
-function Loading() {
-  const router = useRouter();
+import Router, { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import NProgress from "nprogress";
+import 'nprogress/nprogress.css';
 
-  const [loading, setLoading] = useState(false);
+import { motion } from 'framer-motion';
+
+export default function App({ Component, pageProps }) {
+  NProgress.configure({showSpinner:false})
+  const router = useRouter()
 
   useEffect(() => {
-      const handleStart = (url) => (url !== router.asPath) && setLoading(true);
-      const handleComplete = () => setLoading(false);
-
-      router.events.on('routeChangeStart', handleStart)
-      router.events.on('routeChangeComplete', handleComplete)
-      router.events.on('routeChangeEnd',  handleComplete)
-
+      const handleRouteStart = () => NProgress.start();
+      const handleRouteDone = () => NProgress.done();
+  
+      Router.events.on("routeChangeStart", handleRouteStart);
+      Router.events.on("routeChangeComplete", handleRouteDone);
+      Router.events.on("routeChangeError", handleRouteDone);
+  
       return () => {
-          router.events.off('routeChangeStart', handleStart)
-          router.events.off('routeChangeComplete', handleComplete)
-          router.events.off('routeChangeEnd', handleComplete)
-      }
-  })
-  
-  return loading && (<div className='spinner-wrapper'>
-    <div className="spinner"></div></div>)
-}
-function MyApp({ Component, pageProps }) {
-  const router = useRouter()
-  
-  return (
-  <>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto&display=swap" rel="stylesheet"/>
-
-    <div
-      key={router.route}      
-      
-      className='base-page-size'>
-        <Loading/>
-      <Component {...pageProps} />
-      </div>
+        // Make sure to remove the event handler on unmount!
+        Router.events.off("routeChangeStart", handleRouteStart);
+        Router.events.off("routeChangeComplete", handleRouteDone);
+        Router.events.off("routeChangeError", handleRouteDone);
+      };
     
-  </>)
-}
+  }, []);
+  
+  
 
-export default MyApp
+  
+
+  return(
+    <>
+      <div className='bg-[#1a1b1d]'>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto&display=swap" rel="stylesheet"/>
+        
+        {router.pathname === "/"? <div></div> : <Layout/>}
+        
+        <Component {...pageProps}/>
+        
+      </div>
+          
+    </>
+    
+  )
+}

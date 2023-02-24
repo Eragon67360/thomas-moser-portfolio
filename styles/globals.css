@@ -3,60 +3,101 @@
 @tailwind utilities;
 
 :root {
-  --primary: #35363a;
-  --secondary: #522085;
-  --secondaryhover: #522085cb;
-  --secondarypressed: #5220857e;
+  --max-width: 1100px;
+  --border-radius: 12px;
+  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
+    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+
+  --primary-glow: conic-gradient(
+    from 180deg at 50% 50%,
+    #16abff33 0deg,
+    #0885ff33 55deg,
+    #54d6ff33 120deg,
+    #0071ff33 160deg,
+    transparent 360deg
+  );
+  --secondary-glow: radial-gradient(
+    rgba(255, 255, 255, 1),
+    rgba(255, 255, 255, 0)
+  );
+
+  --tile-start-rgb: 239, 245, 249;
+  --tile-end-rgb: 228, 232, 233;
+  --tile-border: conic-gradient(
+    #00000080,
+    #00000040,
+    #00000030,
+    #00000020,
+    #00000010,
+    #00000010,
+    #00000080
+  );
+
+  --callout-rgb: 238, 240, 241;
+  --callout-border-rgb: 172, 175, 176;
+  --card-rgb: 180, 185, 188;
+  --card-border-rgb: 131, 134, 135;
 }
 
-/* Firefox */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+
+    --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
+    --secondary-glow: linear-gradient(
+      to bottom right,
+      rgba(1, 65, 255, 0),
+      rgba(1, 65, 255, 0),
+      rgba(1, 65, 255, 0.3)
+    );
+
+    --tile-start-rgb: 2, 13, 46;
+    --tile-end-rgb: 2, 5, 19;
+    --tile-border: conic-gradient(
+      #ffffff80,
+      #ffffff40,
+      #ffffff30,
+      #ffffff20,
+      #ffffff10,
+      #ffffff10,
+      #ffffff80
+    );
+
+    --callout-rgb: 20, 20, 20;
+    --callout-border-rgb: 108, 108, 108;
+    --card-rgb: 100, 100, 100;
+    --card-border-rgb: 200, 200, 200;
+  }
+}
+
 * {
-  scrollbar-width: thin;
-  scrollbar-color: var(--secondary) var(--primary);
-}
-
-/* Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-  width: 15px;
-}
-
-*::-webkit-scrollbar-track {
-  background: var(--primary);
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: var(--secondary);  
-  border-radius: 14px;
-  border: 3px solid var(--primary);
-}
-*::-webkit-scrollbar-thumb:hover {
-  background-color: var(--secondaryhover);
-}
-*::-webkit-scrollbar-thumb:active {
-  background-color: var(--secondarypressed);
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.container-snap::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.container-snap {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-
-
-html,
-body {  
-  scroll-padding:
-    var(--scroll-padding, 5rem);
+  box-sizing: border-box;
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: #1a1b1d;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
 a {
@@ -64,37 +105,23 @@ a {
   text-decoration: none;
 }
 
-
-* {
-  box-sizing: border-box;
-}
-
-.will-change-transform {
-  will-change: transform;
-}
-
-.cursor::after {
-  display: block;
-  content: '';
-  position: absolute;
-  width: 4px;
-  height: 100%;
-  background-color: #fff;
-  animation: cursor 0.6s linear infinite alternate;
-  will-change: opacity;
-}
-
-@keyframes cursor {
-  0%,
-  40% {
-    opacity: 1;
-  }
-
-  60%,
-  100% {
-    opacity: 0;
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
   }
 }
+
+.unselectable{
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+
+}
+
 
 .circle { 
   width: 10px;
@@ -103,178 +130,4 @@ a {
   -moz-border-radius: 5px; 
   -webkit-border-radius: 5px; 
   border-radius: 5px;
-}
-
-.spinner-wrapper {
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 9999;
-
-}
-
-.unselectable {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.spinner {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  height:60px;
-  width:60px;
-  margin:0px auto;
-  -webkit-animation: rotation .6s infinite linear;
-  -moz-animation: rotation .6s infinite linear;
-  -o-animation: rotation .6s infinite linear;
-  animation: rotation .6s infinite linear;
-  border-left:6px solid rgba(0,174,239,.15);
-  border-right:6px solid rgba(0,174,239,.15);
-  border-bottom:6px solid rgba(0,174,239,.15);
-  border-top:6px solid rgba(0,174,239,.8);
-  border-radius:100%;
-}
-
-.background-animate {
-  background-size: 400%;
-
-  -webkit-animation: AnimationName 10s ease infinite;
-  -moz-animation: AnimationName 10s ease infinite;
-  animation: AnimationName 10s ease infinite;
-}
-
-@keyframes AnimationName {
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-.bganimation {
-  background-size: 200%;
-
-  -webkit-animation: AnimationBG 5s ease infinite;
-  -moz-animation: AnimationBG 5s ease infinite;
-  animation: AnimationBG 5s ease infinite;
-}
-
-@keyframes AnimationBG {
-  
-  0% {
-    background-position: 0% 0%;    
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100%{
-    background-position: 0% 50%;
-  }
-}
-
-@-webkit-keyframes rotation {
-  from {-webkit-transform: rotate(0deg);}
-  to {-webkit-transform: rotate(359deg);}
-}
-@-moz-keyframes rotation {
-  from {-moz-transform: rotate(0deg);}
-  to {-moz-transform: rotate(359deg);}
-}
-@-o-keyframes rotation {
-  from {-o-transform: rotate(0deg);}
-  to {-o-transform: rotate(359deg);}
-}
-@keyframes rotation {
-  from {transform: rotate(0deg);}
-  to {transform: rotate(359deg);}
-}
-
-@font-face {
-  font-family: "burtons";
-  src: url("../public/Burtons.otf");
-}
-
-
-.pulse1 {
-  -webkit-animation: 1s linear 1s infinite alternate pulsation;
-  -moz-animation: 1s linear 1s infinite alternate pulsation;
-  -o-animation: 1s linear 1s infinite alternate pulsation;
-  animation: 1s linear 1s infinite alternate pulsation;
-  animation-delay: 0ms;
-  
-}
-.pulse2 {
-  -webkit-animation: 1s linear 1s infinite alternate pulsation;
-  -moz-animation: 1s linear 1s infinite alternate pulsation;
-  -o-animation: 1s linear 1s infinite alternate pulsation;
-  animation: 1s linear 1s infinite alternate pulsation;
-  animation-delay: 500ms;
-  
-}
-.pulse3 {
-  -webkit-animation: 1s linear 1s infinite alternate pulsation;
-  -moz-animation: 1s linear 1s infinite alternate pulsation;
-  -o-animation: 1s linear 1s infinite alternate pulsation;
-  animation: 1s linear 1s infinite alternate pulsation;
-  animation-delay: 1s;
-  
-}
-.pulse4 {
-  -webkit-animation: 1s linear 1s infinite alternate pulsation;
-  -moz-animation: 1s linear 1s infinite alternate pulsation;
-  -o-animation: 1s linear 1s infinite alternate pulsation;
-  animation: 1s linear 1s infinite alternate pulsation;
-  animation-delay: 1.5s;
-  
-}
-.pulse5 {
-  -webkit-animation: 1s linear 1s infinite alternate pulsation;
-  -moz-animation: 1s linear 1s infinite alternate pulsation;
-  -o-animation: 1s linear 1s infinite alternate pulsation;
-  animation: 1s linear 1s infinite alternate pulsation;
-  animation-delay: 2s;  
-}
-.pulse6 {
-  -webkit-animation: 1s linear 1s infinite alternate pulsation;
-  -moz-animation: 1s linear 1s infinite alternate pulsation;
-  -o-animation: 1s linear 1s infinite alternate pulsation;
-  animation: 1s linear 1s infinite alternate pulsation;
-  animation-delay: 2.5s;  
-}
-.pulse7 {
-  -webkit-animation: 1s linear 1s infinite alternate pulsation;
-  -moz-animation: 1s linear 1s infinite alternate pulsation;
-  -o-animation: 1s linear 1s infinite alternate pulsation;
-  animation: 1s linear 1s infinite alternate pulsation;
-  animation-delay: 3s;  
-}
-
-@-webkit-keyframes pulsation {
-  from {opacity: 0;}  
-  to {opacity: 100;}
-}
-@-moz-keyframes pulsation {
-  from {opacity: 0;}
-  to {opacity: 100;}
-}
-@-o-keyframes pulsation {
-  from {opacity: 0;}
-  to {opacity: 100;}
-}
-@keyframes pulsation {
-  from {opacity: 0;}
-  to {opacity: 100;}
 }

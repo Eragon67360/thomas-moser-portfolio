@@ -1,11 +1,8 @@
 //Cards for each project
 import React from "react";
-import { NextSeo } from "next-seo";
-import { useState, useEffect } from "react";
-import { AnimatedName } from '../../components/layout/project1_float'
+import { useState } from "react";
 import { motion } from "framer-motion"
 import YouTube from "react-youtube";
-import { render } from "react-dom";
 
 
 function hideReader() {

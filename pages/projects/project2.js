@@ -1,17 +1,20 @@
 //Cards for each project
 import React from "react";
-import dynamic from "next/dynamic";
-import { NextSeo } from "next-seo";
+import Head from "next/head";
 
 
 export default function Project2() {
-    const title = "Card -- OpenAI"
     return(
         <>
-        <NextSeo title={title}/>
-        <main>
-            <h1 className="text-6xl text-center font-bold">Project 2</h1>
-        </main>
+            <Head>
+                <title>Projects--OpenAI</title>
+                <meta name="description" content="Activities - portfolio" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <main>
+                <h1 className="h-screen text-6xl text-center font-bold">Project 2</h1>
+            </main>
         </>
         
     )

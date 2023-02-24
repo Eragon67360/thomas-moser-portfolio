@@ -1,33 +1,18 @@
 //Cards for each project
 import React from "react";
-import { NextSeo } from "next-seo";
 import { useState, useEffect } from "react";
-import { AnimatedName } from '../../components/layout/project1_float'
 import { motion } from "framer-motion"
 import YouTube from "react-youtube";
 import { render } from "react-dom";
 import { VideoReader } from "../../components/layout/video";
-
+import Image from "next/image";
+import Beautiful from "../../public/beautiful.gif"
+import Head from "next/head";
 
 export default function Project1 (){
 
         const _onReady = (event) => {
             event.target.pauseVideo();
-        }
-    
-        const title = "Card -- Stop'Violence"
-
-        const [scrolled, setMore] = useState(false);
-        
-
-        var classNames = require('classnames');
-
-        const setScrolled = () => {
-            if (window.pageYOffset > 200) {
-            setMore(true)
-            } else {
-            setMore(false)
-            }
         }
 
         const opts = {
@@ -37,30 +22,27 @@ export default function Project1 (){
                 autoplay: 1,
             },
         };
-        
-        useEffect(() => {
-            window.addEventListener('scroll', setScrolled)
-
-            return () => {
-            window.removeEventListener('scroll', setScrolled)
-            }
-        }, [])
-
-        
 
         return(
-            <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-            className="">
-                <NextSeo title={title}/>                
-                <AnimatedName/>
-                <div>
+            <>
+                <Head>
+                    <title>Projects--Stop Violence</title>
+                    <meta name="description" content="Activities - portfolio" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1" />
+                    <link rel="icon" href="/favicon.ico" />
+                </Head>
+
+                
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1 }}
+                    className="overflow-y-hidden h-[95vh] ">
+
                     <VideoReader/>
-                    <main className='overflow-x-hidden transition ease-in-out duration-1000 h-screen overflow-scroll bg-fixed bg-transparent bg-gradient-to-br from-[#040404] via-cyan-900 to-primary'>
-                        <div className="snap-center h-screen duration-700">
+                    <main className='transition pb-24 ease-in-out duration-1000 h-screen overflow-scroll bg-fixed bg-transparent bg-gradient-to-br from-[#040404] via-cyan-900 to-primary'>
+                        <div className="snap-center duration-700">
                             <header className="h-screen bg-project1-bg transition-all ease-in-out duration-1000">
                                 <div className="h-screen group relative z-0 flex items-center justify-center w-full transition-all ease-in-out duration-500">
                                     <h1>
@@ -82,14 +64,14 @@ export default function Project1 (){
                                 <div className="w-20 md:w-36 lg:w-56 transition-all duration-1000"></div>
                             </div>
                             <div className="flex-auto">
-                                <div className="mt-12 bg-[#58585857] shadow-lg rounded-lg border border-white border-opacity-10 bg-background_100  flex-col">
-                                    <h1 className="filter-none text-xl lg:text-4xl font-bold text-white text-bold border-gray-600 mt-10 pt-10 text-start px-10">Overview 👀</h1>
+                                <div className="mt-12 py-10 bg-[#58585857] shadow-lg rounded-lg border border-white border-opacity-10 bg-background_100  flex-col">
+                                    <h1 className="filter-none text-xl lg:text-4xl font-bold text-white text-bold border-gray-600 mt-10 text-start px-10">Overview 👀</h1>
                                     <h2 className="py-20 px-10 text-start text-xl text-white">Stop&apos;Violence is a mobile application to identify the dangers of society in terms of harassment, etc... The project is initiated in the framework of the mobile development course of the Haute-École ARC (Neuchâtel, Switzerland).</h2>
                                     
-                                    <div className="flex flex-col">
+                                    <div className="flex">
+                                        <Image className="flex m-auto" src={Beautiful} alt="presentation gif" height={400} width={736} />
                                     
                                     </div>
-                                    
                                     
 
                                     <h1 className="filter-none text-xl lg:text-4xl font-bold text-white text-bold border-gray-600 mt-10 pt-10 text-start px-10">Objective 🎯</h1>
@@ -121,9 +103,12 @@ export default function Project1 (){
 
                     </main>
 
-                </div>
+                    
                 
-            </motion.div>
+                </motion.div>
+
+            </>
+           
             
         );
     }
