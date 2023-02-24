@@ -50,13 +50,13 @@ const PlayedGames = () => {
                 className='rounded-md'
                 loader={() => array[index]}
                 src={array[index]}
-                alt={game.getname}                
+                alt={game.getname}
                 width={400}
                 height={200}
               />
             </div>
-            <div className='relative z-0 flex h-full items-end rounded-md p-4 '>
-              <div className=' rounded-mdl flex flex-col space-y-5'>
+            <div className='relative z-10 flex h-full items-end rounded-md p-4 '>
+              <div className=' z-20 rounded-mdl flex flex-col space-y-5'>
                 <h3 className='bg-black bg-opacity-80 p-1 text-gray-300'>{name[index]}</h3>
 
                 <span className=' bg-black bg-opacity-80 p-1 text-gray-300'>
