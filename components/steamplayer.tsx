@@ -21,6 +21,7 @@ const Player = () => {
                   {data?.steam.getAvatar ? (
                     <Image
                       className="rounded-lg"
+                      loader={() => data?.steam.getAvatar}
                       src={data?.steam.getAvatar}
                       width={100}
                       height={100}

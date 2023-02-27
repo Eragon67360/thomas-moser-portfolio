@@ -26,6 +26,7 @@ const DeezerHistory = () => {
                     >
                     <Image
                       className="rounded-lg"
+                      loader={() => music.album.cover}
                       src={music.album.cover}
                       width={100}
                       height={100}

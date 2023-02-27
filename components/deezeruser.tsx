@@ -20,6 +20,7 @@ const DeezerUser = () => {
                   <a href={data?.deezer.getprofileUrl} target="_blank" rel='noreferrer noopener'>
                   <Image
                     className="rounded-lg"
+                    loader={() => data?.deezer.getAvatar}
                     src={data?.deezer.getAvatar}
                     width={100}
                     height={100}
