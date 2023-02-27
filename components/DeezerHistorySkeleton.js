@@ -25,7 +25,7 @@ const DeezerHistorySkeleton = () => {
                 <div className="my-auto ml-10">
                     <p className="text-md sm:text-xl text-white space-y-4 flex flex-col">
                         <Skeleton width={200} height={24}/>                
-                        <Skeleton width={200} height={24}/>
+                        <Skeleton width={150} height={24}/>
                         
                     </p>
                 </div>

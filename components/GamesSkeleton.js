@@ -3,9 +3,9 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from 'react-loading-skeleton';
 
 const GamesSkeleton = () => {
-    const loadGames = Array(2).fill(1);
+    const loadGames = Array(3).fill(1);
     return (
-    <div className='py-10 m-auto '>
+    <div className='py-10 flex mx-auto'>
         <div className='mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-28'>
         {loadGames.map((_, i) => (
             <SkeletonTheme
