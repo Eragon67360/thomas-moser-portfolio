@@ -1,42 +1,22 @@
 import useSWR from 'swr'
 import React from 'react';
 import Image from 'next/image';
+import GamesSkeleton from './GamesSkeleton'
+
 import Skeleton from 'react-loading-skeleton'
-// import 'react-loading-skeleton/dist/skeleton.css'
+import { SkeletonTheme } from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const PlayedGames = () => {
   const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
   const { data } = useSWR('/api/gamessummaries', fetcher);
 
-
-  // const src=`https://steamcdn-a.akamaihd.net/steam/apps/${data.steam[0].appid}/header.jpg`//https://steamcdn-a.akamaihd.net/steam/apps/${data?.steam.appid}/header.jpg
-
-  // console.log(src)
   
   if(!data){
     return (
-      <div className='py-10 m-auto '>
-      <div className='mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-28'>          
-          <div
-            className='group rounded-md bg-opacity-75 duration-150 ease-in-out'
-          >
-            <div className='inline-block absolute rounded-md opacity-80 duration-150 ease-in-out group-hover:opacity-100'>
-              <Skeleton
-                className='rounded-md'
-                width={400}
-                height={200}
-              />
-            </div>
-            <div className='relative z-10 flex h-full items-end rounded-md p-4 '>
-              <div className=' z-20 rounded-mdl flex flex-col space-y-5'>
-                <Skeleton className='bg-black bg-opacity-80 p-1 text-gray-300' width={300}/>
-
-                <Skeleton className=' bg-black bg-opacity-80 p-1 text-gray-300' width={250}/>
-              </div>
-            </div>
-          </div>        
+      <div>
+        <GamesSkeleton/>
       </div>
-    </div>
     );
   }
   else {

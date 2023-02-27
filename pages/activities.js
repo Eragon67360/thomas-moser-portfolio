@@ -28,14 +28,12 @@ function Activities() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className='h-screen border border-transparent bg-bg_gradient bg-no-repeat bg-cover'>
+            <div className='max-h-max border border-transparent bg-bg_gradient bg-fixed bg-no-repeat bg-cover'>
                 <div className='m-10 p-10 rounded-xl bg-gray-400/30'>
 
                     <h1 className='text-center text-4xl text-white py-5 font-bold'>What I play</h1>
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
-                    <Suspense fallback={<GamesSkeleton amount={1}/>}>
-                      <Player/>
-                    </Suspense>
+                    <Player/>
 
                     
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>The games I recently played.</p>

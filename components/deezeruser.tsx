@@ -2,15 +2,16 @@ import useSWR from 'swr'
 import React from 'react';
 import {BiError} from 'react-icons/bi'
 import Image from 'next/image';
+import PlayerSkeleton from './DeezerUserSkeleton'
 
 const DeezerUser = () => {
   const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
   const { data } = useSWR('/api/deezeruser', fetcher);
 
-  if(data){
-    return (
-      <>
-      <section className="mb-16">
+  return (
+    <div>
+      {data ? (
+        <section className="mb-16">
         <div className="rounded-lg">
           <div className="flex py-6 rounded-md">
             <div className="flex m-auto">
@@ -43,20 +44,13 @@ const DeezerUser = () => {
           </div>
         </div>
       </section>
-      </>
-    );
 
-  } else {
-    return (
-      <section>
-        <div className='text-2xl flex flex-wrap gap-12 py-10'>
-          <div className=''><BiError/></div>
-          <h1 className=''>{"Sorry, an error occured. We couldn't fetch the Deezer user informations!"}</h1>
-        </div>
-        
-      </section>
-    );
-  }
+      ):(
+        <PlayerSkeleton/>
+      )}
+    
+    </div>
+  );
 };
 
 export default DeezerUser;
