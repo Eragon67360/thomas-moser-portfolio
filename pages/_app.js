@@ -3,13 +3,11 @@ import '../styles/nprogress.css';
 import Layout from '../components/layout/layout'
 
 import Router, { useRouter } from 'next/router';
-import { Suspense, useEffect } from 'react';
+import { useEffect } from 'react';
 import NProgress from "nprogress";
 import 'nprogress/nprogress.css';
-import Loading from '../components/layout/loading';
-
-
 import { motion } from 'framer-motion';
+
 
 export default function App({ Component, pageProps }) {
   NProgress.configure({showSpinner:false})
@@ -33,18 +31,27 @@ export default function App({ Component, pageProps }) {
   }, []);
   
   
-
-  
-
   return(
     <>
+    <motion.main
+        initial='pageInitial'
+        animate='pageAnimate'
+        variants={{
+          pageInitial: { opacity: 0 },
+          pageAnimate: { opacity: 1 },
+        }}
+        transition={{ duration: 0.4, ease: 'easeInOut' }}
+        >
       <div className='bg-[#1a1b1d]'>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto&display=swap" rel="stylesheet"/>
         
         {router.pathname === "/"? <div></div> : <Layout/>}
-        <Component {...pageProps}/>
+        
+          <Component {...pageProps}/>
+        
         
       </div>
+      </motion.main>
           
     </>
     

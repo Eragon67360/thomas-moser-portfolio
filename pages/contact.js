@@ -4,6 +4,7 @@ import { BsEnvelopeFill } from "react-icons/bs";
 import {maps} from "../public/maps.jpg"
 import Image from "next/image";
 import Head from 'next/head';
+import { motion } from "framer-motion";
 
 function Contact() {
     return(
@@ -14,7 +15,16 @@ function Contact() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="font-montserrat flex flex-col px-20 pt-32 text-slate-200">
+            <motion.main 
+                initial='pageInitial'
+                animate='pageAnimate'
+                variants={{
+                pageInitial: { opacity: 0 },
+                pageAnimate: { opacity: 1 },
+                }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                className="font-montserrat flex flex-col px-20 pt-32 text-slate-200">
+                    
                 <div className="py-12 text-7xl  font-bold">{"Let's talk"}</div>
                 <div className="py-12 text-2xl ">Feel free to contact me and I will get back to you as soon as I can.</div>
                 <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-between">
@@ -61,7 +71,7 @@ function Contact() {
                         </a>
                     </div>
                 </div>
-            </div>
+            </motion.main>
         </>
     )
 };

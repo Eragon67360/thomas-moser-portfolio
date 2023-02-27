@@ -13,7 +13,15 @@ function Resume() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <div className="bg-no-repeat bg-cover bg-center bg-fixed ">
+            <motion.main
+                initial='pageInitial'
+                animate='pageAnimate'
+                variants={{
+                pageInitial: { opacity: 0 },
+                pageAnimate: { opacity: 1 },
+                }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                className="bg-no-repeat bg-cover bg-center bg-fixed ">
                 <div className=" overflow-auto backdrop-blur-3xl font-montserrat flex flex-col pb-12 px-20 pt-32 text-slate-200">
                 
                     <div className="unselectable py-12 text-7xl  font-bold">{"Resume"}</div>
@@ -47,7 +55,7 @@ function Resume() {
                     </div>
                 </div>
                 
-            </div>
+            </motion.main>
         </>
     )
 };

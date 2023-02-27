@@ -5,6 +5,7 @@ import app from "../public/app.png";
 import chatgpt from '../public/chatgpt.png';
 import musescore from '../public/musescore.png';
 import portfolio from '../public/portfolio.png';
+import { motion } from 'framer-motion';
 
 function Projects() {
 
@@ -49,7 +50,15 @@ function Projects() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className="font-montserrat flex flex-col text-slate-200">
+            <motion.main
+                initial='pageInitial'
+                animate='pageAnimate'
+                variants={{
+                pageInitial: { opacity: 0 },
+                pageAnimate: { opacity: 1 },
+                }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                className="font-montserrat flex flex-col text-slate-200">
                 <div className='px-20 py-[2vw] z-0 fixed'>
                     <div className="unselectable py-[1vh] text-[5vw] font-bold">My projects</div>                
                     <div className="py-[2vw] text-[3vw] lg:text-4xl ">Here is a brief summary of the projects I have done in various fields.</div>
@@ -109,7 +118,7 @@ function Projects() {
                 </div>
 
 
-        </div>
+        </motion.main>
         </>
     )
 };

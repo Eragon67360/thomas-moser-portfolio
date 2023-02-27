@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image';
 import avatar from "../public/avatar.png";
+import { motion } from 'framer-motion';
 
 function About() {
     const skills = [
@@ -47,7 +48,15 @@ function About() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <main className="font-montserrat flex flex-col text-slate-200">
+            <motion.main
+                initial='pageInitial'
+                animate='pageAnimate'
+                variants={{
+                pageInitial: { opacity: 0 },
+                pageAnimate: { opacity: 1 },
+                }}
+                transition={{ duration: 0.4, ease: 'easeInOut' }}
+                className="font-montserrat flex flex-col text-slate-200">
                 <div className='px-20 py-[2vw] z-0 fixed'>
                     <div className="unselectable py-[1vh] text-[5vw] font-bold">About me</div>
                 </div>
@@ -176,7 +185,7 @@ function About() {
                     </div>
 
                 </div>
-            </main>
+            </motion.main>
         </>
     )
 };

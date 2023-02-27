@@ -11,29 +11,59 @@ function Navbar() {
         { name: 'Resume', href: '/resume' },
       
       ];
+
+    const router = useRouter();
+
+    const checkSlug = router.pathname.endsWith('/[slug]')
+    ? router.pathname.replace('/[slug]', '')
+    : router.pathname;
       
     return(
-        <header className='unselectable h-[5vh] py-2 font-montserrat w-full mx-auto bg-black/10 px-4'>
-            <div className='w-full flex justify-between'>
-                <Link href="/" className='my-auto text-xl hidden lg:block'>Thomas Moser</Link>
-                <div className='sm:mx-auto lg:mx-0 justify-between flex px-8 transition-p ease-in-out duration-500 '>
-                    <nav className='flex items-center justify-center w-full'>
-                        <div className='text-lg space-x-3' id='navbar-default'>
-                            <ul className="flex rounded-lg flex-row space-x-3 md:space-x-8 md:font-medium bg-transparent ">
-                                {navigation.map((item) => (
-                                <Link href={item.href} key={item.name}>
-                                    <div className='py-1 md:py-2 hover:border-b-2 text-gray-300 text-md md:text-xl lg:text-2xl hover:border-primary hover:text-primary transition-py duration-500 ease-in-out'>{item.name}</div>
-                                </Link>
-                                
-                                ))}
-
-                            </ul>
-                        
+        <div className='font-montserrat'>
+        
+        {/* Mobile View */}
+        <nav className='relative z-10 w-full bg-opacity-90 px-0 xs:px-4 sm:hidden'>
+            <div className='mx-auto flex justify-center space-x-3 text-xs xs:space-x-6 xs:text-sm'>
+                {navigation.map((item) => (
+                <Link key={item.name} href={item.href}>
+                    {item.href === checkSlug ? (
+                        <div className=' my-4 text-gray-300'>
+                            <div className='border-b-2 border-primary pb-1 text-white'>
+                                {item.name}
+                            </div>
                         </div>
-                    </nav>
-                </div>
+                    ) : (                    
+                        <div className=' my-4 text-gray-300'>
+                            <div className='hover:text-primary'>
+                                {item.name}
+                            </div>
+                        </div>
+                    )}
+                </Link>
+                ))}
             </div>
-        </header>
+        </nav>
+        {/* Desktop View */}
+        <nav className='hidden relative z-10 w-full bg-opacity-90 px-0 xs:px-4 sm:flex'>
+            <div className='mx-auto text-2xl flex justify-center space-x-3  xs:space-x-6 '>
+            {navigation.map((item) => (
+                <Link key={item.name} href={item.href}>
+                {item.href === checkSlug ? (
+                    <div className=' my-4 text-gray-300'>
+                        <p className='flex justify-center border-b-2 border-primary pb-1 text-white'>
+                            {item.name}
+                        </p>
+                    </div>
+                ) : (
+                    <div className='my-4 text-gray-300'>
+                        <p className='flex justify-center  hover:text-primary'>{item.name}</p>
+                    </div>
+                )}
+                </Link>
+            ))}
+            </div>
+        </nav>
+    </div>
         
     )
 }

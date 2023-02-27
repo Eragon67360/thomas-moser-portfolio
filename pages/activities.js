@@ -1,23 +1,25 @@
 import Head from 'next/head'
 import dynamic from 'next/dynamic';
 import Player from '../components/steamplayer';
-import { Suspense } from "react";
-import GamesSkeleton from '../components/GamesSkeleton';
+import Games from '../components/steamgames';
+import DeezerUser from '../components/deezeruser';
+import DeezerHistory from '../components/deezerhistory';
 
+import { motion } from 'framer-motion';
 // const DynamicSteamPlayer = dynamic(() => import('../components/steamplayer'), {
 //     ssr: false,
 //   });
-  const DynamicSteamGames = dynamic(() => import('../components/steamgames'), {
-    ssr: false,
-  });
+  // const DynamicSteamGames = dynamic(() => import('../components/steamgames'), {
+  //   ssr: false,
+  // });
   
-  const DynamicDeezerProfile = dynamic(() => import('../components/deezeruser'), {
-    ssr: false,
-  });
+  // const DynamicDeezerProfile = dynamic(() => import('../components/deezeruser'), {
+  //   ssr: false,
+  // });
   
-  const DynamicDeezerHistory = dynamic(() => import('../components/deezerhistory'), {
-    ssr: false,
-  });
+  // const DynamicDeezerHistory = dynamic(() => import('../components/deezerhistory'), {
+  //   ssr: false,
+  // });
 
 function Activities() {
     return(
@@ -28,7 +30,15 @@ function Activities() {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <div className='max-h-max border border-transparent bg-bg_gradient bg-fixed bg-no-repeat bg-cover'>
+            <motion.main
+              initial='pageInitial'
+              animate='pageAnimate'
+              variants={{
+                pageInitial: { opacity: 0 },
+                pageAnimate: { opacity: 1 },
+              }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            className='font-montserrat max-h-max border border-transparent bg-bg_gradient bg-fixed bg-no-repeat bg-cover'>
                 <div className='px-20 py-[2vw] z-0'>
                     <div className="unselectable py-[1vh] text-[5vw] font-bold">Activities</div>
                 </div>
@@ -41,17 +51,17 @@ function Activities() {
 
                     
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>The games I recently played.</p>
-                    <DynamicSteamGames/>
+                    <Games/>
                     <h1 className='text-center mt-24 text-4xl text-white py-5 font-bold'>What I&apos;m currently listening to.</h1>
                     
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
-                    <DynamicDeezerProfile/>
+                    <DeezerUser/>
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My last listened songs.</p>
-                    <DynamicDeezerHistory className="flex items-center justify-center h-screen"/>
+                    <DeezerHistory className="flex items-center justify-center h-screen"/>
 
                 </div>
                 
-            </div>
+            </motion.main>
         </>
     )
 };
