@@ -26,8 +26,8 @@ function Contact() {
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
                 className="font-montserrat flex flex-col px-12 md:px-20 lg:pt-32 text-slate-200">
                 
-                <div className="py-12 text-[7vw] lg:text-7xl font-bold">{"Let's talk"}</div>
-                <div className="py-12 text-[2vw] lg:text-2xl ">Feel free to contact me and I will get back to you as soon as I can.</div>
+                <div className="py-4 sm:py-8 md:py-12 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center sm:text-start font-bold">{"Let's talk"}</div>
+                <div className="py-4 sm:py-8 md:py-12 text-lg sm:text-2xl lg:text-4xl text-center sm:text-start font-bold">Feel free to contact me and I will get back to you as soon as I can.</div>
                 <div className="mx-auto p-6 xs:block sm:hidden">
                     Access my resume below.
                 </div>
