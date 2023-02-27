@@ -22,9 +22,9 @@ export default async function handler(
   const getPersonName = deezer.name;
   const getAvatar = deezer.picture;
   const getStatus =
-  deezer.status === 2
-      ? "Online 😆"
-      : "Offline 😴";
+  (deezer.status === 2
+      ? "Online 🎵"
+      : "Offline 😴");
 
   
   const getprofileUrl = deezer.link;
