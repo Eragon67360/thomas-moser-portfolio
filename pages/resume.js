@@ -24,8 +24,8 @@ function Resume() {
                 className="bg-no-repeat bg-cover bg-center bg-fixed ">
                 <div className=" overflow-auto backdrop-blur-3xl font-montserrat flex flex-col pb-12 px-20 pt-32 text-slate-200">
                 
-                    <div className="unselectable py-12 text-7xl  font-bold">{"Resume"}</div>
-                    <div className="py-12 text-2xl">Click one of the links below to get access to my full resume.</div>
+                    <div className="py-12 text-[7vw] lg:text-7xl font-bold">{"Resume"}</div>
+                    <div className="py-12 text-[2vw] lg:text-2xl ">Click one of the links below to get access to my full resume.</div>
                     <div className="pt-12 space-y-7 m-auto">
                         <motion.a
                         whileHover={{ scale: 1.1 }}

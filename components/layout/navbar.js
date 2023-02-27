@@ -23,8 +23,8 @@ function Navbar() {
         
         {/* Mobile View */}
         <nav className='relative z-10 w-full bg-opacity-90 px-0 xs:px-4 sm:hidden'>
-            <div className='mx-auto flex justify-center space-x-3 text-xs xs:space-x-6 xs:text-sm'>
-                {navigation.map((item) => (
+            <div className='mx-auto flex justify-center space-x-3 text-xs xs:text-sm'>
+                {navigation.slice(0,5).map((item) => (
                 <Link key={item.name} href={item.href}>
                     {item.href === checkSlug ? (
                         <div className=' my-4 text-gray-300'>

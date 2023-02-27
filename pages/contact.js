@@ -5,6 +5,7 @@ import {maps} from "../public/maps.jpg"
 import Image from "next/image";
 import Head from 'next/head';
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 function Contact() {
     return(
@@ -23,10 +24,20 @@ function Contact() {
                 pageAnimate: { opacity: 1 },
                 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
-                className="font-montserrat flex flex-col px-20 pt-32 text-slate-200">
-                    
-                <div className="py-12 text-7xl  font-bold">{"Let's talk"}</div>
-                <div className="py-12 text-2xl ">Feel free to contact me and I will get back to you as soon as I can.</div>
+                className="font-montserrat flex flex-col px-12 md:px-20 lg:pt-32 text-slate-200">
+                
+                <div className="py-12 text-[7vw] lg:text-7xl font-bold">{"Let's talk"}</div>
+                <div className="py-12 text-[2vw] lg:text-2xl ">Feel free to contact me and I will get back to you as soon as I can.</div>
+                <div className="mx-auto p-6 xs:block sm:hidden">
+                    Access my resume below.
+                </div>
+                
+                <Link className="mx-auto" href={'/resume'}>
+                    <div className="mx-auto px-5 py-3 hover:opacity-60 xs:block sm:hidden rounded-lg bg-primary text-white font-bold">
+                        Resume
+                    </div>
+                </Link>
+
                 <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-between">
                     <div className="py-6 border rounded-xl flex flex-col my-auto px-6">
 
