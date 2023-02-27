@@ -9,6 +9,7 @@ const GamesSkeleton = () => {
         <div className='mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-28'>
         {loadGames.map((_, i) => (
             <SkeletonTheme
+                key={i}
                 baseColor='#484262'
             >
                 <div

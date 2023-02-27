@@ -2,6 +2,7 @@ import useSWR from 'swr'
 import React from 'react';
 import {BiError} from 'react-icons/bi'
 import DeezerHistorySkeleton from './DeezerHistorySkeleton'
+import Image from 'next/image';
 
 const DeezerHistory = () => {
   const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
@@ -23,7 +24,7 @@ const DeezerHistory = () => {
                     target="_blank"
                     rel='noreferrer noopener'
                     >
-                    <img
+                    <Image
                       className="rounded-lg"
                       src={music.album.cover}
                       width={100}
