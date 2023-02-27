@@ -56,12 +56,13 @@ function About() {
                 pageAnimate: { opacity: 1 },
                 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
-                className="font-montserrat flex flex-col text-slate-200">
-                <div className='px-20 py-[2vw] z-0 fixed'>
-                    <div className="unselectable py-[1vh] text-[5vw] font-bold">About me</div>
+                className="font-montserrat flex flex-col text-slate-200 xs:items-center sm:items-start">
+                <div className='px-20 pt-8 sm:pt-16 md:pt-24 lg:pt-32 z-0 fixed'>
+                    <div className="py-4 sm:py-8 md:py-12 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center sm:text-start font-bold">About me</div>
+
                 </div>
 
-                <div className='z-10 rounded-t-3xl px-8 bg-gradient-to-br from-background via-purple-800 to-primary/40 py-8 mt-[18vw] align-middle transition-all ease-in-out duration-300'>
+                <div className='z-10 rounded-t-3xl px-8 bg-gradient-to-br from-background via-purple-800 to-primary/40 py-8 mt-[32vw] align-middle transition-all ease-in-out duration-300'>
 
                     <h1 className='text-center text-xl md:text-3xl lg:text-5xl text-white font-bold transition-all ease-in-out duration-300'>Who am I?</h1>
                     <div className="text-center text-lg md:text-xl lg:text-2xl pb-10 leading-8 text-gray-400 transition-all ease-in-out duration-300">Here are my professional background, accomplishments and personal values.</div>

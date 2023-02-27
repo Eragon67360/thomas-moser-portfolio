@@ -55,34 +55,34 @@ function HomePage() {
                     <meta name="viewport" content="width=device-width, initial-scale=1" />
                     <link rel="icon" href="/favicon.ico" />
                 </Head>
-                <main className="max-h-max px-20 pt-32 font-montserrat flex flex-col text-slate-200">
-                    <div className='flex'>
-                        <div className='flex flex-col'>
-                            <div className="unselectable py-12 text-[5vw]  font-bold">{"Hey there! I'm"} <span className='text-primary'>Thomas Moser</span></div>
-                            <div className='py-12 text-[3vw] lg:text-3xl'>Developer providing services for programming in embedded systems, software development... And so much more!</div>
+                <main className="max-h-max px-4 sm:px-8 md:px-16 lg:px-20 pt-32 font-montserrat flex flex-col text-slate-200 transition-all duration-300 ease-in-out">
+                    <div className='flex transition-all duration-300 ease-in-out'>
+                        <div className='flex flex-col transition-all duration-300 ease-in-out'>
+                            <div className="unselectable py-4 sm:py-8 md:py-12 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center sm:text-start font-bold transition-all duration-300 ease-in-out">{"Hey there! I'm"} <span className='text-primary'>Thomas Moser</span></div>
+                            <div className='py-4 sm:py-8 md:py-12 text-lg sm:text-2xl lg:text-4xl text-center sm:text-start font-semibold text-slate-300 transition-all duration-300 ease-in-out'>Developer providing services for programming in embedded systems, software development... And so much more!</div>
                         </div>
 
                     </div>
-                    <div className='my-20 flex mx-auto space-x-6'>
-                        <button className='bg-primary text-2xl rounded-md p-3 font-bold hover:opacity-70'>
+                    <div className='unselectable my-20 flex mx-auto space-x-6 transition-all duration-300 ease-in-out'>
+                        <button className='bg-primary text-lg sm:text-2xl lg:text-4xl rounded-md p-3 font-bold hover:opacity-70 transition-all duration-300 ease-in-out'>
                             <Link href="/projects">Visit projects</Link>
                         </button>
-                        <button className='bg-[#3c3e43] text-2xl rounded-md p-3 font-bold hover:opacity-70'>
+                        <button className='bg-[#3c3e43] text-lg sm:text-2xl lg:text-4xl rounded-md p-3 font-bold hover:opacity-70 transition-all duration-300 ease-in-out'>
                             <Link href="/about">About me</Link>
                         </button>
                     </div>
-                    <div className='flex flex-col m-auto items-center'>
-                        <h1 className='text-[5vw] font-bold text-center m-auto'>My socials</h1>
+                    <div className='flex flex-col m-auto items-center transition-all duration-300 ease-in-out'>
+                        <h1 className='text-[5vw] font-bold text-center m-auto transition-all duration-300 ease-in-out'>My socials</h1>
                         
-                        <div className="unselectable flex flex-wrap gap-5 mt-10 h-[100px] p-2 md:p-4 lg:p-6 border border-primary rounded-3xl items-center mb-12">
+                        <div className="unselectable flex flex-wrap gap-5 mt-10 h-[100px] p-2 md:p-4 lg:p-6 border border-primary rounded-3xl items-center mb-12 transition-all duration-300 ease-in-out">
                             {icons.map((item, index) =>(
                             <a key={index} href={item.href} target="_blank" rel="noopener noreferrer">
                                 <div className='group z-0'>
-                                <div className={classNames("bg-white h-14 w-14 p-2 group-hover:w-40 rounded-full flex transition-{w} ease-in-out duration-500",`${item.color}`,'')}>
-                                    <div className='opacity-0 text-lg group-hover:text-2xl text-center group-hover:text-start hidden group-hover:block group-hover:opacity-100 uppercase text-slate-100 m-auto transition-{text-align} ease-in-out duration-500'>
+                                <div className={classNames("bg-white h-10 w-10 sm:h-10 sm:w-10 md:h-12 md:w-12 lg:h-14 lg:w-14 p-2 group-hover:w-44 rounded-full flex transition-{w} ease-in-out duration-500",`${item.color}`,'')}>
+                                    <div className='opacity-0 text-lg sm:text-xl md:text-xl lg:text-2xl text-center group-hover:text-start hidden group-hover:block group-hover:opacity-100 uppercase text-slate-100 m-auto transition-{text-align} ease-in-out duration-500'>
                                     {item.name}
                                     </div>
-                                    <div className={classNames('opacity-100 text-4xl group-hover:hidden text-gray-700 m-auto transition ease-in-out duration-500 group-hover:opacity-0 ',`${item.icon_color}`)}>
+                                    <div className={classNames('opacity-100 text-xl sm:text-2xl md:text-3xl lg:text-4xl group-hover:hidden text-gray-700 m-auto transition ease-in-out duration-500 group-hover:opacity-0 ',`${item.icon_color}`)}>
                                     {item.icon}
                                     </div>
                                 </div>

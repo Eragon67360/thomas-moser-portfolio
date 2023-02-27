@@ -59,17 +59,17 @@ function Projects() {
                 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
                 className="font-montserrat flex flex-col text-slate-200">
-                <div className='px-20 py-[2vw] z-0 fixed'>
-                    <div className="unselectable py-[1vh] text-[5vw] font-bold">My projects</div>                
-                    <div className="py-[2vw] text-[3vw] lg:text-4xl ">Here is a brief summary of the projects I have done in various fields.</div>
+                <div className='px-20 pt-8 sm:pt-16 md:pt-24 lg:pt-32 z-0 fixed'>
+                    <div className="py-4 sm:py-8 md:py-12 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center sm:text-start font-bold">My projects</div>                
+                    <div className="py-4 sm:py-8 md:py-12 text-lg sm:text-2xl lg:text-4xl text-center sm:text-start font-bold text-slate-300">Here is a brief summary of the projects I have done in various fields.</div>
 
                 </div>
                 
             
             
-                <div className='z-10 rounded-t-3xl px-8 bg-gradient-to-br from-background to-purple-800 py-8 mt-[30vw] align-middle grid grid-cols-1 gap-5 md:gap-10'>
+                <div className='z-10 rounded-t-3xl px-8 bg-gradient-to-br from-background to-purple-800 py-8 mt-48 sm:mt-72 md:mt-[48vw] lg:mt-[40vw] align-middle grid grid-cols-1 gap-5 md:gap-10 transition-all ease-in-out duration-500'>
                 {projects.map((item, index) => (
-                    <a key={index} className=' mb-5 max-w-none flex-none items-center justify-between lg:flex lg:flex-row-reverse'>
+                    <a key={index} className='mb-5 max-w-none flex-none items-center justify-between lg:flex lg:flex-row-reverse'>
                     <div className='py-5 w-fit overflow-hidden rounded-md bg-background_100 lg:ml-10'>
                         <div className='group relative z-0 items-center'>
                         <Link href={item.link} target={item.target}>
@@ -90,7 +90,7 @@ function Projects() {
                         </div>
                     </div>
 
-                    <div className='text-center md:text-start py-5 align-middle lg:w-[900px] relative z-0 transition ease-in-out translate-x-16 duration-300'>
+                    <div className='text-center md:text-start py-5 align-middle lg:w-[900px] relative z-0 transition ease-in-out duration-300'>
                         <div >
                         <h3 className='py-5 md:text-3xl lg:text-5xl font-bold'>
                             {item.title}

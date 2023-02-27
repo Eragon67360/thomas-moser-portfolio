@@ -39,8 +39,8 @@ function Activities() {
               }}
             transition={{ duration: 0.4, ease: 'easeInOut' }}
             className='font-montserrat max-h-max border border-transparent bg-bg_gradient bg-fixed bg-no-repeat bg-cover'>
-                <div className='px-20 py-[2vw] z-0'>
-                    <div className="unselectable py-[1vh] text-[5vw] font-bold">Activities</div>
+                <div className='overflow-auto backdrop-blur-3xl font-montserrat flex flex-col pb-12 px-20 pt-8 sm:pt-16 md:pt-24 lg:pt-32 text-slate-200'>
+                    <div className="py-4 sm:py-8 md:py-12 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center sm:text-start font-bold">Activities</div>
                 </div>
 
                 <div className='m-10 p-10 rounded-xl bg-gray-400/30 mt-[2vw]'>

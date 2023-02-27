@@ -22,16 +22,16 @@ function Resume() {
                 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
                 className="bg-no-repeat bg-cover bg-center bg-fixed ">
-                <div className=" overflow-auto backdrop-blur-3xl font-montserrat flex flex-col pb-12 px-20 pt-32 text-slate-200">
+                <div className="overflow-auto backdrop-blur-3xl font-montserrat flex flex-col pb-12 px-20 pt-8 sm:pt-16 md:pt-24 lg:pt-32 text-slate-200">
                 
                     <div className="py-4 sm:py-8 md:py-12 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center sm:text-start font-bold">{"Resume"}</div>
-                    <div className="py-4 sm:py-8 md:py-12 text-lg sm:text-2xl lg:text-4xl text-center sm:text-start font-bold">Click one of the links below to get access to my full resume.</div>
+                    <div className="py-4 sm:py-8 md:py-12 text-lg sm:text-2xl lg:text-4xl text-center sm:text-start font-bold text-slate-300">Click one of the links below to get access to my full resume.</div>
                     <div className="pt-12 space-y-7 m-auto">
                         <motion.a
                         whileHover={{ scale: 1.1 }}
                         transition={{ type: "spring", stiffness: 400, damping: 10, duration: 0.2}}
 
-                        className="unselectable flex space-x-4 text-2xl m-auto p-4 rounded-xl bg-primary hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/50"
+                        className="unselectable flex space-x-4 text-lg md:text-2xl m-auto p-4 rounded-xl bg-primary hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/50"
                         href="CV_Thomas_MOSER.pdf"
                         alt="cv french"
                         target="_blank"
@@ -42,7 +42,7 @@ function Resume() {
                         <motion.a
                         whileHover={{ scale: 1.1 }}
                         transition={{ type: "spring", stiffness: 400, damping: 10, duration: 0.2}}
-                        className="unselectable flex space-x-4 text-2xl m-auto p-4 rounded-xl bg-primary hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/50"
+                        className="unselectable flex space-x-4 text-lg md:text-2xl m-auto p-4 rounded-xl bg-primary hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/50"
                         href="Lebenslauf_MOSER.pdf"
                         alt="cv german"
                         target="_blank"
