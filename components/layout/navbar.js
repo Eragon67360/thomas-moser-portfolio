@@ -22,7 +22,7 @@ function Navbar() {
                             <ul className="flex rounded-lg flex-row space-x-3 md:space-x-8 md:font-medium bg-transparent ">
                                 {navigation.map((item) => (
                                 <Link href={item.href} key={item.name}>
-                                    <div className='py-1 md:py-2 hover:border-b-2 text-gray-300 md:text-xl lg:text-2xl hover:border-primary hover:text-primary transition-py duration-500 ease-in-out'>{item.name}</div>
+                                    <div className='py-1 md:py-2 hover:border-b-2 text-gray-300 text-md sm:text-lg md:text-xl lg:text-2xl hover:border-primary hover:text-primary transition-py duration-500 ease-in-out'>{item.name}</div>
                                 </Link>
                                 
                                 ))}
