@@ -1,9 +1,12 @@
 import Head from 'next/head'
 import dynamic from 'next/dynamic';
+import Player from '../components/steamplayer';
+import { Suspense } from "react";
+import GamesSkeleton from '../components/GamesSkeleton';
 
-const DynamicSteamPlayer = dynamic(() => import('../components/steamplayer'), {
-    ssr: false,
-  });
+// const DynamicSteamPlayer = dynamic(() => import('../components/steamplayer'), {
+//     ssr: false,
+//   });
   const DynamicSteamGames = dynamic(() => import('../components/steamgames'), {
     ssr: false,
   });
@@ -30,7 +33,11 @@ function Activities() {
 
                     <h1 className='text-center text-4xl text-white py-5 font-bold'>What I play</h1>
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
-                    <DynamicSteamPlayer/>
+                    <Suspense fallback={<GamesSkeleton amount={1}/>}>
+                      <Player/>
+                    </Suspense>
+
+                    
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>The games I recently played.</p>
                     <DynamicSteamGames/>
                     <h1 className='text-center mt-24 text-4xl text-white py-5 font-bold'>What I&apos;m currently listening to.</h1>

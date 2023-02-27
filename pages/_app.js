@@ -3,9 +3,11 @@ import '../styles/nprogress.css';
 import Layout from '../components/layout/layout'
 
 import Router, { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import NProgress from "nprogress";
 import 'nprogress/nprogress.css';
+import Loading from '../components/layout/loading';
+
 
 import { motion } from 'framer-motion';
 
@@ -40,7 +42,6 @@ export default function App({ Component, pageProps }) {
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&family=Roboto&display=swap" rel="stylesheet"/>
         
         {router.pathname === "/"? <div></div> : <Layout/>}
-        
         <Component {...pageProps}/>
         
       </div>
