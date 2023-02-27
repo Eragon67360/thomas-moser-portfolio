@@ -110,7 +110,7 @@ export default function Home() {
                 </motion.div>
                 <div className="m-auto">
                   <motion.h3
-                    className="text-[2vw] justify-center text-center px-6 pb-10 transition-all duration-500"
+                    className="text-[3vw] lg:text-4xl justify-center text-center px-6 pb-10 transition-all duration-500"
                     variants={sentence}
                     initial="hidden"
                     animate="visible">
@@ -159,7 +159,7 @@ export default function Home() {
                     href="/home"
                     passHref
                     className=" group scale-100 relative m-auto flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium rounded-lg bg-gradient-to-br from-purple-800 to-primary transition-scale ease-in-out duration-300 bganimation hover:scale-125 hover:text-white text-white hover:shadow-lg hover:shadow-primary active:brightness-50">
-                    <span className="transition-all duration-500 md:text-md lg:text-xl uppercase relative px-5 py-2.5 bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                    <span className="transition-all duration-500 text-[2vw] lg:text-xl uppercase relative px-5 py-2.5 bg-gray-900 rounded-md group-hover:bg-opacity-0">
                       Get started
                     </span>
                   </Link>

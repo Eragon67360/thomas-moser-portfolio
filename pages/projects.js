@@ -50,15 +50,15 @@ function Projects() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className="font-montserrat flex flex-col text-slate-200">
-                <div className='fixed px-20 pt-32 z-0'>
-                    <div className="unselectable py-12 text-7xl  font-bold">{"My projects"}</div>
-                    <div className="py-12 text-2xl ">Here is a brief summary of the projects I have done in various fields.</div>
+                <div className='px-20 py-[2vw] z-0 fixed'>
+                    <div className="unselectable py-[1vh] text-[5vw] font-bold">My projects</div>                
+                    <div className="py-[2vw] text-[3vw] lg:text-4xl ">Here is a brief summary of the projects I have done in various fields.</div>
 
                 </div>
                 
             
             
-                <div className='z-10 rounded-t-3xl px-8 bg-gradient-to-br from-background to-purple-800 py-8 mt-[40vh] align-middle grid grid-cols-1 gap-5 md:gap-10'>
+                <div className='z-10 rounded-t-3xl px-8 bg-gradient-to-br from-background to-purple-800 py-8 mt-[30vw] align-middle grid grid-cols-1 gap-5 md:gap-10'>
                 {projects.map((item, index) => (
                     <a key={index} className=' mb-5 max-w-none flex-none items-center justify-between lg:flex lg:flex-row-reverse'>
                     <div className='py-5 w-fit overflow-hidden rounded-md bg-background_100 lg:ml-10'>

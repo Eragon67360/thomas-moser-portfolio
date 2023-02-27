@@ -17,10 +17,10 @@ function Contact() {
             <div className="font-montserrat flex flex-col px-20 pt-32 text-slate-200">
                 <div className="py-12 text-7xl  font-bold">{"Let's talk"}</div>
                 <div className="py-12 text-2xl ">Feel free to contact me and I will get back to you as soon as I can.</div>
-                <div className="py-12 flex justify-between">
-                    <div className="flex flex-col my-auto">
+                <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-between">
+                    <div className="py-6 border rounded-xl flex flex-col my-auto px-6">
 
-                        <span className="py-6 text-3xl font-bold">Email</span>
+                        <span className="text-3xl font-bold">Email</span>
 
                         <div className="flex">
                             <div className="flex my-auto text-4xl text-yellow-400">
@@ -40,7 +40,7 @@ function Contact() {
 
                     </div>
 
-                    <div className="my-auto flex flex-col space-y-4">
+                    <div className="py-6 border rounded-xl flex flex-col space-y-4 px-6">
                         <div className="text-2xl font-bold">Head quarters xD</div>
                         <div className="text-lg space-y-4">
                             <div>{"2 rue de Munster,"}

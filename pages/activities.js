@@ -29,7 +29,11 @@ function Activities() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className='max-h-max border border-transparent bg-bg_gradient bg-fixed bg-no-repeat bg-cover'>
-                <div className='m-10 p-10 rounded-xl bg-gray-400/30'>
+                <div className='px-20 py-[2vw] z-0'>
+                    <div className="unselectable py-[1vh] text-[5vw] font-bold">Activities</div>
+                </div>
+
+                <div className='m-10 p-10 rounded-xl bg-gray-400/30 mt-[2vw]'>
 
                     <h1 className='text-center text-4xl text-white py-5 font-bold'>What I play</h1>
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>

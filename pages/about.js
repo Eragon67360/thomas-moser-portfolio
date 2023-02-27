@@ -48,16 +48,14 @@ function About() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className="font-montserrat flex flex-col text-slate-200">
-                <div className='px-20 py-32 z-0 fixed'>
-                    <div className="unselectable py-12 text-7xl  font-bold">{"About me"}</div>
-                    
+                <div className='px-20 py-[2vw] z-0 fixed'>
+                    <div className="unselectable py-[1vh] text-[5vw] font-bold">About me</div>
                 </div>
 
-                <div className='z-10 rounded-t-3xl px-8 bg-gradient-to-br from-background via-purple-800 to-primary py-8 mt-[30vh] align-middle'>
+                <div className='z-10 rounded-t-3xl px-8 bg-gradient-to-br from-background via-purple-800 to-primary/40 py-8 mt-[18vw] align-middle transition-all ease-in-out duration-300'>
 
-                
-                    <h1 className='pt-20 text-center text-5xl text-white font-bold'>Who am I?</h1>
-                    <div className="text-center md:text-xl lg:text-2xl pb-10 leading-8 text-gray-400">Here are my professional background, accomplishments and personal values.</div>
+                    <h1 className='text-center text-xl md:text-3xl lg:text-5xl text-white font-bold transition-all ease-in-out duration-300'>Who am I?</h1>
+                    <div className="text-center text-lg md:text-xl lg:text-2xl pb-10 leading-8 text-gray-400 transition-all ease-in-out duration-300">Here are my professional background, accomplishments and personal values.</div>
 
                     <div className='py-10 -pt-5 bg-[#58585857] shadow-lg rounded-lg border border-white border-opacity-10 bg-background_100 p-5'>
                         <div className='relative float-left mr-4 w-[150px]'>
