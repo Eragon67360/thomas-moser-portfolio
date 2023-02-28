@@ -10,7 +10,8 @@ module.exports = {
     extend: {
       colors: {
         'primary': '#d4af37',
-        'background': '#1a1b1d'
+        'background': '#1a1b1d',
+        'gradient':'bg-gradient-to-r from-amber-300 to-fuchsia-700'
       },
       fontFamily: {
         montserrat: ['Montserrat'],
