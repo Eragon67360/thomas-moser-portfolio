@@ -16,7 +16,7 @@ const PlayedGames = () => {
 
     useEffect(() => {
         setLoading(true)
-        fetch('/api/playersummaries')
+        fetch('/api/gamessummaries')
             .then((res) => res.json())
             .then((data) => {
             setData(data)
@@ -37,16 +37,16 @@ const PlayedGames = () => {
     var name = [];
     var index = 0;
     for (const game in data.steam) {
-    array[game]=`https://steamcdn-a.akamaihd.net/steam/apps/${data.steam[game].appid}/header.jpg`;
-    playtime[game] = data.steam[game].playtime_forever;
-    name[game] = data.steam[game].name; 
+        array[game]=`https://steamcdn-a.akamaihd.net/steam/apps/${data.steam[game].appid}/header.jpg`;
+        playtime[game] = data.steam[game].playtime_forever;
+        name[game] = data.steam[game].name;
     }
 
     return (
     <div className='flex mx-auto'>
     
         <div className='py-10 flex mx-auto'>
-            <div className='mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-28'>          
+            <div className='mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-28'>
             {data.steam.map((game, index) => (
                 <a
                 target='_blank'
