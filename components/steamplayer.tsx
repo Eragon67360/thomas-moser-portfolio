@@ -1,16 +1,13 @@
-import useSWR from 'swr'
 import React from 'react';
 import { useState, useEffect } from 'react'
-import {BiError} from 'react-icons/bi'
 import Image from 'next/image';
-import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import PlayerSkeleton from './PlayerSkeleton'
 
 const Player = () => {
-  const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
-  const [data, setData] = useState(null)
-  const [isLoading, setLoading] = useState(false)
+    const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
+    const [data, setData] = useState(null)
+    const [isLoading, setLoading] = useState(false)
 
 
     useEffect(() => {
@@ -32,7 +29,7 @@ const Player = () => {
         console.log("no data")
         return <div>No data</div>
     }
-    
+
     return (
       <div className='m-auto'>
         
