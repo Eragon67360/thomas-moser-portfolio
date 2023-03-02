@@ -43,16 +43,16 @@ function Activities() {
                     <div className="py-4 sm:py-8 md:py-12 text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center sm:text-start font-bold">Activities</div>
                 </div>
 
-                <div className='m-10 p-10 rounded-xl bg-gray-400/30 mt-[2vw]'>
+                <div className='m-2 md:m-6 lg:m-10 p-10 rounded-xl bg-gray-400/30 mt-[2vw]'>
 
-                    <h1 className='text-center text-4xl text-white py-5 font-bold'>What I play</h1>
+                    <h1 className='text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white py-5 font-bold'>What I play</h1>
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
                     <Player/>
 
                     
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>The games I recently played.</p>
                     <Games/>
-                    <h1 className='text-center mt-24 text-4xl text-white py-5 font-bold'>What I&apos;m currently listening to.</h1>
+                    <h1 className='text-center mt-24 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white py-5 font-bold'>{"What I'm currently listening to."}</h1>
                     
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
                     <DeezerUser/>
