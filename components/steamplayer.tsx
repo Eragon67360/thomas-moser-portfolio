@@ -9,19 +9,10 @@ import PlayerSkeleton from './PlayerSkeleton'
 
 const Player = () => {
     const [isLoading, setLoading] = useState(false);
-    const [data, setData] = useState(null);
 
-    useEffect(() => {
-        setLoading(true);
-        const fetcher = (url: RequestInfo) =>
-        fetch(url)
-        .then((res) => res.json())
-        .then((data) => {            
-            setData(useSWR('/api/playersummaries', fetcher))
-            setLoading(false)
-        })
+    const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
+    const {data} = useSWR('/api/playersummaries', fetcher)
 
-    }, [])
 
     if(isLoading){
         return <PlayerSkeleton/>
