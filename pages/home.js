@@ -89,7 +89,7 @@ function HomePage() {
                     whileHover={{ scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
                     whileTap={{ scale: 0.8 }}
-                    className='z-10 mx-auto flex rounded-xl bg-background '>
+                    className='mx-4 z-10 flex rounded-xl bg-background '>
                         <Link className='z-10 mx-auto border flex flex-col rounded-xl p-4 md:p-8 lg:p-12 bg-background' href={"/activities"}>
                             <div className='text-2xl flex'>
                                 <div className='text-2xl p-10'>My activities</div>
