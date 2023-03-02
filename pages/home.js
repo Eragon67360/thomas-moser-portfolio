@@ -22,7 +22,7 @@ function HomePage() {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 1 }}
-                className=' w-screen min-h-screen overflow-auto overflow-x-hidden bg-gradient-to-b from-background via-gray-900 to-gray-700'
+                className='w-screen min-h-screen overflow-auto overflow-x-hidden bg-gradient-to-b from-background via-gray-900 to-gray-700'
                 >
                     <div className='h-screen w-screen fixed z-0 flex bg-transparent justify-evenly divide-x divide-neutral-500'>
                         <div className='w-full'></div>
@@ -30,9 +30,9 @@ function HomePage() {
                     </div>
                    
 
-                <div className='snap-start bg-transparent text-8xl w-screen h-screen flex items-center justify-center'>
+                <div className='snap-start bg-transparent w-screen h-screen flex items-center justify-center'>
                     <div className='z-10 flex flex-col mx-8 md:mx-16 lg:mx-24 transition-all duration-300 ease-in-out items-center justify-center w-full bg-background'>
-                        <div className="unselectable py-4 sm:py-8 md:py-8 text-md sm:text-lg  md:text-xl lg:text-xl text-center transition-all duration-300 ease-in-out">{"Hey there! I'm"} <span className='text-primary'>Thomas</span></div>
+                        <div className="unselectable text-white py-4 sm:py-8 md:py-8 text-md sm:text-lg  md:text-xl lg:text-xl text-center transition-all duration-300 ease-in-out">{"Hey there! I'm"} <span className='text-primary'>Thomas</span></div>
                         <div className='py-4 sm:py-8 md:py-8 text-2xl sm:text-4xl lg:text-4xl text-center text-white font-bold transition-all duration-300 ease-in-out'>{"I'm a Junior Developer building softwares in Germany."}</div>
                         <div className='py-0 sm:py-4 md:py-8 text-md sm:text-lg lg:text-xl text-center text-gray-500 transition-all duration-300 ease-in-out'>
                             Currently working at BMG LABTECH.
@@ -41,7 +41,7 @@ function HomePage() {
 
                 </div>
 
-                <div className='snap-start bg-transparent w-screen h-screen flex items-center justify-center'>
+                <div className='snap-start bg-transparent text-white w-screen h-screen flex items-center justify-center'>
                     <motion.div
                         whileHover={{ scale: 1.1 }}
                         transition={{ type: "spring", stiffness: 400, damping: 20 }}
@@ -50,9 +50,9 @@ function HomePage() {
                         className='z-10 mx-auto flex rounded-xl bg-transparent '>
                             <Link
                                 href={"/about"}
-                                className='border border-r-gradient z-10 mx-auto flex flex-col rounded-xl p-4 md:p-8 lg:p-12 bg-background '>
+                                className='border z-10 mx-auto flex flex-col rounded-xl p-4 md:p-8 lg:p-12 bg-background '>
                                 <div className='text-2xl flex' >
-                                    <div className='text-2xl p-10'>About me</div>
+                                    <div className=' text-2xl p-10'>About me</div>
                                     <div className='m-auto'><BiRightArrowAlt/></div>
                                 </div>
                                 <div className='animate-pulse text-center visible opacity-100 transition-opacity ease-in-out duration-500'>
@@ -63,7 +63,7 @@ function HomePage() {
 
                 </div>
 
-                <div className='snap-start bg-transparent w-screen h-screen flex items-center justify-center'>
+                <div className='snap-start bg-transparent text-white w-screen h-screen flex items-center justify-center'>
                     <motion.div
                         whileHover={{ scale: 1.1 }}
                         transition={{ type: "spring", stiffness: 400, damping: 20 }}
@@ -72,7 +72,7 @@ function HomePage() {
                         className='z-10 mx-auto flex rounded-xl bg-background '>
                             <Link
                                 href={"/projects"}
-                                className='z-10 mx-auto border flex flex-col rounded-xl p-4 md:p-8 lg:p-12 bg-background '>
+                                className='z-10 mx-auto border flex flex-col rounded-xl p-4 md:p-8 lg:p-12 bg-background'>
                                 <div className='text-2xl flex' >
                                     <div className='text-2xl p-10'>Visit my projects</div>
                                     <div className='m-auto'><BiRightArrowAlt/></div>
@@ -84,7 +84,7 @@ function HomePage() {
                     </motion.div>
                 </div>
 
-                <div className='snap-start bg-transparent w-screen h-screen flex items-center justify-center'>
+                <div className='snap-start bg-transparent text-white w-screen h-screen flex items-center justify-center'>
                     <motion.div
                     whileHover={{ scale: 1.1 }}
                     transition={{ type: "spring", stiffness: 400, damping: 20 }}
