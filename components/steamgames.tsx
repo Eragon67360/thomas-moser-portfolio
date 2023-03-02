@@ -10,25 +10,25 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 const PlayedGames = () => {
     const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
-    const {data} = useSWR('/api/gamessummaries',fetcher)
+    // const {data} = useSWR('/api/gamessummaries',fetcher)
     
-    // const [data, setData] = useState(null)
-    // const [isLoading, setLoading] = useState(false)
+    const [data, setData] = useState(null)
+    const [isLoading, setLoading] = useState(false)
 
 
-    // useEffect(() => {
-    //     setLoading(true)
-    //     fetch('/api/gamessummaries')
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //         setData(data)
-    //         setLoading(false)
-    //     })
-    // }, [])
+    useEffect(() => {
+        setLoading(true)
+        fetch('/api/gamessummaries')
+            .then((res) => res.json())
+            .then((data) => {
+            setData(data)
+            setLoading(false)
+        })
+    }, [])
 
-    // if (isLoading){
-    //     return <GamesSkeleton/>
-    // }
+    if (isLoading){
+        return <GamesSkeleton/>
+    }
 
     if(!data){
         return <div>No data</div>

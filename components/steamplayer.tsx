@@ -1,34 +1,25 @@
 import React from 'react';
+import useSWR from 'swr';
 import { useState, useEffect } from 'react'
 import Image from 'next/image';
 import 'react-loading-skeleton/dist/skeleton.css'
 import PlayerSkeleton from './PlayerSkeleton'
 
+
 const Player = () => {
-    const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
-    const [data, setData] = useState(null)
     const [isLoading, setLoading] = useState(false)
+    setLoading(true)
 
+    const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json())
 
-    useEffect(() => {
-        setLoading(true)
-        fetch('/api/playersummaries')
-            .then((res) => res.json())
-            .then((data) => {
-            setData(data)
-            setLoading(false)
-        })
-    }, [])
+    const { data, error } = useSWR('/api/playersummaries', fetcher)
+    setLoading(false)
 
     if (isLoading){
-        console.log("loading")
         return <PlayerSkeleton/>
     }
 
-    if(!data){
-        console.log("no data")
-        return <div>No data</div>
-    }
+    if (error) return <div>Failed to load</div>
 
     return (
       <div className='m-auto'>
