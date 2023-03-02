@@ -1,25 +1,25 @@
 import Head from 'next/head'
 import dynamic from 'next/dynamic';
-import Player from '../components/steamplayer';
-import Games from '../components/steamgames';
-import DeezerUser from '../components/deezeruser';
-import DeezerHistory from '../components/deezerhistory';
+// import Player from '../components/steamplayer';
+// import Games from '../components/steamgames';
+// import DeezerUser from '../components/deezeruser';
+// import DeezerHistory from '../components/deezerhistory';
 
 import { motion } from 'framer-motion';
-// const DynamicSteamPlayer = dynamic(() => import('../components/steamplayer'), {
-//     ssr: false,
-//   });
-  // const DynamicSteamGames = dynamic(() => import('../components/steamgames'), {
-  //   ssr: false,
-  // });
+const DynamicSteamPlayer = dynamic(() => import('../components/steamplayer'), {
+    ssr: false,
+  });
+  const DynamicSteamGames = dynamic(() => import('../components/steamgames'), {
+    ssr: false,
+  });
   
-  // const DynamicDeezerProfile = dynamic(() => import('../components/deezeruser'), {
-  //   ssr: false,
-  // });
+  const DynamicDeezerProfile = dynamic(() => import('../components/deezeruser'), {
+    ssr: false,
+  });
   
-  // const DynamicDeezerHistory = dynamic(() => import('../components/deezerhistory'), {
-  //   ssr: false,
-  // });
+  const DynamicDeezerHistory = dynamic(() => import('../components/deezerhistory'), {
+    ssr: false,
+  });
 
 function Activities() {
     return(
@@ -47,17 +47,17 @@ function Activities() {
 
                     <h1 className='text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white py-5 font-bold'>What I play</h1>
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
-                    <Player/>
+                    <DynamicSteamPlayer/>
                     
 
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>The games I recently played.</p>
-                    <Games/>
+                    <DynamicSteamGames/>
                     <h1 className='text-center mt-24 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white py-5 font-bold'>{"What I'm currently listening to."}</h1>
                     
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
-                    <DeezerUser/>
+                    <DynamicDeezerProfile/>
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My last listened songs.</p>
-                    <DeezerHistory className="flex items-center justify-center h-screen"/>
+                    <DynamicDeezerHistory className="flex items-center justify-center h-screen"/>
 
                 </div>
                 
