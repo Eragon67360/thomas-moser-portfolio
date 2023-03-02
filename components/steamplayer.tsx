@@ -13,12 +13,8 @@ const Player = () => {
     const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json());
     const {data} = useSWR('/api/playersummaries', fetcher)
 
-
-    if(isLoading){
-        return <PlayerSkeleton/>
-    }
     if(!data) {
-        return <div>No data available</div>
+        return <PlayerSkeleton/>
     }
 
     return (

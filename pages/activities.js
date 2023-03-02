@@ -48,23 +48,16 @@ function Activities() {
                     <h1 className='text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white py-5 font-bold'>What I play</h1>
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
                     <Player/>
-                    <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
-                    <Player/>
-                    <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
-                    <Player/>
-                    <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
-                    <Player/>
-                    <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
-                    <Player/>
+                    
 
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>The games I recently played.</p>
-                    {/* <Games/> */}
+                    <Games/>
                     <h1 className='text-center mt-24 text-xl sm:text-2xl md:text-3xl lg:text-4xl text-white py-5 font-bold'>{"What I'm currently listening to."}</h1>
                     
-                    {/*<p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
+                    <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My status.</p>
                     <DeezerUser/>
                     <p className='text-md my-4 text-center font-bold text-gray-400 sm:text-xl'>My last listened songs.</p>
-                    <DeezerHistory className="flex items-center justify-center h-screen"/> */}
+                    <DeezerHistory className="flex items-center justify-center h-screen"/>
 
                 </div>
                 
