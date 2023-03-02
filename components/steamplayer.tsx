@@ -7,18 +7,8 @@ import PlayerSkeleton from './PlayerSkeleton'
 
 
 const Player = () => {
-    const [isLoading, setLoading] = useState(false)
-    setLoading(true)
-
     const fetcher = (url: RequestInfo) => fetch(url).then((res) => res.json())
-
     const { data, error } = useSWR('/api/playersummaries', fetcher)
-    setLoading(false)
-
-    if (isLoading){
-        return <PlayerSkeleton/>
-    }
-
     if (error) return <div>Failed to load</div>
 
     return (
