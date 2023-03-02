@@ -18,8 +18,8 @@ const Player = () => {
     }
 
     return (
-      <div className='m-auto'>
-        <section className="mb-16 container">
+      <div>
+        <section className="mb-16">
           <div className="rounded-lg">
             <div className="flex py-6 rounded-md">
               <div className="flex m-auto">
