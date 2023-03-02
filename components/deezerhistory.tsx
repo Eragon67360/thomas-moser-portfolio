@@ -15,7 +15,7 @@ const DeezerHistory = () => {
           <section className="mb-16 m-0 md:m-auto container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {data.data.slice(0,12).map((music, index) => (
           <div key={index} className="rounded-lg items-center border border-white border-opacity-10">
-            <div className="flex py-6 border my-auto rounded-md">
+            <div className="flex py-6 my-auto rounded-md">
             
               <div className="flex my-auto ml-5 mr-4">
                 <div className="w-20 h-20 flex items-center justify-center rounded-lg">
