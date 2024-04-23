@@ -1,10 +1,12 @@
 import type { Config } from "tailwindcss";
+const { nextui } = require("@nextui-org/react");
 
 const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     extend: {
@@ -14,7 +16,70 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
     },
+    
   },
-  plugins: [],
+  darkMode: "class",
+  plugins: [
+    nextui({
+      themes: {
+        "dark": {
+          extend: "dark",
+          colors: {
+            background: "#181818",
+            foreground: "#ffffff",
+            primary: {
+              50: "#ffe100",
+              100: "#ffe100",
+              200: "#ffd000",
+              300: "#ffd000",
+              400: "#FFBF00",
+              500: "#FFBF00",
+              600: "#FFBF00",
+              700: "#cc9800",
+              800: "#cc9800",
+              900: "#7f5f00",
+              DEFAULT: "#FFBF00",
+              foreground: "#ffffff",
+              svgFill: '#fff'
+            },
+            secondary:{
+              DEFAULT: "#8F8F8F",
+            },
+            focus: "#FFBF00",
+          },          
+        },
+
+        "light": {
+          extend: "light",
+          colors: {
+            background: "#ffffff",
+            foreground: "#000",
+            primary: {
+              50: "#ffe100",
+              100: "#ffe100",
+              200: "#ffd000",
+              300: "#ffd000",
+              400: "#FFBF00",
+              500: "#FFBF00",
+              600: "#FFBF00",
+              700: "#cc9800",
+              800: "#cc9800",
+              900: "#7f5f00",
+              DEFAULT: "#FFBF00",
+              foreground: "#000",
+              svgFill: '#000'
+            },
+            secondary:{
+              DEFAULT: "#8F8F8F",
+            },
+            focus: "#FFBF00",
+          },          
+        },
+
+        
+        
+      },
+    }),
+  ]
 };
 export default config;
