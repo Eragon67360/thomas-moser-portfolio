@@ -1,18 +1,41 @@
 'use client'
 import React from 'react'
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, Link, DropdownItem, DropdownTrigger, Dropdown, DropdownMenu, Button } from "@nextui-org/react";
+import {
+  Navbar,
+  NavbarBrand,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  Link,
+  DropdownItem,
+  DropdownTrigger,
+  Dropdown,
+  DropdownMenu,
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure
+} from "@nextui-org/react";
 import { GithubIcon } from './icons/GitHubIcon';
 import { ThemeSwitcher } from './ThemeSwitcher';
 import { Me } from './icons/Me';
 import { ChevronDown } from './icons/Icons';
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { CiSettings } from "react-icons/ci";
-import { FaProjectDiagram } from "react-icons/fa";
+import { FaLink, FaProjectDiagram } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import { FaSpotify } from "react-icons/fa";
 import { FaSteam } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaWhatsapp } from "react-icons/fa";
+import { TiMessages } from "react-icons/ti";
+import { FaLinkedin } from "react-icons/fa";
+import { FaInstagram } from "react-icons/fa";
+import ModalContentContact from './ModalContentContact';
+
 import profile from '@/public/json/personal_data.json'
 
 const Navigation = () => {
@@ -20,6 +43,8 @@ const Navigation = () => {
     chevron: <ChevronDown fill="currentColor" size={16} height={16} width={16} />
   };
   const router = useRouter();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
 
   return (
     <Navbar
@@ -70,7 +95,7 @@ const Navigation = () => {
               description="Get to know about me"
               startContent={<IoPersonCircleOutline size={24} />}
             >
-              <p>About</p>
+              About
             </DropdownItem>
 
             <DropdownItem
@@ -79,7 +104,7 @@ const Navigation = () => {
               description="My cross-disciplinary and technical skills"
               startContent={<CiSettings size={24} />}
             >
-              <p>Competencies</p>
+              Competencies
             </DropdownItem>
             <DropdownItem
               key="projects"
@@ -87,7 +112,7 @@ const Navigation = () => {
               description="Various projects I've carried out in recent years"
               startContent={<FaProjectDiagram size={24} />}
             >
-              <p>Projects</p>
+              Projects
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -120,7 +145,7 @@ const Navigation = () => {
               description="About my listenings"
               startContent={<FaSpotify size={24} />}
             >
-              <p>Spotify</p>
+              Spotify
             </DropdownItem>
 
             <DropdownItem
@@ -129,7 +154,7 @@ const Navigation = () => {
               description="Yup, I'm a gamer"
               startContent={<FaSteam size={24} />}
             >
-              <p>Steam</p>
+              Steam
             </DropdownItem>
 
 
@@ -166,26 +191,27 @@ const Navigation = () => {
               description="Send me an email"
               startContent={<MdOutlineEmail size={24} />}
             >
-              <p>Email</p>
+              Email
             </DropdownItem>
 
             <DropdownItem
               key="whatsapp"
-              href={`https://wa.me/${profile.WhatsApp}`}
+
+              href={`https://api.whatsapp.com/send?phone=${profile.WhatsApp}`}
               target='_blank'
               description="Write from a more direct channel"
               startContent={<FaWhatsapp size={24} />}
             >
-              <p>WhatsApp</p>
+              WhatsApp
             </DropdownItem>
 
             <DropdownItem
               key="others"
-              onClick={() => { router.push('/#competencies') }}
+              onClick={onOpen}
               description="Reach to me with other channels"
-              startContent={<FaWhatsapp size={24} />}
+              startContent={<TiMessages size={24} />}
             >
-              <p>WhatsApp</p>
+              Others
             </DropdownItem>
 
           </DropdownMenu>
@@ -195,7 +221,7 @@ const Navigation = () => {
 
       <NavbarContent justify="end">
         <NavbarItem>
-          <Link color="foreground" href="https://github.com/Eragon67360" target='_blank'>
+          <Link color="foreground" href={`${profile.Github}`} target='_blank'>
             <GithubIcon />
           </Link>
         </NavbarItem>
@@ -203,7 +229,12 @@ const Navigation = () => {
           <ThemeSwitcher />
         </NavbarItem>
       </NavbarContent>
+
+      <Modal backdrop='blur' isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContentContact />
+      </Modal>
     </Navbar>
+
   )
 }
 
