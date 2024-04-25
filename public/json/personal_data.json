@@ -1,0 +1,13 @@
+{
+    "Name": "Thomas Moser",
+    "Birthday": {
+        "Day": 15,
+        "Month": 3,
+        "Year": 2001
+    },
+    "Email": "thomas-moser@orange.fr",
+    "Phone": "+33 6 47 84 93 08",
+    "WhatsApp": "0033647849308",
+    "LinkedIn": "https://www.linkedin.com/in/thomas-moser67/",
+    "Github": "https://github.com/Eragon67360"
+}

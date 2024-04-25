@@ -25,7 +25,7 @@ const config: Config = {
         "dark": {
           extend: "dark",
           colors: {
-            background: "#181818",
+            background: "#090909",
             foreground: "#ffffff",
             primary: {
               50: "#ffe100",
