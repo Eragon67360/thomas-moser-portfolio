@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { } from 'react'
+import SpotifyLoader from '@/components/SpotifyLoader'
 
-const Projects = () => {
+const Projects = async () => {
+
+
   return (
     <>
-    <div id='spotify' className='h-screen'>Spotify</div>
-    <div id='steam' className='h-screen'>Steam</div>
+      <div id='spotify' className='h-screen'>
+        {/* <SpotifyLoader /> */}
+      </div>
+      <div id='steam' className='h-screen'>Steam</div>
     </>
   )
 }
