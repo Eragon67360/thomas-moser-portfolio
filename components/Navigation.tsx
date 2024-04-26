@@ -165,7 +165,7 @@ const Navigation = () => {
           >
             <DropdownItem
               key="spotify"
-              href='/projects/#spotify'
+              href='/activities/#spotify'
               description="About my listenings"
               startContent={<FaSpotify size={24} />}
             >
@@ -174,7 +174,7 @@ const Navigation = () => {
 
             <DropdownItem
               key="steam"
-              href='/projects/#steam'
+              href='/activities/#steam'
               description="Yup, I'm a gamer"
               startContent={<FaSteam size={24} />}
             >

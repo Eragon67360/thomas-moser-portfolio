@@ -1,72 +1,61 @@
 import React from 'react'
-import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
+import app from "@/public/img/app.png";
+import chatgpt from '@/public/img/chatgpt.png';
+import musescore from '@/public/img/musescore.png';
+import curefab from '@/public/img/curefab.png'
+import Image from 'next/image';
 
 const ProjectsViewer = () => {
-
     const projects = [
         {
-            title: "What is SaaS? Software as a Service Explained",
-            desc: "Going into this journey, I had a standard therapy regimen, based on looking at the research literature. After I saw the movie, I started to ask other people what they did for their anxiety, and some",
-            // img: "https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-            // authorLogo: "https://api.uifaces.co/our-content/donated/xZ4wg2Xj.jpg",
-            authorName: "Sidi dev",
-            date: "Jan 4 2022",
-            // href: "javascript:void(0)"
+            title: "Curefab",
+            explanation: "An Android app to help people, especially women, wherever they are. Developped with Android Studio (Java) and Love 💜.",
+            screenshot: curefab,
+            link: 'projects/project1',
+            code:['Java', 'XML'],
+            from:'#21B79B',
+            to:'#2F4858',
         },
         {
-            title: "A Quick Guide to WordPress Hosting",
-            desc: "According to him, â€œI'm still surprised that this has happened. But we are surprised because we are so surprised.â€More revelations about Whittington will be featured in the film",
-            // img: "https://images.unsplash.com/photo-1620287341056-49a2f1ab2fdc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-            // authorLogo: "https://api.uifaces.co/our-content/donated/FJkauyEa.jpg",
-            authorName: "Micheal",
-            date: "Jan 4 2022",
-            // href: "javascript:void(0)"
+            title: "Stop'Violence",
+            explanation: "An Android app to help people, especially women, wherever they are. Developped with Android Studio (Java) and Love 💜.",
+            screenshot: app,
+            link: 'projects/project1',
+            code:['Java', 'XML'],
+            from:'#efdff7',
+            to:'#F9F871'
         },
         {
-            title: "7 Promising VS Code Extensions Introduced in 2022",
-            desc: "I hope I remembered all the stuff that they needed to know. They're like, 'okay,' and write it in their little reading notebooks. I realized today that I have all this stuff that",
-            // img: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-            // authorLogo: "https://randomuser.me/api/portraits/men/46.jpg",
-            authorName: "Luis",
-            date: "Jan 4 2022",
-            // href: "javascript:void(0)"
+            title: "OpenAI Clone",
+            explanation: "A ChatGPT and DALL·E clone in one tool. Developped with Flet (Flutter for Python) and OpenAI API.",
+            screenshot: chatgpt,
+            link: 'projects/project2',
+            code:['Python', 'Flutter'],
+            from:'#efdff7',
+            to:'#717171'
         },
         {
-            title: "How to Use Root C++ Interpreter Shell to Write C++ Programs",
-            desc: "The powerful gravity waves resulting from the impact of the planets' moons â€” four in total â€” were finally resolved in 2015 when gravitational microlensing was used to observe the",
-            // img: "https://images.unsplash.com/photo-1617529497471-9218633199c0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
-            // authorLogo: "https://api.uifaces.co/our-content/donated/KtCFjlD4.jpg",
-            authorName: "Lourin",
-            date: "Jan 4 2022",
-            // href: "javascript:void(0)"
-        }
-    ]
+            title: "Musescore",
+            explanation: "Music creation with Musescore. Arrangements of existing songs/musics for duets, orchestra, etc...",
+            screenshot: musescore,
+            code:[],
+            from:'#efdff7',
+            to:'#717171'
+        },        
+      ];
 
     return (
         <>
-            <section className="mt-12 mx-auto max-w-screen-xl w-screen h-screen">
-                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2 h-full">
+            <section className="mt-12 mx-auto max-w-screen-xl w-screen h-screen transition-all duration-150">
+                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-2 h-full transition-all duration-150">
                     {
                         projects.map((items, key) => (
-                            <Card key={key}
-                                radius="lg"
-                                className="border-none filter-none"
-                            >
-                                <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-                                    <p className="text-tiny uppercase font-bold">Daily Mix</p>
-                                    <small className="text-default-500">12 Tracks</small>
-                                    <h4 className="font-bold text-large">Frontend Radio</h4>
-                                </CardHeader>
-                                <CardBody className="overflow-visible py-2">
-                                    <Image
-                                        alt="Card background"
-                                        className="object-cover rounded-xl"
-                                        src="/img/code.jpg"
-                                        loading='lazy'
-                                        width={800}
-                                    />
-                                </CardBody>
-                            </Card>
+                            <div key={key}
+                            style={{ background: `linear-gradient(to right, ${items.from}, ${items.to})` }} 
+         
+                            className={`group w-full aspect-video rounded-3xl pt-8 px-8 transition-all duration-150 hover:px-0 hover:pt-0 hover:shadow-2xl cursor-none`}>
+                                <Image src={items.screenshot} className='transition-all duration-150 w-full h-full rounded-t-3xl bg-slate-200 shadow-none group-hover:shadow-lg group-hover:rounded-3xl' alt={'Project screenshot'}/>
+                            </div>
 
                         ))
                     }

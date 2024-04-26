@@ -13,7 +13,7 @@ export const CustomRadio = (props: any) => {
             classNames={{
                 base: cn(
                     "inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between",
-                    "flex-row-reverse max-w-[300px] text-xs cursor-pointer rounded-lg gap-4 p-2 border border-transparent",
+                    "flex-row-reverse min-w-full text-xs cursor-pointer rounded-lg gap-4 p-2 border border-transparent",
                     "data-[selected=true]:border-primary"
                 ),
             }}
@@ -41,7 +41,7 @@ const ModalForm = () => {
                                     <p className='text-center text-sm'>This form clarifies important questions in advance. Please be as precise as possible, as it saves us both time.</p>
                                     <div className='flex flex-col w-full gap-2 items-center justify-center'>
                                         <Button onClick={handleContinue} className='w-full font-semibold' color='primary'>Get started</Button>
-                                        <p className='text-xs text-secondary'>Don't like forms?&nbsp;<Link href='mailto:thomas-moser@orange.fr' className='text-xs text-secondary' color='foreground'>Send an email</Link> </p>
+                                        <p className='text-xs text-secondary'>Don't like forms?&nbsp;<Link href='mailto:thomas-moser@orange.fr' className='text-xs text-secondary underline' color='foreground'>Send an email</Link> </p>
                                     </div>
                                 </ModalBody>
                                 <ModalFooter>
@@ -49,7 +49,7 @@ const ModalForm = () => {
                                         <CardFooter className='gap-2'>
                                             <IoIosInformationCircleOutline size={20} />
                                             <p className='text-[10px]'>I take pure development projects, but also full stack projects with the amazing designer&nbsp;
-                                                <Link href='https://portfolio-cristinaandres-projects.vercel.app/' target='_blank' className='text-[10px] text-indigo-600' color='foreground'>
+                                                <Link href='https://portfolio-cristinaandres-projects.vercel.app/' target='_blank' className='text-[10px] text-indigo-600 dark:text-indigo-300 ' color='foreground'>
                                                     Cristina Andrés
                                                 </Link>
                                             </p>
