@@ -3,33 +3,46 @@ import { SpotifyApi } from '@spotify/web-api-ts-sdk';
 
 
 if (!process.env.NEXT_SPOTIFY_CLIENT_ID) {
-    throw new Error("Missing NEXT_SPOTIFY_CLIENT_ID");
+  throw new Error("Missing NEXT_SPOTIFY_CLIENT_ID");
 }
 
 if (!process.env.NEXT_SPOTIFY_CLIENT_SECRET) {
-    throw new Error("Missing NEXT_SPOTIFY_CLIENT_SECRET");
+  throw new Error("Missing NEXT_SPOTIFY_CLIENT_SECRET");
 }
 
+import { getCurrentlyPlaying } from '@/services/spotify.service';
+
+export const revalidate = 0;
+
 export async function GET() {
-
-    const scopes = [
-        "user-read-email",
-        "user-read-private",
-        "user-read-playback-state",
-        "user-library-read",
-        "user-modify-playback-state",
-        "playlist-read-private",
-        "playlist-read-collaborative",
-        "user-read-currently-playing",
-        "user-top-read"
-    ];
-
-    const sdk = SpotifyApi.withClientCredentials(process.env.NEXT_SPOTIFY_CLIENT_ID!, process.env.NEXT_SPOTIFY_CLIENT_SECRET!, scopes);
-    const items = await sdk.users.profile('3172n5pvrazayylbzlh2bf44rvu4');
-
-    console.table(items.display_name);
-
-    return NextResponse.json({
-        items
-    });
+  try {
+    const response = await getCurrentlyPlaying();
+    if (response?.status === 204) {
+      return NextResponse.json({
+        data: {
+          isPlaying: false,
+        },
+      });
+    }
+    const music = await response.json();
+    if (music.item === null) {
+      return NextResponse.json({
+        data: {
+          isPlaying: false,
+        },
+      });
+    }
+    const data = {
+      fullTitle: `${music.item.name} - ${music.item.artists[0].name}`,
+      url: music.item.external_urls.spotify,
+      isPlaying: music.is_playing,
+    };
+    return NextResponse.json({ error: null, data: data });
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      { error: 'someting went wrong', data: null },
+      { status: 500 },
+    );
+  }
 }
