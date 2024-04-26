@@ -37,11 +37,11 @@ const ModalForm = () => {
                                 <ModalBody className='flex flex-col items-center justify-center gap-8 px-8 py-24'>
 
                                     <Avatar src='/logos/logo.svg' className="w-20 h-20 text-large" />
-                                    <H2>Let's get started</H2>
+                                    <H2>Let&apos;s get started</H2>
                                     <p className='text-center text-sm'>This form clarifies important questions in advance. Please be as precise as possible, as it saves us both time.</p>
                                     <div className='flex flex-col w-full gap-2 items-center justify-center'>
                                         <Button onClick={handleContinue} className='w-full font-semibold' color='primary'>Get started</Button>
-                                        <p className='text-xs text-secondary'>Don't like forms?&nbsp;<Link href='mailto:thomas-moser@orange.fr' className='text-xs text-secondary underline' color='foreground'>Send an email</Link> </p>
+                                        <p className='text-xs text-secondary'>Don&apos;t like forms?&nbsp;<Link href='mailto:thomas-moser@orange.fr' className='text-xs text-secondary underline' color='foreground'>Send an email</Link> </p>
                                     </div>
                                 </ModalBody>
                                 <ModalFooter>
