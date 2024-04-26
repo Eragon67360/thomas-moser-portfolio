@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.radio-hide-control .nextui-radio-button {
+    display: none;  /* Hides the circle control */
+}
+
+.radio-custom-label {
+    cursor: pointer;
+}

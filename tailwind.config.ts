@@ -16,8 +16,10 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
         'hero': "url('../public/img/bg_hero.webp')",
       },
+      backgroundColor:{
+        'overlay': 'rgba(0, 0, 0, 0.8)',
+      }
     },
-
   },
   darkMode: "class",
   plugins: [
