@@ -18,11 +18,11 @@ const ModalContentContact = () => {
                                     <span>Instagram</span>
                                 </Link>
                                 <Link href={`${profile.LinkedIn}`} target='_blank' color='foreground' className='flex gap-4 px-4 py-3 items-center rounded-lg hover:bg-black/5 transition-all duration-300'>
-                                    <FaCalendarAlt size={24} />
+                                    <FaLinkedin size={24} />
                                     <span>LinkedIn</span>
                                 </Link>
                                 <Link href={`${profile.Calendly}`} target='_blank' color='foreground' className='flex gap-4 px-4 py-3 items-center rounded-lg hover:bg-black/5 transition-all duration-300'>
-                                    <FaLinkedin size={24} />
+                                    <FaCalendarAlt size={24} />
                                     <span>Book an appointment</span>
                                 </Link>
                             </div>

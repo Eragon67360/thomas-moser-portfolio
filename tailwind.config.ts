@@ -14,9 +14,10 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        'hero': "url('../public/img/bg_hero.webp')",
       },
     },
-    
+
   },
   darkMode: "class",
   plugins: [
@@ -42,11 +43,11 @@ const config: Config = {
               foreground: "#ffffff",
               svgFill: '#fff'
             },
-            secondary:{
+            secondary: {
               DEFAULT: "#8F8F8F",
             },
             focus: "#FFBF00",
-          },          
+          },
         },
 
         "light": {
@@ -69,15 +70,15 @@ const config: Config = {
               foreground: "#000",
               svgFill: '#000'
             },
-            secondary:{
+            secondary: {
               DEFAULT: "#8F8F8F",
             },
             focus: "#FFBF00",
-          },          
+          },
         },
 
-        
-        
+
+
       },
     }),
   ]

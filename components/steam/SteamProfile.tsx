@@ -37,8 +37,8 @@ export default function SteamProfile() {
                         target="_blank"
                     >
                         <Button
-                            className="bg-primary-50 text-foreground border-default-200"
-                            color="primary"
+                            className="bg-primary-500 text-foreground font-semibold border-default-200"
+                            color="primary"                            
                             size="sm"
                             radius="full"
                         >

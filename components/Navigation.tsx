@@ -13,11 +13,9 @@ import {
   DropdownMenu,
   Button,
   Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure
+  useDisclosure,
+  NavbarMenu,
+  NavbarMenuItem
 } from "@nextui-org/react";
 import { GithubIcon } from './icons/GitHubIcon';
 import { ThemeSwitcher } from './ThemeSwitcher';
@@ -25,15 +23,13 @@ import { Me } from './icons/Me';
 import { ChevronDown } from './icons/Icons';
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { CiSettings } from "react-icons/ci";
-import { FaLink, FaProjectDiagram } from "react-icons/fa";
+import { FaProjectDiagram } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import { FaSpotify } from "react-icons/fa";
 import { FaSteam } from "react-icons/fa";
 import { MdOutlineEmail } from "react-icons/md";
 import { FaWhatsapp } from "react-icons/fa";
 import { TiMessages } from "react-icons/ti";
-import { FaLinkedin } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
 import ModalContentContact from './ModalContentContact';
 
 import profile from '@/public/json/personal_data.json'
@@ -45,23 +41,51 @@ const Navigation = () => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const menuItems = [
+    {
+      "name": "Home",
+      "href": "/"
+    },
+    {
+      "name": "About me",
+      "href": "/#about"
+    },
+    {
+      "name": "Competencies",
+      "href": "/#competencies"
+    },
+    {
+      "name": "Projects",
+      "href": "/#projects"
+    },
+    {
+      "name": "Activities",
+      "href": "/activities"
+    },
+  ];
 
   return (
     <Navbar
       shouldHideOnScroll
       isBordered
+      className='transition-all duration-250'
     >
-      <NavbarContent className="sm:hidden" justify="start">
-        <NavbarMenuToggle />
-      </NavbarContent>
-      <NavbarBrand
-        className='gap-2 cursor-pointer hover:opacity-80 transition-all duration-250'
-        onClick={() => { router.push('/') }} >
-        <Me />
-        <p className="font-bold text-inherit text-xl">Thomas</p>
-      </NavbarBrand>
 
-      <NavbarContent className="hidden sm:flex gap-6" justify="center">
+      <NavbarContent>
+        <NavbarMenuToggle
+          aria-label={isOpen ? "Close menu" : "Open menu"}
+          className="sm:hidden"
+        />
+        <NavbarBrand
+          className='gap-2 w-full cursor-pointer hover:opacity-80 transition-all duration-250'
+          onClick={() => { router.push('/') }} >
+          <Me />
+
+          <p className="flex font-bold text-inherit text-base lg:text-xl">Thomas</p>
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent className="hidden sm:flex gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6" justify="center">
         <NavbarItem>
           <Link href='/' color='foreground'>
             Home
@@ -128,12 +152,12 @@ const Navigation = () => {
                 radius="sm"
                 variant="light"
               >
-                Embedded Projects
+                Activities
               </Button>
             </DropdownTrigger>
           </NavbarItem>
           <DropdownMenu
-            aria-label="Embedded projects"
+            aria-label="Activities"
             className="w-[340px]"
             itemClasses={{
               base: "gap-4",
@@ -219,6 +243,7 @@ const Navigation = () => {
 
       </NavbarContent>
 
+
       <NavbarContent justify="end">
         <NavbarItem>
           <Link color="foreground" href={`${profile.Github}`} target='_blank'>
@@ -229,6 +254,20 @@ const Navigation = () => {
           <ThemeSwitcher />
         </NavbarItem>
       </NavbarContent>
+      <NavbarMenu>
+        {menuItems.map((item, index) => (
+          <NavbarMenuItem key={`${item}-${index}`}>
+            <Link
+              color="foreground"
+              className="w-full"
+              href={item.href}
+              size="lg"
+            >
+              {item.name}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
 
       <Modal backdrop='blur' isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContentContact />

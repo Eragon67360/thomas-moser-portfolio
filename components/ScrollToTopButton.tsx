@@ -30,11 +30,9 @@ const ScrollToTopButton: React.FC = () => {
 
     return (
         <>
-
-
             <button
                 onClick={scrollToTop}
-                className={`fixed bottom-5 right-5 w-32 h-32 transition-all duration-250 ${isVisible ? 'opacity-100 cursor-pointer hover:scale-110' : 'opacity-0 cursor-default'}`}
+                className={`z-20 scale-50 md:scale-75 lg:scale-80 xl:scale-100 fixed bottom-5 right-5 w-32 h-32 transition-all duration-250 ${isVisible ? 'opacity-100 cursor-pointer hover:md:scale-80 hover:lg:scale-85 hover:xl:scale-110 hover:scale-[.55]' : 'opacity-0 cursor-default'}`}
                 aria-label="Scroll to top"
             >
                 <Suspense fallback={<div>Loading...</div>}>
