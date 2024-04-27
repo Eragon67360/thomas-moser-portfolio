@@ -7,6 +7,8 @@ import GameDetail from './GameDetail';
 import SteamProfile from './SteamProfile';
 import { H2 } from '../ui/Typography';
 import { HorizontalDivider } from '../ui/HorizontalDivider';
+import Loader from '../Loader';
+
 
 const SteamLoader = () => {
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -17,14 +19,14 @@ const SteamLoader = () => {
 
 
     if (errorGames) return <div>Failed to load games.</div>;
-    if (!dataGames) return <div>Loading...</div>;
+    if (!dataGames) return <Loader/>;
 
     return (
         <section className="mb-16 flex flex-col gap-8">
             <div className='py-8 w-[1440px] px-8'>
                 <div className='flex flex-col items-center gap-4'>
                     <H2>Steam profile and games</H2>
-                    <HorizontalDivider/>
+                    <HorizontalDivider />
                 </div>
 
                 <div className='flex flex-col items-center py-8 gap-8'>
@@ -35,7 +37,7 @@ const SteamLoader = () => {
                                 <GameDetail key={game.appid} game={game} />
                             ))
                         ) : (
-                            <div>Loading...</div>
+                            <Loader/>
                         )}
 
                     </div>

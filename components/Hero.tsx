@@ -9,8 +9,8 @@ const Hero = () => {
 
     return (
         <>
-            <div className="flex h-[100dvh] items-center justify-center w-full bg-white dark:bg-hero  bg-no-repeat bg-cover bg-center bg-fixed bg-blend-multiply dark:bg-overlay">
-                <div className="w-1/3 flex flex-col items-center px-8">
+            <div className="flex h-[100dvh] items-center justify-center w-full px-4 bg-white dark:bg-hero  bg-no-repeat bg-cover bg-center bg-fixed bg-blend-multiply dark:bg-overlay">
+                <div className="w-full md:w-1/2 lg:w-1/3 flex flex-col items-center px-8">
                     <H1>Thomas Moser - Full-Stack Developer</H1>
                     <h2 className="transition-all duration-250 text-center mb-6 font-light text-gray-500 lg:mb-8 text-sm sm:text-base md:text-lg lg:text-xl">Embracing curiosity and a passion for learning, I craft dynamic software and web solutions that drive innovation and efficiency.</h2>
 
