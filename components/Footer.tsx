@@ -14,7 +14,7 @@ export const Footer = () => {
                             Content licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target='_blank' className='text-primary hover:underline'>CC BY-NC-SA 4.0.</a>&nbsp;
                             <a href="https://github.com/Eragon67360/thomas-moser-portfolio/blob/main/LICENSE.md" target='_blank' className='text-primary hover:underline'>MIT License</a> © {getYear()} Thomas Moser.</p>
                     </div>
-                    <div className='flex justify-evenly gap-16 text-sm md:text-base order-1 md:order-2'>
+                    <div className='flex justify-between gap-4 md:gap-8 lg:gap-16 text-sm md:text-base order-1 md:order-2'>
                         <div className='flex flex-col gap-4'>
                             <p className='uppercase font-bold'>Social</p>
                             <Link href={profile.Github} target='_blank' className='font-extralight hover:text-primary hover:underline transition-all duration-200'>Github</Link>
