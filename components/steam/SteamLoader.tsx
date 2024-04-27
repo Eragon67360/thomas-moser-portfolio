@@ -24,11 +24,6 @@ const SteamLoader = () => {
     return (
         <section className="mb-16 flex flex-col gap-8">
             <div className='py-8 w-[1440px] px-8'>
-                <div className='flex flex-col items-center gap-4'>
-                    <H2>Steam profile and games</H2>
-                    <HorizontalDivider />
-                </div>
-
                 <div className='flex flex-col items-center py-8 gap-8'>
                     <SteamProfile />
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>

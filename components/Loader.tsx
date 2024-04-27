@@ -1,53 +1,25 @@
-const Loader = () => {
-    return (
-      <div>
-        <CutoutTextLoader
-          height="450px"
-          background="white"
-          imgUrl="/img/bg_hero.webp"
-        />
+import React from "react";
+import { Card, Skeleton } from "@nextui-org/react";
+
+function Loader() {
+  return (
+    <Card className="w-[200px] space-y-5 p-4 my-8" radius="lg">
+      <Skeleton className="rounded-lg">
+        <div className="h-24 rounded-lg bg-default-300"></div>
+      </Skeleton>
+      <div className="space-y-3">
+        <Skeleton className="w-3/5 rounded-lg">
+          <div className="h-3 w-3/5 rounded-lg bg-default-200"></div>
+        </Skeleton>
+        <Skeleton className="w-4/5 rounded-lg">
+          <div className="h-3 w-4/5 rounded-lg bg-default-200"></div>
+        </Skeleton>
+        <Skeleton className="w-2/5 rounded-lg">
+          <div className="h-3 w-2/5 rounded-lg bg-default-300"></div>
+        </Skeleton>
       </div>
-    );
-  };
-  
-  const CutoutTextLoader = ({
-    height,
-    background,
-    imgUrl,
-  }: {
-    height: string;
-    background: string;
-    imgUrl: string;
-  }) => {
-    return (
-      <div className="relative w-screen " style={{ height }}>
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            backgroundImage: `url(${imgUrl})`,
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-          }}
-        />
-        <div
-          style={{ background }}
-          className="absolute inset-0 animate-pulse z-10"
-        />
-        <span
-          className="font-black absolute inset-0 z-20 text-center bg-clip-text text-transparent pointer-events-none"
-          style={{
-            backgroundImage: `url(${imgUrl})`,
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-            fontSize: "clamp(3rem, 12vw, 10rem)",
-            lineHeight: height,
-          }}
-        >
-          Loading...
-        </span>
-      </div>
-    );
-  };
-  
-  export default Loader;
-  
+    </Card>
+  );
+}
+
+export default Loader;

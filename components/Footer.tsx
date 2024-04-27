@@ -7,14 +7,14 @@ export const Footer = () => {
     }
     return (
         <>
-            <div className='w-full flex justify-center bg-transparent'>
-                <div className='max-w-[1440px] w-full h-[260px] flex justify-between'>
-                    <div className='flex flex-col'>
+            <div className='w-full flex justify-center bg-transparent border-t border-gray-500/30 py-4 px-4'>
+                <div className='max-w-[1440px] w-full h-[260px] flex flex-col md:flex-row justify-between'>
+                    <div className='flex flex-col order-2 md:order-1'>
                         <p className='text-sm'>
                             Content licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target='_blank' className='text-primary hover:underline'>CC BY-NC-SA 4.0.</a>&nbsp;
                             <a href="https://github.com/Eragon67360/thomas-moser-portfolio/blob/main/LICENSE.md" target='_blank' className='text-primary hover:underline'>MIT License</a> © {getYear()} Thomas Moser.</p>
                     </div>
-                    <div className='flex justify-evenly gap-16'>
+                    <div className='flex justify-evenly gap-16 text-sm md:text-base order-1 md:order-2'>
                         <div className='flex flex-col gap-4'>
                             <p className='uppercase font-bold'>Social</p>
                             <Link href={profile.Github} target='_blank' className='font-extralight hover:text-primary hover:underline transition-all duration-200'>Github</Link>
