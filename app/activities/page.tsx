@@ -7,25 +7,23 @@ import { H2 } from '@/components/ui/Typography'
 const Projects = async () => {
   return (
     <>
-      <div className='w-[100%] flex flex-col items-center'>
-        <div className='py-8 w-[1440px] px-8 flex flex-col items-center justify-center' >
-          <div className='flex flex-col items-center gap-4 text-center'>
-            <H2>Steam profile and games</H2>
-            <HorizontalDivider />
-          </div>
-          <div id='steam' className='h-screen'>
-            <SteamLoader />
-          </div>
-          <div className='flex flex-col items-center gap-4'>
-            <H2>Spotify profile and streams</H2>
-            <HorizontalDivider />
-          </div>
-          <div id='spotify' className='h-screen'>
-            {/* <SpotifyLoader /> */}
-          </div>
-
-
+      <div className='w-full py-8 px-8 flex flex-col items-center justify-center h-full'>
+        <div className='flex flex-col items-center gap-4 text-center'>
+          <H2>Steam profile and games</H2>
+          <HorizontalDivider />
         </div>
+        <div id='steam' className='w-full flex items-center justify-center'>
+          <SteamLoader />
+        </div>
+        <hr className='h-16'/>
+        <div className='flex flex-col items-center gap-4'>
+          <H2>Spotify profile and streams</H2>
+          <HorizontalDivider />
+        </div>
+        <div id='spotify' className='h-32'>
+          {/* <SpotifyLoader /> */}
+        </div>
+
       </div>
 
 

@@ -19,32 +19,21 @@ const SteamLoader = () => {
 
 
     if (errorGames) return <div>Failed to load games.</div>;
-    if (!dataGames) return <Loader/>;
+    if (!dataGames) return <Loader />;
 
     return (
-        <section className="mb-16 flex flex-col gap-8">
-            <div className='py-8 w-[1440px] px-8'>
-                <div className='flex flex-col items-center py-8 gap-8'>
-                    <SteamProfile />
-                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
-                        {dataGames?.games.enrichedGames ? (
-                            dataGames.games.enrichedGames.map((game: { appid: Key | null | undefined; }) => (
-                                <GameDetail key={game.appid} game={game} />
-                            ))
-                        ) : (
-                            <Loader/>
-                        )}
-
-                    </div>
-                </div>
-
+        <section className="flex flex-col gap-8 my-8 items-center w-full max-w-[1440px]">
+            <SteamProfile />
+            <div className='grid grid-cols-1 sm:grid-cols-2 gap-8'>
+                {dataGames?.games.enrichedGames ? (
+                    dataGames.games.enrichedGames.map((game: { appid: Key | null | undefined; }) => (
+                        <GameDetail key={game.appid} game={game} />
+                    ))
+                ) : (
+                    <Loader />
+                )}
 
             </div>
-
-            <div className=''></div>
-
-
-
         </section>
     );
 };
