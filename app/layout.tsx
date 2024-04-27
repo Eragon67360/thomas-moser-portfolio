@@ -5,6 +5,7 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import Navigation from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 const inter = Inter({ subsets: ["latin"] });
 const jetbrains = JetBrains_Mono({ subsets: ["latin"] });
@@ -20,11 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="select-none scroll-smooth overflow-x-hidden">
+    <html lang="en" className="scroll-smooth overflow-x-hidden">
       <body className={jetbrains.className}>
         <Providers>
-          <Navigation/>
+          <Navigation />
           {children}
+          <Footer />
           <ScrollToTopButton />
         </Providers>
       </body>

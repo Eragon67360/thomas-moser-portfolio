@@ -3,9 +3,17 @@
 @tailwind utilities;
 
 .radio-hide-control .nextui-radio-button {
-    display: none;  /* Hides the circle control */
+    display: none;
+    /* Hides the circle control */
 }
 
 .radio-custom-label {
     cursor: pointer;
 }
+/* 
+*,
+*:before,
+*:after {
+   @apply cursor-default;
+  @apply cursor-pointer; 
+} */

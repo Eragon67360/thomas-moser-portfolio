@@ -18,6 +18,11 @@ const config: Config = {
       },
       backgroundColor:{
         'overlay': 'rgba(0, 0, 0, 0.8)',
+      },
+      cursor: {
+          // default: 'url(/img/cursor.svg), default',
+          // pointer: 'url(/img/cursor1.svg), pointer',
+        
       }
     },
   },

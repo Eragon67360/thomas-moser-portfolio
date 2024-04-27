@@ -54,7 +54,7 @@ const ProjectsViewer = () => {
                             style={{ background: `linear-gradient(to right, ${items.from}, ${items.to})` }} 
          
                             className={`group w-full aspect-video rounded-3xl pt-8 px-8 transition-all duration-150 hover:px-0 hover:pt-0 hover:shadow-2xl cursor-none`}>
-                                <Image src={items.screenshot} className='transition-all duration-150 w-full h-full rounded-t-3xl bg-slate-200 shadow-none group-hover:shadow-lg group-hover:rounded-3xl' alt={'Project screenshot'}/>
+                                <Image src={items.screenshot} className='cursor-none transition-all duration-150 w-full h-full rounded-t-3xl bg-slate-200 shadow-none group-hover:shadow-lg group-hover:rounded-3xl' alt={'Project screenshot'}/>
                             </div>
 
                         ))
