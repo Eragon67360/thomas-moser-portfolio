@@ -36,7 +36,7 @@ export const Footer = () => {
                         <div className='flex flex-col gap-4'>
                             <p className='uppercase font-bold'>Extra</p>
                             <Link href={'/pdf/CV_Thomas_MOSER.pdf'} target='_blank' className='font-extralight hover:text-primary hover:underline transition-all duration-200'>Resume</Link>
-                            <Link href={'/not-built'} className='font-extralight hover:text-primary hover:underline transition-all duration-200'>Analytics</Link>
+                            <Link href={'/analytics'} className='font-extralight hover:text-primary hover:underline transition-all duration-200'>Analytics</Link>
                             <Link href={'https://github.com/Eragon67360/thomas-moser-portfolio.git'} target='_blank' className='font-extralight hover:text-primary hover:underline transition-all duration-200'>Source code</Link>
                         </div>
                     </div>

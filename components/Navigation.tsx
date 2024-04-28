@@ -236,6 +236,12 @@ const Navigation = () => {
 
           </DropdownMenu>
         </Dropdown>
+
+        <NavbarItem>
+          <Link href='/blog' color='foreground'>
+            Blog
+          </Link>
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent justify="end">

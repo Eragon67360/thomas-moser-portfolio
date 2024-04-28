@@ -13,7 +13,7 @@ const SpotifyNowPlaying = () => {
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
     const { data: dataPlaying, error: errorPlaying } = useSWR('/api/spotifyplaying', fetcher, {
-        refreshInterval: 2000,
+        refreshInterval: 10000,
     });
 
 
@@ -49,7 +49,7 @@ const SpotifyNowPlaying = () => {
                             />
                             <div className='text-xs h-full flex flex-col justify-center truncate'>
                                 <TrackText><Link href={dataPlaying?.data.songUrl} target="_blank" className='text-xs md:text-sm lg:text-base font-semibold truncate' color='foreground'>{dataPlaying?.data.title}</Link></TrackText>
-                                <ArtistText><p className='truncate'>{dataPlaying?.data.artist}</p></ArtistText>
+                                <ArtistText>{dataPlaying?.data.artist}</ArtistText>
 
                             </div>
                         </div>
