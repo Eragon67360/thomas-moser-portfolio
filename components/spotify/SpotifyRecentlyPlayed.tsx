@@ -19,13 +19,13 @@ const SpotifyRecentlyPlayed = () => {
 
     return (
         <>
-            <Card className='w-full h-full '>
+            <Card className='w-full h-full'>
                 <CardHeader>
                     <Title>Last played</Title>
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                    <ScrollShadow className="flex flex-wrap justify-center">
+                    <ScrollShadow hideScrollBar className="flex flex-wrap justify-center">
                         {dataTracks?.tracks.map((track) => (
                             <RecentlyPlayedTrack key={track.songUrl} {...track} />
                         ))}

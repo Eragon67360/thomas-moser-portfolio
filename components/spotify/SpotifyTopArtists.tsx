@@ -4,7 +4,7 @@ import { TopArtists } from '@/lib/types';
 import useSWR from 'swr';
 import Loader from '../Loader';
 import Artist from './SpotifyArtist';
-import { Card, CardHeader, CardBody, CardFooter, Link, Divider } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Link, Divider, ScrollShadow } from '@nextui-org/react';
 import { Title, FooterText } from '../ui/Typography';
 
 const SpotifyTopArtists = () => {
@@ -26,11 +26,11 @@ const SpotifyTopArtists = () => {
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                    <div className='flex flex-wrap gap-4 justify-center'>
+                    <ScrollShadow hideScrollBar className='flex flex-wrap gap-4 justify-center'>
                         {dataArtists?.artists.map((artist, index) => (
                             <Artist ranking={index + 1} key={artist.name} {...artist} />
                         ))}
-                    </div>
+                    </ScrollShadow>
 
                 </CardBody>
                 <Divider />

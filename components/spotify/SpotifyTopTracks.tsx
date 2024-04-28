@@ -25,7 +25,7 @@ const SpotifyTopTracks = () => {
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                    <ScrollShadow className='flex flex-wrap justify-center'>
+                    <ScrollShadow hideScrollBar className='flex flex-wrap justify-center'>
                         {dataTracks?.tracks.map((track) => (
                             <TopTrack key={track.title} {...track} />
                         ))}
