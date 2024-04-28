@@ -14,8 +14,8 @@ const LastPlayedLoader = () => {
                 <Divider />
                 <CardBody className='flex justify-center items-center w-full px-auto'>
                     <div className='flex flex-col gap-4 w-full my-8'>
-                        {[...Array(14)].map(() =>
-                            <div className='flex gap-4 items-center'>
+                        {[...Array(14)].map((index) =>
+                            <div key={index} className='flex gap-4 items-center'>
                                 <Skeleton className="w-16 h-16 rounded-lg">
                                     <div className="h-16 w-3/5 rounded-lg bg-default-200"></div>
                                 </Skeleton>

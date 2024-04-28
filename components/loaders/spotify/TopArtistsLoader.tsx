@@ -14,8 +14,8 @@ const TopArtistsLoader = () => {
                 <Divider />
                 <CardBody className='flex justify-center items-center w-full px-auto'>
                     <div className='grid grid-cols-3 gap-4 '>
-                        {[...Array(6)].map(() =>
-                            <Skeleton className="w-32 h-32 rounded-lg">
+                        {[...Array(6)].map((index) =>
+                            <Skeleton key={index} className="w-32 h-32 rounded-lg">
                                 <div className="h-32 w-32 rounded-lg bg-default-200"></div>
                             </Skeleton>
                         )}
