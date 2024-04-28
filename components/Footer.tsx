@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React from 'react'
 import profile from '@/public/json/personal_data.json'
+import SpotifyNowPlaying from './spotify/SpotifyNowPlaying';
 export const Footer = () => {
     function getYear() {
         return new Date().getFullYear();
@@ -9,10 +10,12 @@ export const Footer = () => {
         <>
             <div className='w-full flex justify-center bg-transparent border-t border-gray-500/30 py-4 px-4'>
                 <div className='max-w-[1440px] w-full h-[260px] flex flex-col md:flex-row justify-between'>
-                    <div className='flex flex-col order-2 md:order-1'>
+                    <div className='flex flex-col order-2 md:order-1 gap-4'>
+                        <SpotifyNowPlaying />
                         <p className='text-sm'>
                             Content licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target='_blank' className='text-primary hover:underline'>CC BY-NC-SA 4.0.</a>&nbsp;
-                            <a href="https://github.com/Eragon67360/thomas-moser-portfolio/blob/main/LICENSE.md" target='_blank' className='text-primary hover:underline'>MIT License</a> © {getYear()} Thomas Moser.</p>
+                            <a href="https://github.com/Eragon67360/thomas-moser-portfolio/blob/main/LICENSE.md" target='_blank' className='text-primary hover:underline'>MIT License</a> © {getYear()} Thomas Moser.
+                        </p>
                     </div>
                     <div className='flex justify-between gap-4 md:gap-8 lg:gap-16 text-sm md:text-base order-1 md:order-2'>
                         <div className='flex flex-col gap-4'>

@@ -236,9 +236,7 @@ const Navigation = () => {
 
           </DropdownMenu>
         </Dropdown>
-
       </NavbarContent>
-
 
       <NavbarContent justify="end">
         <NavbarItem>

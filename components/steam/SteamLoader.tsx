@@ -1,12 +1,9 @@
 "use client"
 
 import useSWR from 'swr';
-import { Card, CardFooter, Image, Button } from "@nextui-org/react";
 import { Key } from 'react';
 import GameDetail from './GameDetail';
 import SteamProfile from './SteamProfile';
-import { H2 } from '../ui/Typography';
-import { HorizontalDivider } from '../ui/HorizontalDivider';
 import Loader from '../Loader';
 
 

@@ -1,5 +1,5 @@
 import React, { } from 'react'
-import SpotifyLoader from '@/components/SpotifyLoader'
+import SpotifyLoader from '@/components/spotify/SpotifyLoader'
 import SteamLoader from '@/components/steam/SteamLoader'
 import { HorizontalDivider } from '@/components/ui/HorizontalDivider'
 import { H2 } from '@/components/ui/Typography'
@@ -20,8 +20,8 @@ const Projects = async () => {
           <H2>Spotify profile and streams</H2>
           <HorizontalDivider />
         </div>
-        <div id='spotify' className='h-32'>
-          {/* <SpotifyLoader /> */}
+        <div id='spotify' className='w-full flex items-center justify-center'>
+          <SpotifyLoader />
         </div>
 
       </div>
