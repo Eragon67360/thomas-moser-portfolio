@@ -7,6 +7,7 @@ import { Providers } from "./providers";
 import Navigation from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
+import { Analytics } from "@vercel/analytics/react"
 const inter = Inter({ subsets: ["latin"] });
 const jetbrains = JetBrains_Mono({ subsets: ["latin"] });
 import AnimatedCursor from "react-animated-cursor";
