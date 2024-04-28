@@ -4,8 +4,9 @@ import React from 'react'
 import useSWR from 'swr';
 import Loader from '../Loader';
 import SpotifyLogo from './SpotifyLogo';
-import { Card, CardBody, CardHeader, Image } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Image, Link } from "@nextui-org/react";
 import PlayingAnimation from './PlayingAnimation';
+import { ArtistText, TrackText, Title } from '../ui/Typography';
 
 const SpotifyNowPlaying = () => {
 
@@ -20,41 +21,37 @@ const SpotifyNowPlaying = () => {
 
     return (
         <>
-            <Card>
+            <Card>                
                 <CardHeader className='gap-4 flex items-center'>
                     <SpotifyLogo />
                     {dataPlaying?.data?.isPlaying ? (
                         <div className='flex gap-4 items-center'>
-                            <span>Currently playing</span>
+                            <Title>Currently playing</Title>
                             <PlayingAnimation />
                         </div>
                     ) : (
-                        <span>Currently offline</span>
+                        <Title>Currently offline</Title>
                     )}
 
                 </CardHeader>
-                <CardBody>
-                    {dataPlaying?.data?.isPlaying ? (
+                {dataPlaying?.data?.isPlaying && (
+                    <CardBody>
                         <div className='flex gap-8'>
                             <Image
                                 alt={`${dataPlaying?.data.title} Album cover`}
                                 className="object-cover w-[64px]"
-                                height={200}
-                                shadow="md"
+                                height={140}
                                 src={dataPlaying?.data.albumImageUrl}
                                 width="100%"
                             />
-                            <div className='text-xs h-full flex flex-col justify-center'>
-
-                                <a href={dataPlaying?.data.songUrl} target="_blank">{dataPlaying?.data.title}</a>
-                                <p>{dataPlaying?.data.artist}</p>
+                            <div className='text-xs h-full flex flex-col justify-center truncate'>
+                                <TrackText><Link href={dataPlaying?.data.songUrl} target="_blank" className='text-xs md:text-sm lg:text-base font-semibold' color='foreground'>{dataPlaying?.data.title}</Link></TrackText>
+                                <ArtistText>{dataPlaying?.data.artist}</ArtistText>
                             </div>
                         </div>
+                    </CardBody>
+                )}
 
-                    ) : (
-                        <div></div>
-                    )}
-                </CardBody>
             </Card>
         </>
     )

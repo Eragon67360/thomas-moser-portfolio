@@ -9,9 +9,25 @@ export const H1: React.FC<TypographyProps> = ({ children }) => {
 };
 
 export const H2: React.FC<TypographyProps> = ({ children }) => {
-    return <h2 className='text-center transition-all duration-250 uppercase font-bold text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl'>{children}</h2>;
+    return <h2 className='text-center transition-all duration-250 uppercase font-bold text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl'>{children}</h2>;
 };
 
 export const H3: React.FC<TypographyProps> = ({ children }) => {
-  return <h2 className='w-4/5 text-center transition-all duration-250 text-secondary text-xs md:text-sm lg:text-md xl:text-lg'>{children}</h2>;
+    return <h3 className='w-4/5 text-center transition-all duration-250 text-secondary text-xs md:text-sm lg:text-base xl:text-lg'>{children}</h3>;
+};
+
+export const Title: React.FC<TypographyProps> = ({ children }) => {
+    return <h3 className='transition-all duration-250 text-sm md:text-base lg:text-lg xl:text-xl'>{children}</h3>;
+};
+
+export const FooterText: React.FC<TypographyProps> = ({ children }) => {
+    return <h3 className='transition-all duration-250 text-xs lg:text-base'>{children}</h3>;
+};
+
+export const TrackText: React.FC<TypographyProps> = ({ children }) => {
+    return <p className='transition-all duration-250 text-xs md:text-sm lg:text-base font-semibold truncate'>{children}</p>;
+};
+
+export const ArtistText: React.FC<TypographyProps> = ({ children }) => {
+    return <p className='transition-all duration-250 text-xs md:text-sm lg:text-base font-light opacity-80'>{children}</p>;
 };

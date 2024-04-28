@@ -8,9 +8,9 @@ export const Footer = () => {
     }
     return (
         <>
-            <div className='w-full flex justify-center bg-transparent border-t border-gray-500/30 py-4 px-4'>
-                <div className='max-w-[1440px] w-full h-[260px] flex flex-col md:flex-row justify-between'>
-                    <div className='flex flex-col order-2 md:order-1 gap-4'>
+            <div className='w-full flex justify-center bg-transparent border-t border-gray-500/30 py-4 px-8'>
+                <div className='max-w-[1440px] w-full h-[260px] flex flex-col md:flex-row gap-8 justify-between'>
+                    <div className='flex flex-col w-full md:w-1/2 order-2 md:order-1 gap-4'>
                         <SpotifyNowPlaying />
                         <p className='text-sm'>
                             Content licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target='_blank' className='text-primary hover:underline'>CC BY-NC-SA 4.0.</a>&nbsp;

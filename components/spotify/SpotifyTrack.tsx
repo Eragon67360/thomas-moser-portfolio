@@ -1,25 +1,46 @@
+import { Card, CardBody, Divider, Image } from "@nextui-org/react";
+import { TrackText, ArtistText } from "../ui/Typography";
+import Link from "next/link";
+
 export default function Track(track: any) {
     return (
-        <div className="flex flex-row items-baseline border-b border-gray-200 dark:border-gray-800 max-w-3xl w-full mt-8">
-            <p className="text-sm font-bold text-gray-400 dark:text-gray-600">
-                {track.ranking}
-            </p>
-            <div className="flex flex-col pl-3">
-                <a
-                    className="font-medium text-gray-900 dark:text-gray-100 truncate w-60 sm:w-96 md:w-full"
-                    href={track.songUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    {track.title}
-                </a>
-                <p
-                    className="text-gray-500 mb-4 truncate w-60 sm:w-96 md:w-full"
-                    color="gray.500"
-                >
-                    {track.artist}
-                </p>
-            </div>
-        </div>
+        <Card
+            radius="none"
+            shadow='none'
+            className="border-none w-full"
+        ><Link href={track.songUrl} target="_blank">
+                <CardBody>
+                    <div className='flex gap-8'>
+                        <Image
+                            alt={`Album picture: ${track.title}`}
+                            className="object-cover w-[64px]"
+                            height={64}
+                            src={track.imageUrl}
+                            width='100%'
+                        />
+                        <div className='flex flex-col justify-center truncate'>
+                            <TrackText>{track.title}</TrackText>
+                            <ArtistText>{track.artist}</ArtistText>
+                        </div>
+                    </div>
+
+                    {/* <div className='flex gap-2 text-xs'>
+                    <div className="w-16 h-16 flex items-center justify-center border-2 border-red-500">
+                        <Image
+                            alt={`Album picture: ${track.title}`}
+                            className="object-cover w-[64px]"
+                            height={64}
+                            src={track.imageUrl}
+                            width='100%'
+                        />
+                    </div>
+                    <div className='flex flex-col justify-center'>
+                        <TrackText>{track.title}</TrackText>
+                        <ArtistText>{track.artist}</ArtistText>
+                    </div>
+                </div> */}
+                </CardBody></Link>
+
+        </Card>
     );
 }
