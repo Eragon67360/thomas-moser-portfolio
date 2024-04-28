@@ -19,12 +19,7 @@ const config: Config = {
       },
       backgroundColor:{
         'overlay': 'rgba(0, 0, 0, 0.8)',
-      },
-      cursor: {
-          // default: 'url(/img/cursor.svg), default',
-          // pointer: 'url(/img/cursor1.svg), pointer',
-        
-      },
+      },      
       animation: {
         marquee: 'marquee 25s linear infinite',
         marquee2: 'marquee2 25s linear infinite',

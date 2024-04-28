@@ -30,32 +30,35 @@ export default function RootLayout({
           <Footer />
           <ScrollToTopButton />
         </Providers>
-        <AnimatedCursor
-          innerSize={8}
-          outerSize={8}
-          color='128,128,128'
-          outerAlpha={0.2}
-          innerScale={0.7}
-          outerScale={5}
-          clickables={[
-            'a',
-            'input[type="text"]',
-            'input[type="email"]',
-            'input[type="number"]',
-            'input[type="submit"]',
-            'input[type="image"]',
-            'label[for]',
-            'select',
-            'textarea',
-            'button',
-            'Button',
-            'Link',
-            '.link',
-            {
-              target: '.custom',              
-            }
-          ]}
-        />
+        <div className="hidden sm:block">
+          <AnimatedCursor
+            innerSize={8}
+            outerSize={8}
+            color='128,128,128'
+            outerAlpha={0.2}
+            innerScale={0.7}
+            outerScale={5}
+            clickables={[
+              'a',
+              'input[type="text"]',
+              'input[type="email"]',
+              'input[type="number"]',
+              'input[type="submit"]',
+              'input[type="image"]',
+              'label[for]',
+              'select',
+              'textarea',
+              'button',
+              'Button',
+              'Link',
+              '.link',
+              {
+                target: '.custom',
+              }
+            ]}
+          />
+        </div>
+
 
       </body>
     </html>
