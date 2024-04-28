@@ -23,11 +23,11 @@ const Projects = async () => {
           <HorizontalDivider />
         </div>
         <div id='spotify' className='w-full max-w-[1440px] flex flex-col lg:flex-row gap-8 py-8 items-centertransition-all duration-250'>
-          <div className='flex flex-col gap-8 w-full lg:w-1/2'>
+          <div className='flex flex-col gap-8 w-full lg:w-1/2 h-full md:h-screen'>
             <SpotifyTopArtists />
             <SpotifyTopTracks />
           </div>
-          <div className='h-full w-full lg:w-1/2'>
+          <div className='h-full md:h-screen w-full lg:w-1/2'>
             <SpotifyRecentlyPlayed />
           </div>
 

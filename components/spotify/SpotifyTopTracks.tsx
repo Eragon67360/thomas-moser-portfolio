@@ -3,11 +3,9 @@ import React from 'react'
 import { TopTracks } from '@/lib/types';
 import useSWR from 'swr';
 import Loader from '../Loader';
-import Artist from './SpotifyArtist';
 import { Card, CardHeader, CardBody, CardFooter, Link, Divider, ScrollShadow } from '@nextui-org/react';
 import TopTrack from './TopTrack';
 import { Title, FooterText } from '../ui/Typography';
-
 
 const SpotifyTopTracks = () => {
 
@@ -24,7 +22,6 @@ const SpotifyTopTracks = () => {
             <Card className='w-full h-full '>
                 <CardHeader>
                     <Title>Top musics</Title>
-
                 </CardHeader>
                 <Divider />
                 <CardBody>
@@ -33,10 +30,6 @@ const SpotifyTopTracks = () => {
                             <TopTrack key={track.title} {...track} />
                         ))}
                     </ScrollShadow>
-                    <div className='flex flex-wrap gap-4 justify-center'>
-
-                    </div>
-
                 </CardBody>
                 <Divider />
                 <CardFooter>

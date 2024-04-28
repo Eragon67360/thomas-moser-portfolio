@@ -19,7 +19,7 @@ const SpotifyTopArtists = () => {
 
     return (
         <>
-            <Card className='w-full h-full '>
+            <Card className='w-full h-full'>
                 <CardHeader>
                     <Title>Top artists</Title>
                     

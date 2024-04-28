@@ -1,8 +1,13 @@
-import React, { ReactNode } from 'react'
-
+'use client'
+import React, { ReactNode, useEffect, useRef } from 'react'
+import styles from './TextComponent.module.css'
 interface TypographyProps {
     children: ReactNode;
 }
+interface AutoScrollTextProps {
+    text: string;
+}
+
 
 export const H1: React.FC<TypographyProps> = ({ children }) => {
     return <h1 className='transition-all duration-250 text-center mb-4 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-extrabold tracking-tight leading-none bg-gradient-to-r from-primary-500 via-secondary to-indigo-500 inline-block text-transparent bg-clip-text dark:text-white'>{children}</h1>;
@@ -29,5 +34,6 @@ export const TrackText: React.FC<TypographyProps> = ({ children }) => {
 };
 
 export const ArtistText: React.FC<TypographyProps> = ({ children }) => {
-    return <p className='transition-all duration-250 text-xs md:text-sm lg:text-base font-light opacity-80'>{children}</p>;
+    return <p className='transition-all duration-250 text-xs md:text-sm lg:text-base font-light opacity-80 truncate'>{children}</p>;
 };
+

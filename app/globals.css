@@ -10,10 +10,3 @@
 .radio-custom-label {
     cursor: pointer;
 }
-/* 
-*,
-*:before,
-*:after {
-   @apply cursor-default;
-  @apply cursor-pointer; 
-} */

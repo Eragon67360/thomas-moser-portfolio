@@ -1,9 +1,11 @@
 'use client'
+import React from 'react'
 import { RecentlyPlayed } from '@/lib/types';
 import useSWR from 'swr';
 import Loader from '../Loader';
-import Track from './SpotifyTrack';
-import { Card, CardHeader, Divider, CardBody, CardFooter, ScrollShadow,Link } from '@nextui-org/react';
+import RecentlyPlayedTrack from './RecentlyPlayedTrack';
+import { Card, CardHeader, Divider, CardBody, CardFooter, ScrollShadow, Link } from '@nextui-org/react';
+import { FooterText, Title } from '../ui/Typography';
 
 const SpotifyRecentlyPlayed = () => {
 
@@ -17,23 +19,21 @@ const SpotifyRecentlyPlayed = () => {
 
     return (
         <>
-        
             <Card className='w-full h-full '>
                 <CardHeader>
-                    Last played
+                    <Title>Last played</Title>
                 </CardHeader>
                 <Divider />
                 <CardBody>
-                    <ScrollShadow className="flex flex-wrap ">
-                        {dataTracks?.tracks.map((track, index) => (
-                            <Track ranking={index + 1} key={track.songUrl} {...track} />
+                    <ScrollShadow className="flex flex-wrap justify-center">
+                        {dataTracks?.tracks.map((track) => (
+                            <RecentlyPlayedTrack key={track.songUrl} {...track} />
                         ))}
                     </ScrollShadow>
-
                 </CardBody>
                 <Divider />
                 <CardFooter>
-                    <p className='text-xs'>Data fetched with&nbsp;<Link href='https://developer.spotify.com/documentation/web-api' target='_blank' className='text-xs'>Spotify API</Link></p>
+                    <FooterText >Data fetched with&nbsp;<Link href='https://developer.spotify.com/documentation/web-api' target='_blank' className='text-xs lg:text-base'>Spotify API</Link></FooterText>
                 </CardFooter>
 
             </Card>
