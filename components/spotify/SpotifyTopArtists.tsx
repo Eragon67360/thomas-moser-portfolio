@@ -2,7 +2,7 @@
 import React from 'react'
 import { TopArtists } from '@/lib/types';
 import useSWR from 'swr';
-import Loader from '../Loader';
+import TopArtistsLoader from '../loaders/spotify/TopArtistsLoader';
 import Artist from './SpotifyArtist';
 import { Card, CardHeader, CardBody, CardFooter, Link, Divider, ScrollShadow } from '@nextui-org/react';
 import { Title, FooterText } from '../ui/Typography';
@@ -15,7 +15,7 @@ const SpotifyTopArtists = () => {
         refreshInterval: 20000,
     });
 
-    if (!dataArtists) return <Loader />;
+    if (!dataArtists) return <TopArtistsLoader />;
 
     return (
         <>

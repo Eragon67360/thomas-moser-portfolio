@@ -22,7 +22,7 @@ const Projects = async () => {
           <H2>Spotify profile and streams</H2>
           <HorizontalDivider />
         </div>
-        <div id='spotify' className='w-full max-w-[1440px] flex flex-col lg:flex-row gap-8 py-8 items-centertransition-all duration-250'>
+        <div id='spotify' className='w-full max-w-[1440px] flex flex-col lg:flex-row gap-8 py-8 items-center transition-all duration-250'>
           <div className='flex flex-col gap-8 w-full lg:w-1/2 h-full md:h-screen'>
             <SpotifyTopArtists />
             <SpotifyTopTracks />

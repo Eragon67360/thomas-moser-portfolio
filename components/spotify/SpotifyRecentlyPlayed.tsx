@@ -2,7 +2,7 @@
 import React from 'react'
 import { RecentlyPlayed } from '@/lib/types';
 import useSWR from 'swr';
-import Loader from '../Loader';
+import LastPlayedLoader from '../loaders/spotify/LastPlayedLoader';
 import RecentlyPlayedTrack from './RecentlyPlayedTrack';
 import { Card, CardHeader, Divider, CardBody, CardFooter, ScrollShadow, Link } from '@nextui-org/react';
 import { FooterText, Title } from '../ui/Typography';
@@ -15,7 +15,7 @@ const SpotifyRecentlyPlayed = () => {
         refreshInterval: 20000,
     });
 
-    if (!dataTracks) return <Loader />;
+    if (!dataTracks) return <LastPlayedLoader />;
 
     return (
         <>

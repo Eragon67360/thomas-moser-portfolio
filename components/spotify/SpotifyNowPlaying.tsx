@@ -2,7 +2,7 @@
 
 import React from 'react'
 import useSWR from 'swr';
-import Loader from '../Loader';
+import SpotifyPlayerLoader from '../loaders/spotify/SpotifyPlayerLoader';
 import SpotifyLogo from './SpotifyLogo';
 import { Card, CardBody, CardHeader, Divider, Image, Link } from "@nextui-org/react";
 import PlayingAnimation from './PlayingAnimation';
@@ -18,7 +18,7 @@ const SpotifyNowPlaying = () => {
 
 
     if (errorPlaying) return <div>Failed to load Spotify API.</div>;
-    if (!dataPlaying) return <Loader />;
+    if (!dataPlaying) return <SpotifyPlayerLoader />;
 
     return (
         <>

@@ -2,7 +2,7 @@
 import React from 'react'
 import { TopTracks } from '@/lib/types';
 import useSWR from 'swr';
-import Loader from '../Loader';
+import TopTracksLoader from '../loaders/spotify/TopTracksLoader';
 import { Card, CardHeader, CardBody, CardFooter, Link, Divider, ScrollShadow } from '@nextui-org/react';
 import TopTrack from './TopTrack';
 import { Title, FooterText } from '../ui/Typography';
@@ -15,7 +15,7 @@ const SpotifyTopTracks = () => {
         refreshInterval: 20000,
     });
 
-    if (!dataTracks) return <Loader />;
+    if (!dataTracks) return <TopTracksLoader />;
 
     return (
         <>
