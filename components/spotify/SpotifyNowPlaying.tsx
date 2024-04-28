@@ -23,7 +23,7 @@ const SpotifyNowPlaying = () => {
             <Card>
                 <CardHeader className='gap-4 flex items-center'>
                     <SpotifyLogo />
-                    {dataPlaying?.data.isPlaying ? (
+                    {dataPlaying?.data?.isPlaying ? (
                         <div className='flex gap-4 items-center'>
                             <span>Currently playing</span>
                             <PlayingAnimation />
@@ -34,7 +34,7 @@ const SpotifyNowPlaying = () => {
 
                 </CardHeader>
                 <CardBody>
-                    {dataPlaying?.data.isPlaying ? (
+                    {dataPlaying?.data?.isPlaying ? (
                         <div className='flex gap-8'>
                             <Image
                                 alt={`${dataPlaying?.data.title} Album cover`}
