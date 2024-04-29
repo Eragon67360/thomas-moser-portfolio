@@ -1,21 +1,41 @@
-import React from 'react'
-import getPosts, { getPost } from '@/lib/get-posts'
-import { PostBody } from '@/components/blog/PostBody'
-import { notFound } from 'next/navigation'
+import getPosts from '@/lib/get-posts'
+import { Metadata } from 'next'
+import ShowPost from '@/components/blog/ShowPost';
 
 export async function generateStaticParams() {
     const posts = await getPosts()
     return posts.map((post) => ({ slug: post.slug }))
-  }
-  
-  export default async function PostPage({
+}
+
+export const generateMetadata = async ({
     params,
-  }: {
+}: {
     params: {
-      slug: string
+        slug: string
     }
-  }) {
-    const post = await getPost(params.slug)
-    if (!post) return notFound()
-    return <PostBody>{post?.body}</PostBody>
-  }
+}): Promise<Metadata> => {
+    const post = (await getPosts()).find((p) => p?.slug === params.slug)
+    return {
+        title: post?.title,
+        description: post?.description,
+        alternates: {
+            canonical: `https://thomasmoserdev.com/blog/${params.slug}`,
+        },
+    }
+}
+
+export default async function PostLayout({
+    params,
+}: {
+    params: {
+        slug: string
+    }
+}) {
+    return (
+        <>
+            <ShowPost params={{
+                slug: params.slug
+            }} />
+        </>
+    )
+}

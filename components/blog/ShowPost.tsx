@@ -1,8 +1,16 @@
-
 import getPosts from '@/lib/get-posts'
 import { getMDXComponent } from 'mdx-bundler/client'
+import { bundleMDX } from 'mdx-bundler'
+import Link from 'next/link'
 import React, { useMemo } from 'react'
 import { MdAccessTime } from 'react-icons/md'
+import PostComponent from './PostComponent'
+import remarkGfm from 'remark-gfm'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+// @ts-expect-error no types
+import remarkA11yEmoji from '@fec/remark-a11y-emoji'
+import remarkToc from 'remark-toc'
 
 async function getData({ slug }: { slug: string }) {
     const posts = await getPosts()
@@ -24,14 +32,16 @@ async function getData({ slug }: { slug: string }) {
 }
 
 export default async function ShowPost({
-    children,
     params,
 }: {
-    children: JSX.Element
     params: {
         slug: string
     }
 }) {
+
+    const remarkPlugins = [remarkGfm, remarkA11yEmoji, remarkToc];
+    const rehypePlugins = [rehypeSlug, rehypeAutolinkHeadings];
+
     const { previous, next, title, date, lastModified, description, duration, body } = await getData(params)
     // const [toc, setToc] = useState([] as Array<TocProps>);
     const lastModifiedDate = lastModified
@@ -42,12 +52,17 @@ export default async function ShowPost({
         })
         : null
 
-    // const ArticleComponent = useMemo(
-    //     () => getMDXComponent(body),
+    const result = await bundleMDX({
+        source: body,
+        mdxOptions(options) {
+            options.remarkPlugins = [...(options?.remarkPlugins ?? []), ...remarkPlugins];
+            options.rehypePlugins = [...(options?.rehypePlugins ?? []), ...rehypePlugins];
 
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    //     [body],
-    // );
+            return options;
+        },
+    })
+    
+    const { code, frontmatter } = result
 
     return (
         <>
@@ -56,7 +71,6 @@ export default async function ShowPost({
                     <div className="absolute h-full w-full opacity-40">
                         <figure className="object-cover flex overflow-hidden">
                             <img
-
                                 alt={description}
                                 loading="lazy"
                                 decoding="async"
@@ -88,9 +102,10 @@ export default async function ShowPost({
                 >
                     <div className='mx-auto w-full'>
                         <article className='mx-auto'>
-                            {children}
+                            {/* {children} */}
+                            <PostComponent code={code} />
                             {/* <ArticleComponent
-                            // components={{ Image, Ads, a: Link, Embed } as any}
+                                components={{ Image, a: Link } as any}
                             /> */}
                         </article>
                         <hr className='my-8 opacity-20' />
@@ -110,12 +125,6 @@ export default async function ShowPost({
                         </div>
                     </div>
                 </div>
-
-
-                <article>
-
-                    {children}
-                </article>
             </div>
 
         </>

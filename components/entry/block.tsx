@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import styles from './block.module.css'
 import { Card, CardHeader, CardBody, CardFooter } from '@nextui-org/react'
-// import Badge from '@components/badge'
+
 
 type Props =
   | {
