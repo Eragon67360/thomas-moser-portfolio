@@ -10,3 +10,79 @@
 .radio-custom-label {
     cursor: pointer;
 }
+
+
+@layer components {
+    .custom-prose {
+        @apply prose prose-invert;
+
+        pre {
+            background-color: #f6f8fa;
+            @apply dark:bg-gray-500/35;
+            color: black;
+            @apply dark:text-white;
+        }
+
+        a {
+            @apply text-primary-500;
+        }
+
+        p {
+            color: black;
+            @apply dark:text-[#D1D5D8];
+        }
+
+        li {
+            color: black;
+            @apply dark:text-[#D1D5D8];
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin-top: 2rem;
+            font-weight: 600;
+            color: black;
+            @apply dark:text-white;
+        }
+
+        h1 {
+            font-size: 1.875rem;
+            /* 3xl */
+            line-height: 2.25rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            /* 2xl */
+            line-height: 2rem;
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            /* xl */
+            line-height: 1.75rem;
+        }
+
+        h4 {
+            font-size: 1.125rem;
+            /* lg */
+            line-height: 1.75rem;
+        }
+
+        h5 {
+            font-size: 1rem;
+            /* base */
+            line-height: 1.5rem;
+        }
+
+        h6 {
+            font-size: 0.875rem;
+            /* sm */
+            line-height: 1.25rem;
+        }
+    }
+}

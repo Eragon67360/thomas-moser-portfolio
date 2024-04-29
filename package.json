@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@fec/remark-a11y-emoji": "^4.0.2",
+    "@tailwindcss/typography": "^0.5.13",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

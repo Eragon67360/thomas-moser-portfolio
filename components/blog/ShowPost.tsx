@@ -54,19 +54,13 @@ export default async function ShowPost({
 
     const result = await bundleMDX({
         source: body,
-        mdxOptions(options) {
-            options.remarkPlugins = [...(options?.remarkPlugins ?? []), ...remarkPlugins];
-            options.rehypePlugins = [...(options?.rehypePlugins ?? []), ...rehypePlugins];
-
-            return options;
-        },
     })
-    
+
     const { code, frontmatter } = result
 
     return (
         <>
-            <div className="mx-auto mb-16 max-w-none sm:mb-28">
+            <div className="custom-prose mx-auto mb-16 max-w-none sm:mb-28">
                 <div className="relative -mt-28 min-h-[105vh]">
                     <div className="absolute h-full w-full opacity-40">
                         <figure className="object-cover flex overflow-hidden">
@@ -101,18 +95,13 @@ export default async function ShowPost({
                     className='mx-auto my-10 max-w-6xl flex-none px-6 sm:my-20 md:px-24 lg:flex lg:space-x-8 xl:px-0'
                 >
                     <div className='mx-auto w-full'>
-                        <article className='mx-auto'>
-                            {/* {children} */}
+                        <article className='w-full'>
                             <PostComponent code={code} />
-                            {/* <ArticleComponent
-                                components={{ Image, a: Link } as any}
-                            /> */}
                         </article>
                         <hr className='my-8 opacity-20' />
                         {/* <Comment /> */}
                     </div>
 
-                    {/* Sidebar */}
                     <div className='hidden lg:block my-10 ml-4 space-y-6 lg:w-[40%]'>
                         <div className='sticky top-10 rounded-lg border border-gray-700 bg-white bg-opacity-5 backdrop-blur-sm backdrop-filter'>
                             <span className='block px-4 py-3 font-medium'>

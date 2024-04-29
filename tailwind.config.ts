@@ -8,7 +8,7 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
-  mode:'jit',
+  mode: 'jit',
   theme: {
     extend: {
       fontFamily: {
@@ -21,9 +21,9 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
         'hero': "url('../public/img/bg_hero.webp')",
       },
-      backgroundColor:{
+      backgroundColor: {
         'overlay': 'rgba(0, 0, 0, 0.8)',
-      },      
+      },
       animation: {
         marquee: 'marquee 25s linear infinite',
         marquee2: 'marquee2 25s linear infinite',
@@ -42,6 +42,7 @@ const config: Config = {
   },
   darkMode: "class",
   plugins: [
+    require('@tailwindcss/typography'),
     nextui({
       themes: {
         "dark": {
@@ -97,9 +98,6 @@ const config: Config = {
             focus: "#FFBF00",
           },
         },
-
-
-
       },
     }),
   ]
