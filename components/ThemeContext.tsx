@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { createContext } from 'react';
 
 // Set up the initial context
-const ThemeContext = React.createContext({
+const ThemeContext = createContext({
     theme: 'light', // Default to light theme
     colors: {
         background: '#f0f0f0',

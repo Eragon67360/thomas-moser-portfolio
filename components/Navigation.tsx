@@ -68,7 +68,7 @@ const Navigation = () => {
     <Navbar
       shouldHideOnScroll
       isBordered
-      className='transition-all duration-250'
+      className='transition-all duration-250 font-jet'
     >
 
       <NavbarContent>

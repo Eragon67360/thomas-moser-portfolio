@@ -1,0 +1,47 @@
+import React from 'react';import CustomLink from '@/components/shared/customLink';
+
+import useTocObserver from '@/hooks/useTocObserver';
+import { TocProps } from '@/lib/types';
+
+
+const Toc = ({ toc }: { toc: TocProps[] }) => {
+  const { tocActiveId, setActiveId } = useTocObserver();
+  return (
+    <ul className='list-none prose-a:no-underline'>
+      {toc.length > 0 &&
+        toc.map((item) => (
+          <div key={item.id}>
+            {item.level === 2 && (
+              <li>
+                <CustomLink href={`#${item.id}`}>
+                  <span
+                    onClick={() => setActiveId(item.id)}
+                    className={`my-0.5 text-sm hover:text-primary ${tocActiveId == item.id ? 'text-primary' : 'text-white'}`}
+                  >
+                    {item.name}
+                  </span>
+                </CustomLink>
+              </li>
+            )}
+
+            <ul className='list-none'>
+              {item.level === 3 && (
+                <li>
+                  <CustomLink href={`#${item.id}`}>
+                    <span
+                      onClick={() => setActiveId(item.id)}
+                      className={`my-0.5 text-sm hover:text-primary ${tocActiveId == item.id ? 'text-primary' : 'text-gray-400'}`}                      
+                    >
+                      {item.name}
+                    </span>
+                  </CustomLink>
+                </li>
+              )}
+            </ul>
+          </div>
+        ))}
+    </ul>
+  );
+};
+
+export default Toc;

@@ -56,3 +56,29 @@ export type Artist = {
 export type TopArtists = {
     artists: Artist[];
 }
+
+export type Base = {
+    title: string
+    description: string
+    duration: number
+    href?: string
+}
+
+export type Post = Base & {
+    // Not defined for third party posts
+    slug: string | undefined
+    date: string
+    tags: string[]
+    body: string
+    lastModified?: number
+    views?: number
+    // Third party only
+    isThirdParty?: boolean
+    type: 'post'
+}
+
+export type TocProps = {
+    id: string;
+    name: string | null;
+    level: number;
+};

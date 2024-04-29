@@ -1,12 +1,15 @@
 import BlogCard from '@/components/blog/BlogCard';
+import { PostListRSC } from '@/components/posts-list/rsc';
 import { HorizontalDivider } from '@/components/ui/HorizontalDivider'
 import { H2, H3 } from '@/components/ui/Typography'
+import getPosts from '@/lib/get-posts';
 import getPostMetadata from '@/utils/getPostMetadata'
 import React from 'react'
 
 function page() {
 
-  const postMetadata = getPostMetadata("articles");
+  const postMetadata = getPosts();
+
   return (
     <>
       <div className='w-full min-h-[90dvh] flex flex-col gap-8 items-center'>
@@ -16,16 +19,11 @@ function page() {
           <HorizontalDivider />
         </div>
         <div className='w-full max-w-[1024px] py-8 px-8 flex flex-col items-center h-full'>
-          <div className='mt-8 flex flex-col gap-8'>
-            {postMetadata.map((article, articleIndex) => {
-              return (
-                <BlogCard key={articleIndex} post={article} />
-              )
-            })}
-          </div>
-
+          <PostListRSC />
         </div>
       </div>
+
+
     </>
   )
 }

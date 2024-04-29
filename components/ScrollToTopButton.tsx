@@ -1,9 +1,9 @@
 'use client'
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { FC, Suspense, useEffect, useState } from 'react';
 import { IoIosArrowRoundUp } from 'react-icons/io';
 import Spline from '@splinetool/react-spline';
 
-const ScrollToTopButton: React.FC = () => {
+const ScrollToTopButton: FC = () => {
     const isBrowser = () => typeof window !== 'undefined'; //The approach recommended by Next.js
 
     function scrollToTop() {
