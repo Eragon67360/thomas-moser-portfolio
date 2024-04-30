@@ -14,17 +14,16 @@ type Props =
   }
 
 const BlockEntry = (props: Props) => {
-
   const { title, description, type, href, date, views, tags } = props
   console.log(title);
   return (
     <Link href={href} className='p-4 flex h-auto w-full hover:opacity-65 transition-all duration-200 rounded-md gap-4'>
-      <div className='w-1/3 flex flex-col flex-1 justify-evenly'>
+      <div className='w-1/3 hidden sm:flex flex-col flex-1 justify-evenly'>
         <div className='h-full'></div>
         <div className='bg-secondary/65 h-[.1vw]' />
         <div className='h-full'></div>
       </div>
-      <Card className='w-2/3 bg-transparent' radius='md' shadow='none'>
+      <Card className='w-full sm:w-2/3 bg-transparent' radius='md' shadow='none'>
         <CardHeader>
           <p className='font-bold text-lg'>{title}</p>
         </CardHeader>

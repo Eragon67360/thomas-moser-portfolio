@@ -14,11 +14,11 @@ export const H1: FC<TypographyProps> = ({ children }) => {
 };
 
 export const H2: FC<TypographyProps> = ({ children }) => {
-    return <h2 className='text-center transition-all duration-250 uppercase font-bold text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl'>{children}</h2>;
+    return <h2 className='text-center transition-all duration-250 uppercase font-bold text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl'>{children}</h2>;
 };
 
 export const H3: FC<TypographyProps> = ({ children }) => {
-    return <h3 className='w-4/5 text-center transition-all duration-250 text-secondary text-xs md:text-sm lg:text-base xl:text-lg'>{children}</h3>;
+    return <h3 className='w-4/5 text-center transition-all duration-250 text-secondary text-sm md:text-base lg:text-xl xl:text-2xl'>{children}</h3>;
 };
 
 export const Title: FC<TypographyProps> = ({ children }) => {

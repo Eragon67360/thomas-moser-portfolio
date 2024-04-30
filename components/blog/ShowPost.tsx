@@ -1,16 +1,24 @@
 import getPosts from '@/lib/get-posts'
-import { getMDXComponent } from 'mdx-bundler/client'
 import { bundleMDX } from 'mdx-bundler'
-import Link from 'next/link'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { MdAccessTime } from 'react-icons/md'
 import PostComponent from './PostComponent'
-import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-// @ts-expect-error no types
-import remarkA11yEmoji from '@fec/remark-a11y-emoji'
-import remarkToc from 'remark-toc'
+import rehypePrism from 'rehype-prism-plus';
+
+import heroesData from '@/articles/hero.json';
+
+// Define the structure of your JSON data using TypeScript interfaces
+interface HeroImages {
+    [key: string]: {
+        image: string;
+    };
+}
+
+// Now cast your imported JSON data to the correct type using the interface
+const heroes: HeroImages = heroesData as HeroImages;
+let imagePath = ""
 
 async function getData({ slug }: { slug: string }) {
     const posts = await getPosts()
@@ -23,6 +31,7 @@ async function getData({ slug }: { slug: string }) {
     const post = posts[postIndex]
 
     const { ...rest } = post
+    imagePath = heroes[slug]?.image;
 
     return {
         previous: posts[postIndex + 1] || null,
@@ -38,10 +47,6 @@ export default async function ShowPost({
         slug: string
     }
 }) {
-
-    const remarkPlugins = [remarkGfm, remarkA11yEmoji, remarkToc];
-    const rehypePlugins = [rehypeSlug, rehypeAutolinkHeadings];
-
     const { previous, next, title, date, lastModified, description, duration, body } = await getData(params)
     // const [toc, setToc] = useState([] as Array<TocProps>);
     const lastModifiedDate = lastModified
@@ -54,6 +59,16 @@ export default async function ShowPost({
 
     const result = await bundleMDX({
         source: body,
+        mdxOptions(options) {
+            options.rehypePlugins = [
+                ...(options.rehypePlugins ?? []),
+                rehypeSlug,
+                rehypeAutolinkHeadings,
+                rehypePrism,
+            ];
+
+            return options;
+        },
     })
 
     const { code, frontmatter } = result
@@ -70,7 +85,7 @@ export default async function ShowPost({
                                 decoding="async"
                                 data-nimg="fill"
                                 className="false object-cover"
-                                src="https://res.cloudinary.com/dlpb6j88q/image/upload/c_limit%2Cf_auto%2Cfl_progressive%2Cq_75%2Cw_800/jagad.dev/posts/sms-otp/header"
+                                src={imagePath}
                                 style={{ position: "absolute", height: "100%", width: "100%", inset: "0px", color: "transparent" }}
                             />
                         </figure>

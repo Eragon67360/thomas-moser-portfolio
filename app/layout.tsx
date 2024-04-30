@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { Analytics } from "@vercel/analytics/react"
 import AnimatedCursor from "react-animated-cursor";
+import { dataSeo } from "@/lib/data";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,8 +25,31 @@ const jetbrains = JetBrains_Mono({
 
 
 export const metadata: Metadata = {
-  title: "Thomas's portfolio",
-  description: "Portfolio",
+  title: {
+    template: '%s - Thomas Moser',
+    default: dataSeo.title,
+  },
+  generator: 'Next.js',
+  applicationName: 'jagad.dev',
+  referrer: 'origin-when-cross-origin',
+  keywords: ['Personal Website', 'Personal Blog', 'Web Development'],
+  authors: [{ name: dataSeo.name }],
+  colorScheme: 'dark',
+  creator: dataSeo.name,
+  publisher: dataSeo.name,
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL(dataSeo.url),
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en-US': '/en-US',
+    },
+  },
+  // openGraph: dataOpenGraph,
 };
 
 export default function RootLayout({
