@@ -11,6 +11,7 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypePrism from 'rehype-prism-plus'
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
+import readingDuration from 'reading-duration';
 
 let imageSrc = ""
 
@@ -34,6 +35,7 @@ async function getData({ slug }: { slug: string }) {
     }
 }
 
+
 export default async function ShowPost({
     params,
 }: {
@@ -51,6 +53,11 @@ export default async function ShowPost({
         })
         : null
 
+
+    const readingTime = readingDuration(body, {
+        wordsPerMinute: 100,
+        emoji: false
+    });
     const result = await bundleMDX({
         source: body,
 
@@ -92,7 +99,7 @@ export default async function ShowPost({
                             <div className="relative my-10 grid grid-cols-[auto_1fr_auto] items-center gap-x-2">
                                 <time className="rounded-lg bg-white bg-opacity-20 p-1 px-2 text-sm">{date}</time>
                                 <div className="w-full border-b"></div>
-                                <div className='flex gap-2 items-center'><MdAccessTime />{duration}&apos;</div>
+                                <div className='flex gap-2 items-center'><MdAccessTime />{readingTime}</div>
                             </div>
                             <div className="flex w-full items-center justify-center">
                                 <p className="text-md mb-10 text-center text-gray-400 sm:text-lg lg:mb-0">{description}</p>
