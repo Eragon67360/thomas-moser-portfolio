@@ -237,11 +237,11 @@ const Navigation = () => {
           </DropdownMenu>
         </Dropdown>
 
-        <NavbarItem>
+        {/* <NavbarItem>
           <Link href='/blog' color='foreground'>
             Blog
           </Link>
-        </NavbarItem>
+        </NavbarItem> */}
       </NavbarContent>
 
       <NavbarContent justify="end">
