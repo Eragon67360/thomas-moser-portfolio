@@ -15,7 +15,7 @@ type Props =
 
 const BlockEntry = (props: Props) => {
   const { title, description, type, href, date, views, tags } = props
-  console.log(title);
+
   return (
     <Link href={href} className='p-4 flex h-auto w-full hover:opacity-65 transition-all duration-200 rounded-md gap-4'>
       <div className='w-1/3 hidden sm:flex flex-col flex-1 justify-evenly'>

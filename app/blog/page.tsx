@@ -12,7 +12,7 @@ function page() {
 
   return (
     <>
-      <div className='w-full min-h-[90dvh] flex flex-col gap-8 items-center'>
+      <div className='font-inter w-full min-h-[90dvh] flex flex-col gap-8 items-center'>
         <div className='flex flex-col items-center gap-4 text-center mt-8 max-w-[1440px]'>
           <H2>Posts</H2>
           <H3>Collection of informative and resources focused on various programming-related with the latest industry trends.</H3>

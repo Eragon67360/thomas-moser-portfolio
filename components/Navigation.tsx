@@ -63,7 +63,7 @@ const Navigation = () => {
   return (
     <Navbar
       shouldHideOnScroll
-      isBordered
+      isBlurred
       className='transition-all duration-250 font-jet'
     >
       <NavbarContent>
@@ -177,6 +177,12 @@ const Navigation = () => {
           </DropdownMenu>
         </Dropdown>
 
+        <NavbarItem>
+          <Link href='/blog' color='foreground'>
+            Blog
+          </Link>
+        </NavbarItem>
+
         <Dropdown>
           <NavbarItem>
             <DropdownTrigger>
@@ -231,12 +237,6 @@ const Navigation = () => {
 
           </DropdownMenu>
         </Dropdown>
-
-        <NavbarItem>
-          <Link href='/blog' color='foreground'>
-            Blog
-          </Link>
-        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent justify="end">

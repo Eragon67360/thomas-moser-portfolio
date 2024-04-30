@@ -3,22 +3,16 @@ import { bundleMDX } from 'mdx-bundler'
 import React from 'react'
 import { MdAccessTime } from 'react-icons/md'
 import PostComponent from './PostComponent'
+import heroesData from '@/articles/hero.json';
+import Image from '../shared/image'
+import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-import rehypePrism from 'rehype-prism-plus';
+import rehypeCodeTitles from 'rehype-code-titles'
+import rehypePrism from 'rehype-prism-plus'
+import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
 
-import heroesData from '@/articles/hero.json';
-
-// Define the structure of your JSON data using TypeScript interfaces
-interface HeroImages {
-    [key: string]: {
-        image: string;
-    };
-}
-
-// Now cast your imported JSON data to the correct type using the interface
-const heroes: HeroImages = heroesData as HeroImages;
-let imagePath = ""
+let imageSrc = ""
 
 async function getData({ slug }: { slug: string }) {
     const posts = await getPosts()
@@ -31,7 +25,7 @@ async function getData({ slug }: { slug: string }) {
     const post = posts[postIndex]
 
     const { ...rest } = post
-    imagePath = heroes[slug]?.image;
+    imageSrc = slug;
 
     return {
         previous: posts[postIndex + 1] || null,
@@ -59,12 +53,18 @@ export default async function ShowPost({
 
     const result = await bundleMDX({
         source: body,
+
         mdxOptions(options) {
+            options.remarkPlugins = [
+                ...(options.remarkPlugins ?? [remarkGfm]),
+            ];
             options.rehypePlugins = [
-                ...(options.rehypePlugins ?? []),
-                rehypeSlug,
-                rehypeAutolinkHeadings,
-                rehypePrism,
+                ...(options.rehypePlugins ?? [rehypeSlug,
+                    rehypeAutolinkHeadings,
+                    rehypeCodeTitles,
+                    rehypePrism,
+                    rehypeAccessibleEmojis,]),
+
             ];
 
             return options;
@@ -79,15 +79,11 @@ export default async function ShowPost({
                 <div className="relative -mt-28 min-h-[105vh]">
                     <div className="absolute h-full w-full opacity-40">
                         <figure className="object-cover flex overflow-hidden">
-                            <img
+                            <Image
                                 alt={description}
-                                loading="lazy"
-                                decoding="async"
-                                data-nimg="fill"
+                                src={`/thomasmoserdev.com/blog/${imageSrc}/header`}
                                 className="false object-cover"
-                                src={imagePath}
-                                style={{ position: "absolute", height: "100%", width: "100%", inset: "0px", color: "transparent" }}
-                            />
+                                style={{ position: "absolute", height: "100%", width: "100%", inset: "0px", color: "transparent" }} />
                         </figure>
                     </div>
                     <div className="relative flex h-full min-h-[105vh] w-full items-center justify-center bg-gradient-to-t from-background to-transparent text-center">

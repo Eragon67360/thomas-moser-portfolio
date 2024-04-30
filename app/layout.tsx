@@ -3,11 +3,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import 'prismjs/themes/prism-okaidia.css';
+
 import { Providers } from "./providers";
 import Navigation from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
-import { Analytics } from "@vercel/analytics/react"
 import AnimatedCursor from "react-animated-cursor";
 import { dataSeo } from "@/lib/data";
 
@@ -34,7 +35,6 @@ export const metadata: Metadata = {
   referrer: 'origin-when-cross-origin',
   keywords: ['Personal Website', 'Personal Blog', 'Web Development'],
   authors: [{ name: dataSeo.name }],
-  colorScheme: 'dark',
   creator: dataSeo.name,
   publisher: dataSeo.name,
   formatDetection: {

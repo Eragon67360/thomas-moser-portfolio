@@ -2,6 +2,15 @@
 import AnalyticsDashboard from '@/components/AnalyticsDashboard'
 import { getDate } from '@/utils'
 import { analytics } from '@/utils/analytics'
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Analytics',
+  description: `Some analytics about this website`,
+  alternates: {
+    canonical: 'https://thomasmoserdev.com/analytics',
+},
+};
 
 const Page = async () => {
   const TRACKING_DAYS = 7

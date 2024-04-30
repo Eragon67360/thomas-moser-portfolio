@@ -5,6 +5,16 @@ import { HorizontalDivider } from '@/components/ui/HorizontalDivider'
 import { H2 } from '@/components/ui/Typography'
 import SpotifyTopArtists from '@/components/spotify/SpotifyTopArtists'
 import SpotifyTopTracks from '@/components/spotify/SpotifyTopTracks'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Activities',
+  description: `What I do beside programming.`,
+  alternates: {
+    canonical: 'https://thomasmoserdev.com/activities',
+},
+};
+
 
 const Projects = async () => {
   return (
