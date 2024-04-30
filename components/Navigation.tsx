@@ -47,16 +47,12 @@ const Navigation = () => {
       "href": "/"
     },
     {
-      "name": "About me",
-      "href": "/#about"
-    },
-    {
-      "name": "Competencies",
-      "href": "/#competencies"
-    },
-    {
       "name": "Projects",
       "href": "/#projects"
+    },
+    {
+      "name": "Blog",
+      "href": "/blog"
     },
     {
       "name": "Activities",
@@ -70,7 +66,6 @@ const Navigation = () => {
       isBordered
       className='transition-all duration-250 font-jet'
     >
-
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isOpen ? "Close menu" : "Open menu"}
@@ -237,11 +232,11 @@ const Navigation = () => {
           </DropdownMenu>
         </Dropdown>
 
-        {/* <NavbarItem>
+        <NavbarItem>
           <Link href='/blog' color='foreground'>
             Blog
           </Link>
-        </NavbarItem> */}
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent justify="end">
@@ -254,6 +249,7 @@ const Navigation = () => {
           <ThemeSwitcher />
         </NavbarItem>
       </NavbarContent>
+
       <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>

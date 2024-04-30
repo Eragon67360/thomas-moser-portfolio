@@ -23,7 +23,7 @@ export const Footer = () => {
                     <div className='flex justify-between gap-4 md:gap-8 lg:gap-16 text-sm md:text-base order-1 md:order-2'>
                         {dataFooter.map((item) => {
                             return (
-                                <div className='flex flex-col gap-4'>
+                                <div key={item.menu} className='flex flex-col gap-4'>
                                     <p className='uppercase font-bold'>{item.menu.toUpperCase()}</p>
                                     {item.content.map((item, index) => (
                                         <div key={index}>
@@ -38,7 +38,6 @@ export const Footer = () => {
                             )
                         })}
                     </div>
-
                 </div>
             </div>
         </>
