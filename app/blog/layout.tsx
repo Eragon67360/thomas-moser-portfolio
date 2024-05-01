@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import React,{ ReactNode } from "react"
 
 export const metadata = {
     title: 'Blog',

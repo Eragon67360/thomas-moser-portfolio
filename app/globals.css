@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.background-core {
+    background-image: radial-gradient(#322e15, #16181d 60%);
+}
+
 .radio-hide-control .nextui-radio-button {
     display: none;
     /* Hides the circle control */

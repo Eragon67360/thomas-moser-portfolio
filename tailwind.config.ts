@@ -48,7 +48,7 @@ const config: Config = {
         "dark": {
           extend: "dark",
           colors: {
-            background: "#090909",
+            background: "#16181d",
             foreground: "#ffffff",
             primary: {
               50: "#ffe100",
@@ -73,10 +73,10 @@ const config: Config = {
         },
 
         "light": {
-          extend: "light",
+          extend: "dark",
           colors: {
-            background: "#ffffff",
-            foreground: "#000",
+            background: "#16181d",
+            foreground: "#ffffff",
             primary: {
               50: "#ffe100",
               100: "#ffe100",
@@ -89,8 +89,8 @@ const config: Config = {
               800: "#cc9800",
               900: "#7f5f00",
               DEFAULT: "#FFBF00",
-              foreground: "#000",
-              svgFill: '#000'
+              foreground: "#ffffff",
+              svgFill: '#fff'
             },
             secondary: {
               DEFAULT: "#8F8F8F",

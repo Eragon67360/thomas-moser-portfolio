@@ -50,7 +50,7 @@ const AnalyticsDashboard = ({
   return (
     <div className='flex flex-col gap-6'>
       <div className='grid w-full mx-auto grid-cols-1 sm:grid-cols-2 gap-6'>
-        <Card className='w-full p-4'>
+        <Card className='w-full p-4 border'>
           <p className=''>
             Avg. visitors/day
           </p>
@@ -58,7 +58,7 @@ const AnalyticsDashboard = ({
             {avgVisitorsPerDay}
           </p>
         </Card>
-        <Card className='w-full p-4'>
+        <Card className='w-full p-4 border'>
           <p className='flex gap-2.5 items-center'>
             Visitors today
             <Badge
@@ -73,7 +73,7 @@ const AnalyticsDashboard = ({
         </Card>
       </div>
 
-      <Card className='flex flex-col sm:grid grid-cols-4 gap-6 p-4'>
+      <Card className='flex flex-col sm:grid grid-cols-4 gap-6 p-4 border'>
         <h2 className='w-full text-center sm:left-left font-semibold text-xl'>
           This weeks top visitors:
         </h2>

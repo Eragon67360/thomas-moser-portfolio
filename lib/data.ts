@@ -7,7 +7,7 @@ export const dataSeo = {
         'My personal website to share my projects, blogs, and other stuff.',
     ogimage:
         'https://res.cloudinary.com/dluezegi8/images/upload/thomasmoserdev.com/default_social.png',
-    name: 'Jagad Yudha Awali',
+    name: 'Thomas Moser',
 };
 
 export const dataOpenGraph = {

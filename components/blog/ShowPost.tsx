@@ -82,8 +82,8 @@ export default async function ShowPost({
 
     return (
         <>
-            <div className="custom-prose mx-auto mb-16 max-w-none sm:mb-28">
-                <div className="relative -mt-28 min-h-[105vh]">
+            <div className="custom-prose mb-16 max-w-none sm:mb-28 w-full">
+                <div className="relative -mt-28 min-h-screen">
                     <div className="absolute h-full w-full opacity-40">
                         <figure className="object-cover flex overflow-hidden">
                             <Image
@@ -93,7 +93,7 @@ export default async function ShowPost({
                                 style={{ position: "absolute", height: "100%", width: "100%", inset: "0px", color: "transparent" }} />
                         </figure>
                     </div>
-                    <div className="relative flex h-full min-h-[105vh] w-full items-center justify-center bg-gradient-to-t from-background to-transparent text-center">
+                    <div className="relative flex h-full min-h-screen w-full items-center justify-center bg-gradient-to-t from-background to-transparent text-center">
                         <div className="mx-5 max-w-3xl">
                             <h1 className="text-3xl text-white sm:text-5xl font-extrabold">{title}</h1>
                             <div className="relative my-10 grid grid-cols-[auto_1fr_auto] items-center gap-x-2">

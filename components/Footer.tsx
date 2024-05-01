@@ -11,8 +11,8 @@ export const Footer = () => {
     }
     return (
         <>
-            <div className='w-full flex justify-center bg-transparent border-t border-gray-500/30 py-4 px-8'>
-                <div className='max-w-[1440px] w-full h-[260px] flex flex-col md:flex-row gap-8 justify-between'>
+            <div className='mx-auto max-w-[80rem] flex justify-center bg-transparent py-8 px-8'>
+                <div className='w-full h-[260px] flex flex-col md:flex-row gap-8 justify-between'>
                     <div className='flex flex-col w-full md:w-1/2 order-2 md:order-1 gap-4'>
                         <SpotifyNowPlaying />
                         <FooterText>

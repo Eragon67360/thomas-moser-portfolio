@@ -2,14 +2,9 @@ import BlogCard from '@/components/blog/BlogCard';
 import { PostListRSC } from '@/components/posts-list/rsc';
 import { HorizontalDivider } from '@/components/ui/HorizontalDivider'
 import { H2, H3 } from '@/components/ui/Typography'
-import getPosts from '@/lib/get-posts';
-import getPostMetadata from '@/utils/getPostMetadata'
 import React from 'react'
 
 function page() {
-
-  const postMetadata = getPosts();
-
   return (
     <>
       <div className='font-inter w-full min-h-[90dvh] flex flex-col gap-8 items-center'>

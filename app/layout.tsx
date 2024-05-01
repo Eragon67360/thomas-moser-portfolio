@@ -1,29 +1,10 @@
 import React, { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { JetBrains_Mono } from "next/font/google";
-import "./globals.css";
-import 'prismjs/themes/prism-okaidia.css';
-import { Providers } from "./providers";
-import Navigation from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
-import ScrollToTopButton from "@/components/ScrollToTopButton";
-import AnimatedCursor from "react-animated-cursor";
+
 import { dataSeo } from "@/lib/data";
 import AdSense from "@/components/ads/AdSense";
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", '700', '800'],
-  variable: "--font-inter",
-});
-
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", '700', '800'],
-  variable: "--font-jetbrains",
-});
-
+import MainLayout from "@/components/layout/MainLayout";
+import { Suspense } from 'react'
 
 export const metadata: Metadata = {
   title: {
@@ -58,49 +39,13 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`scroll-smooth overflow-x-hidden`}>
+    <html lang="en" className={`scroll-smooth overflow-x-hidden dark`}>
       <head>
-        <AdSense pId={process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID!}/>
-        {/* {process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID!} */}
+        <AdSense pId={process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID!} />
       </head>
-      <body className={`${inter.variable} ${jetbrains.variable}`}>
-        <Providers>
-          <Navigation />
-          {children}
-          <Footer />
-          <ScrollToTopButton />
-        </Providers>
-        <div className="hidden sm:block">
-          <AnimatedCursor
-            innerSize={8}
-            outerSize={8}
-            color='128,128,128'
-            outerAlpha={0.2}
-            innerScale={0.7}
-            outerScale={5}
-            clickables={[
-              'a',
-              'input[type="text"]',
-              'input[type="email"]',
-              'input[type="number"]',
-              'input[type="submit"]',
-              'input[type="image"]',
-              'label[for]',
-              'select',
-              'textarea',
-              'button',
-              'Button',
-              'Link',
-              '.link',
-              {
-                target: '.custom',
-              }
-            ]}
-          />
-        </div>
-
-
-      </body>
+      <MainLayout>
+        {children}
+      </MainLayout>
     </html>
   );
 }
