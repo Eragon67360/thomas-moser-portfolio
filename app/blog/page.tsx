@@ -7,18 +7,16 @@ import React from 'react'
 function page() {
   return (
     <>
-      <div className='font-inter w-full min-h-[90dvh] flex flex-col gap-8'>
+      <div className='font-inter w-full flex flex-col gap-8 items-center'>
         <div className='flex flex-col items-center gap-4 text-center'>
           <H2>Posts</H2>
           <H3>Collection of informative and resources focused on various programming-related with the latest industry trends.</H3>
           <HorizontalDivider />
         </div>
-        <div className='w-full py-8 flex flex-col items-center h-full'>
+        <div className='w-full max-w-[896px] py-8 flex flex-col items-center h-full'>
           <PostListRSC />
         </div>
       </div>
-
-
     </>
   )
 }
