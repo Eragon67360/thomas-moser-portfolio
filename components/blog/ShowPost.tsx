@@ -1,7 +1,7 @@
 import getPosts from '@/lib/get-posts'
 import { bundleMDX } from 'mdx-bundler'
 import React from 'react'
-import { MdAccessTime } from 'react-icons/md'
+import { FaRegEye } from "react-icons/fa";
 import PostComponent from './PostComponent'
 import Image from '../shared/image'
 import remarkGfm from 'remark-gfm'
@@ -12,8 +12,13 @@ import rehypePrism from 'rehype-prism-plus'
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
 import readingDuration from 'reading-duration';
 import Comment from './Comment'
+import { ReportView } from '../redis/ReportView'
+import { redis } from '@/lib/redis'
+import { getPostViews } from '@/hooks/useViewCount';
 
-let imageSrc = ""
+let imageSrc = "" 
+export const revalidate = 60
+
 
 async function getData({ slug }: { slug: string }) {
     const posts = await getPosts()
@@ -43,7 +48,9 @@ export default async function ShowPost({
         slug: string
     }
 }) {
-    const { previous, next, title, date, lastModified, description, duration, body } = await getData(params)
+    const { previous, next, title, date, lastModified, description, duration, body } = await getData(params);
+    const views = await getPostViews(params.slug);
+ 
     // const [toc, setToc] = useState([] as Array<TocProps>);
     const lastModifiedDate = lastModified
         ? new Date(lastModified).toLocaleDateString('en-US', {
@@ -82,6 +89,7 @@ export default async function ShowPost({
 
     return (
         <>
+            <ReportView slug={params.slug} />
             <div className="custom-prose mb-16 max-w-none sm:mb-28 w-full">
                 <div className="relative -mt-28 min-h-screen">
                     <div className="absolute h-full w-full opacity-40">
@@ -99,7 +107,8 @@ export default async function ShowPost({
                             <div className="relative my-10 grid grid-cols-[auto_1fr_auto] items-center gap-x-2">
                                 <time className="rounded-lg bg-white bg-opacity-20 p-1 px-2 text-sm">{date}</time>
                                 <div className="w-full border-b"></div>
-                                <div className='flex gap-2 items-center'><MdAccessTime />{readingTime}</div>
+
+                                <div className='flex gap-2 items-center'><FaRegEye />{views}</div>
                             </div>
                             <div className="flex w-full items-center justify-center">
                                 <p className="text-md mb-10 text-center text-gray-400 sm:text-lg lg:mb-0">{description}</p>
@@ -112,6 +121,7 @@ export default async function ShowPost({
                     className='mx-auto my-10 max-w-6xl flex-none px-6 sm:my-20 md:px-24 lg:flex lg:space-x-8 xl:px-0'
                 >
                     <div className='mx-auto w-full'>
+                        {readingTime}
                         <article className='w-full'>
                             <PostComponent code={code} />
                         </article>
