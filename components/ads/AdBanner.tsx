@@ -35,8 +35,8 @@ const AdBanner = ({ dataAdLayout, dataAdSlot, dataAdFormat, dataFullWidthRespons
             <span className='font-bold text-white'>Warning!</span>
           </div>
           <p className='font-light text-gray-200'>
-            Please disable your adBlock to support our site and free contents
-            from jagad.dev
+            Please disable your adBlock to support my website and free contents
+            from thomasmoserdev.com
           </p>
         </div>
       ) : (
