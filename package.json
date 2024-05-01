@@ -1,6 +1,14 @@
 {
-  "name": "portfolio",
-  "version": "0.1.0",
+  "name": "thomasmoserdev.com",
+  "version": "1.1.0",
+  "description": "Website/Portfolio including a project show and a",
+  "author": "Thomas Moser",
+  "license": "MIT",
+  "homepage": "https://github.com/Eragon67360/thomas-moser-portfolio#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eragon67360/thomas-moser-portfolio.git"
+  },
   "private": true,
   "scripts": {
     "dev": "next dev",

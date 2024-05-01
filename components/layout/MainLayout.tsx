@@ -32,7 +32,7 @@ export default function MainLayout({ children }: any) {
   const isBlogPost = [`/blog/`].some((prefix) =>
     pathname.startsWith(prefix),
   );
-  const containerClass = isBlogPost ? 'max-w-screen' : 'mx-auto my-8 max-w-[80rem] px-3 xs:px-6 md:px-24 lg:px-8';
+  const containerClass = isBlogPost ? 'max-w-screen mx-auto my-8 px-0 xs:px-6 md:px-24 lg:px-8' : 'mx-auto my-8 max-w-[80rem] px-0 xs:px-6 md:px-24 lg:px-8';
 
   return (
 

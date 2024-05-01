@@ -7,81 +7,63 @@ import {
   Link,
   Button
 } from "@nextui-org/react";
+import { useRouter } from 'next/navigation';
 
 
 const Navigation = () => {
+  const router = useRouter()
 
   return (
     <Navbar
       shouldHideOnScroll
       isBlurred
-      className='transition-all duration-250 font-jet border-b border-white/30'
+      className='font-jet border-b border-white/30'
     >
-      <NavbarContent className="flex gap-1 sm:gap-2 md:gap-3 lg:gap-4 xl:gap-5 w-full justify-center" justify="center">
+      <NavbarContent className="flex gap-4 sm:gap-5 md:gap-6 lg:gap-8 xl:gap-12 w-full justify-center transition-all duration-250 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl " justify="center">
         <NavbarItem className=''>
-          <Button
-            disableRipple
-            className="px-0 bg-transparent data-[hover=true]:bg-transparent"
-            radius="sm"
-            variant="light"
+          <Link
+            className="bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            href='/'
           >
-            <Link href='/' color='foreground' className=' mx-0'>
-              <p className='text-sm md:text-base'>Home</p>
-            </Link>
-          </Button>
+            Home
+          </Link>
         </NavbarItem>
 
         <NavbarItem className=''>
-          <Button
-            disableRipple
-            className="px-0 bg-transparent data-[hover=true]:bg-transparent"
-            radius="sm"
-            variant="light"
+          <Link
+            className="bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            href='/about'
           >
-            <Link href='/about' color='foreground' className=' mx-0'>
-              <p className='text-sm md:text-base'>About</p>
-            </Link>
-          </Button>
+            About
+          </Link>
         </NavbarItem>
 
         <NavbarItem className=''>
-          <Button
-            disableRipple
-            className="px-4 bg-transparent data-[hover=true]:bg-transparent"
-            radius="sm"
-            variant="light"
+          <Link
+            className=" bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            href='/projects'
           >
-            <Link href='/projects' color='foreground' className=''>
-              <p className='text-sm md:text-base'>Projects</p>
-            </Link>
-          </Button>
+            Projects
+          </Link>
         </NavbarItem>
 
         <NavbarItem className=''>
-          <Button
-            disableRipple
-            className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-            radius="sm"
-            variant="light"
+          <Link
+            className="bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            href='/blog'
           >
-            <Link href='/blog' color='foreground'>
-              <p className='text-sm md:text-base'>Blog</p>
-            </Link>
-          </Button>
+            Blog
+          </Link>
 
         </NavbarItem>
 
         <NavbarItem className=''>
-          <Button
-            disableRipple
-            className="px-4 bg-transparent data-[hover=true]:bg-transparent"
-            radius="sm"
-            variant="light"
+          <Link
+            className="bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            href='/activities'
           >
-            <Link href='/activities' color='foreground' className=''>
-              <p className='text-sm md:text-base'>Activities</p>
-            </Link>
-          </Button>
+            Activities
+          </Link>
         </NavbarItem>
 
       </NavbarContent>
