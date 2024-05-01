@@ -3,7 +3,6 @@ import { bundleMDX } from 'mdx-bundler'
 import React from 'react'
 import { MdAccessTime } from 'react-icons/md'
 import PostComponent from './PostComponent'
-import heroesData from '@/articles/hero.json';
 import Image from '../shared/image'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
@@ -107,7 +106,6 @@ export default async function ShowPost({
                         </div>
                     </div>
                 </div>
-
                 <div
                     id='article'
                     className='mx-auto my-10 max-w-6xl flex-none px-6 sm:my-20 md:px-24 lg:flex lg:space-x-8 xl:px-0'

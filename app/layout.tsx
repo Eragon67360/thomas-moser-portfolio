@@ -4,13 +4,13 @@ import { Inter } from "next/font/google";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import 'prismjs/themes/prism-okaidia.css';
-
 import { Providers } from "./providers";
 import Navigation from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import ScrollToTopButton from "@/components/ScrollToTopButton";
 import AnimatedCursor from "react-animated-cursor";
 import { dataSeo } from "@/lib/data";
+import AdSense from "@/components/ads/AdSense";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     default: dataSeo.title,
   },
   generator: 'Next.js',
-  applicationName: 'jagad.dev',
+  applicationName: 'thomasmoserdev.com',
   referrer: 'origin-when-cross-origin',
   keywords: ['Personal Website', 'Personal Blog', 'Web Development'],
   authors: [{ name: dataSeo.name }],
@@ -59,6 +59,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`scroll-smooth overflow-x-hidden`}>
+      <head>
+        <AdSense pId={process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID!}/>
+        {/* {process.env.NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID!} */}
+      </head>
       <body className={`${inter.variable} ${jetbrains.variable}`}>
         <Providers>
           <Navigation />

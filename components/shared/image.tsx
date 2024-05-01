@@ -43,7 +43,7 @@ const Image: React.FC<Props> = ({ src, className, ...props }) => {
                     className={`${!isReady && 'animate-pulse bg-zinc-600'} ${className ? className : 'rounded-md'
                         }`}
                     {...props}
-                    onLoadingComplete={onLoadCallback}
+                    onLoad={onLoadCallback}
                     unoptimized={true}
                 />
                 {isOpen && (

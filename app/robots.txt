@@ -1,7 +1,0 @@
-User-Agent: *
-Allow: /
-Disallow: /private/
-# Host
-Host: https://thomasmoserdev.com
-
-Sitemap: https://thomasmoserdev.com/sitemap.xml
