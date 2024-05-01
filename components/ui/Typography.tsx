@@ -14,7 +14,7 @@ export const H1: FC<TypographyProps> = ({ children }) => {
 };
 
 export const H2: FC<TypographyProps> = ({ children }) => {
-    return <h2 className='text-center transition-all duration-250 font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl'>{children}</h2>;
+    return <h2 className='text-center transition-all duration-250 font-bold text-2xl md:text-4xl lg:text-5xl'>{children}</h2>;
 };
 
 export const H3: FC<TypographyProps> = ({ children }) => {

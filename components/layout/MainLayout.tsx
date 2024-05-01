@@ -24,19 +24,16 @@ const jetbrains = JetBrains_Mono({
   variable: "--font-jetbrains",
 });
 
-
-
-
 export default function MainLayout({ children }: any) {
   const pathname = usePathname();
   const isBlogPost = [`/blog/`].some((prefix) =>
     pathname.startsWith(prefix),
   );
-  const containerClass = isBlogPost ? 'max-w-screen mx-auto my-8 px-0 xs:px-6 md:px-24 lg:px-8' : 'mx-auto my-8 max-w-[80rem] px-0 xs:px-6 md:px-24 lg:px-8';
+  const containerClass = isBlogPost ? 'max-w-screen' : 'mx-auto my-8 md:my-12 lg:my-16 xl:my-24  max-w-[80rem] px-0 xs:px-6 md:px-24 lg:px-8';
 
   return (
 
-    <body className={`${inter.variable} ${jetbrains.variable} background-core scroll-p-16`}>
+    <body className={`${inter.variable} ${jetbrains.variable} background-core`}>
       <Providers>
         <Navigation />
         <motion.main
@@ -48,7 +45,7 @@ export default function MainLayout({ children }: any) {
             pageAnimate: { opacity: 1 },
           }}
           transition={{ duration: 0.4, ease: 'easeInOut' }}
-          className={`py-16 ${containerClass}`}>
+          className={`${containerClass}`}>
           {children}
         </motion.main>
         <Footer />

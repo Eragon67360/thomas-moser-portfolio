@@ -19,10 +19,10 @@ const Navigation = () => {
       isBlurred
       className='font-jet border-b border-white/30'
     >
-      <NavbarContent className="flex gap-4 sm:gap-5 md:gap-6 lg:gap-8 xl:gap-12 w-full justify-center transition-all duration-250 text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl " justify="center">
+      <NavbarContent className="flex gap-4 sm:gap-5 md:gap-6 lg:gap-8 xl:gap-12 w-full justify-center transition-all duration-250" justify="center">
         <NavbarItem className=''>
           <Link
-            className="bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            className="bg-transparent data-[hover=true]:bg-transparent text-foreground text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl "
             href='/'
           >
             Home
@@ -31,7 +31,7 @@ const Navigation = () => {
 
         <NavbarItem className=''>
           <Link
-            className="bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            className="bg-transparent data-[hover=true]:bg-transparent text-foreground text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl "
             href='/about'
           >
             About
@@ -40,7 +40,7 @@ const Navigation = () => {
 
         <NavbarItem className=''>
           <Link
-            className=" bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            className=" bg-transparent data-[hover=true]:bg-transparent text-foreground text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl "
             href='/projects'
           >
             Projects
@@ -49,7 +49,7 @@ const Navigation = () => {
 
         <NavbarItem className=''>
           <Link
-            className="bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            className="bg-transparent data-[hover=true]:bg-transparent text-foreground text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl "
             href='/blog'
           >
             Blog
@@ -59,7 +59,7 @@ const Navigation = () => {
 
         <NavbarItem className=''>
           <Link
-            className="bg-transparent data-[hover=true]:bg-transparent text-foreground "
+            className="bg-transparent data-[hover=true]:bg-transparent text-foreground text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl "
             href='/activities'
           >
             Activities
