@@ -11,6 +11,7 @@ import rehypeCodeTitles from 'rehype-code-titles'
 import rehypePrism from 'rehype-prism-plus'
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
 import readingDuration from 'reading-duration';
+import Comment from './Comment'
 
 let imageSrc = ""
 
@@ -115,7 +116,7 @@ export default async function ShowPost({
                             <PostComponent code={code} />
                         </article>
                         <hr className='my-8 opacity-20' />
-                        {/* <Comment /> */}
+                        <Comment />
                     </div>
 
                     <div className='hidden lg:block my-10 ml-4 space-y-6 lg:w-[40%]'>

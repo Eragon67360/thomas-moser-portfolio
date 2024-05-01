@@ -5,7 +5,6 @@ import {
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenuToggle,
   Link,
   DropdownItem,
   DropdownTrigger,
@@ -66,180 +65,182 @@ const Navigation = () => {
       isBlurred
       className='transition-all duration-250 font-jet'
     >
-      <NavbarContent>
-        <NavbarMenuToggle
-          aria-label={isOpen ? "Close menu" : "Open menu"}
-          className="sm:hidden"
-        />
-        <NavbarBrand
-          className='gap-2 w-full cursor-pointer hover:opacity-80 transition-all duration-250'
-          onClick={() => { router.push('/') }} >
-          <Me />
-
-          <p className="flex font-bold text-inherit text-base lg:text-xl">Thomas</p>
-        </NavbarBrand>
+      <NavbarContent className='hidden sm:flex' onClick={() => { router.push('/') }}>
+        <Me className='fill-black dark:fill-white' width={42} height={42}/>
+        <p className="flex font-bold text-inherit text-base lg:text-xl">Thomas</p>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-2 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6" justify="center">
-        <NavbarItem>
-          <Link href='/' color='foreground'>
-            Home
-          </Link>
+      <NavbarContent className="sm:flex gap-1 sm:gap-2 md:gap-3 lg:gap-4 xl:gap-5 w-full" justify="center">
+        <NavbarItem className=''>
+          <Button
+            disableRipple
+            className="px-0 bg-transparent data-[hover=true]:bg-transparent"
+            radius="sm"
+            variant="light"
+          >
+            <Link href='/' color='foreground' className=' mx-0'>
+              <p className='text-sm md:text-base'>Home</p>
+            </Link>
+          </Button>
         </NavbarItem>
-        <Dropdown>
-          <NavbarItem>
+
+        <NavbarItem className='hidden sm:block'>
+          <Dropdown className=''>
             <DropdownTrigger>
               <Button
                 disableRipple
-                size='lg'
                 className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-                endContent={icons.chevron}
                 radius="sm"
                 variant="light"
+              >
+                <p className='text-sm md:text-base'>About</p>
+              </Button>
+            </DropdownTrigger>
+
+            <DropdownMenu
+              aria-label="Home"
+              className="w-[340px]"
+              itemClasses={{
+                base: "gap-4",
+              }}
+            >
+              <DropdownItem
+                key="about"
+                href='/#about'
+                description="Get to know about me"
+                startContent={<IoPersonCircleOutline size={24} />}
               >
                 About
-              </Button>
-            </DropdownTrigger>
-          </NavbarItem>
-          <DropdownMenu
-            aria-label="Home"
-            className="w-[340px]"
-            itemClasses={{
-              base: "gap-4",
-            }}
-          >
-            <DropdownItem
-              key="about"
-              href='/#about'
-              description="Get to know about me"
-              startContent={<IoPersonCircleOutline size={24} />}
-            >
-              About
-            </DropdownItem>
+              </DropdownItem>
 
-            <DropdownItem
-              key="competencies"
-              href='/#competencies'
-              description="My cross-disciplinary and technical skills"
-              startContent={<CiSettings size={24} />}
-            >
-              Competencies
-            </DropdownItem>
-            <DropdownItem
-              key="projects"
-              href='/#projects'
-              description="Various projects I've carried out in recent years"
-              startContent={<FaProjectDiagram size={24} />}
-            >
-              Projects
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-
-        <Dropdown>
-          <NavbarItem>
-            <DropdownTrigger>
-              <Button
-                disableRipple
-                size='lg'
-                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-                endContent={icons.chevron}
-                radius="sm"
-                variant="light"
+              <DropdownItem
+                key="competencies"
+                href='/#competencies'
+                description="My cross-disciplinary and technical skills"
+                startContent={<CiSettings size={24} />}
               >
-                Activities
-              </Button>
-            </DropdownTrigger>
-          </NavbarItem>
-          <DropdownMenu
-            aria-label="Activities"
-            className="w-[340px]"
-            itemClasses={{
-              base: "gap-4",
-            }}
-          >
-            <DropdownItem
-              key="steam"
-              href='/activities/#steam'
-              description="Yup, I'm a gamer"
-              startContent={<FaSteam size={24} />}
-            >
-              Steam
-            </DropdownItem>
-            <DropdownItem
-              key="spotify"
-              href='/activities/#spotify'
-              description="About my listenings"
-              startContent={<FaSpotify size={24} />}
-            >
-              Spotify
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-
-        <NavbarItem>
-          <Link href='/blog' color='foreground'>
-            Blog
-          </Link>
+                Competencies
+              </DropdownItem>
+              <DropdownItem
+                key="projects"
+                href='/#projects'
+                description="Various projects I've carried out in recent years"
+                startContent={<FaProjectDiagram size={24} />}
+              >
+                Projects
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </NavbarItem>
 
-        <Dropdown>
-          <NavbarItem>
+        <NavbarItem className=''>
+          <Dropdown>
             <DropdownTrigger>
               <Button
                 disableRipple
-                size='lg'
-                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
-                endContent={icons.chevron}
+                className="px-4 bg-transparent data-[hover=true]:bg-transparent"
                 radius="sm"
                 variant="light"
               >
-                Contact
+                <p className='text-sm md:text-base'>Activities</p>
               </Button>
             </DropdownTrigger>
-          </NavbarItem>
-          <DropdownMenu
-            aria-label="Contact"
-            className="w-[340px]"
-            itemClasses={{
-              base: "gap-4",
-            }}
+            <DropdownMenu
+              aria-label="Activities"
+              className="w-[340px]"
+              itemClasses={{
+                base: "gap-4",
+              }}
+            >
+              <DropdownItem
+                key="steam"
+                href='/activities/#steam'
+                description="Yup, I'm a gamer"
+                startContent={<FaSteam size={24} />}
+              >
+                Steam
+              </DropdownItem>
+              <DropdownItem
+                key="spotify"
+                href='/activities/#spotify'
+                description="About my listenings"
+                startContent={<FaSpotify size={24} />}
+              >
+                Spotify
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </NavbarItem>
+
+        <NavbarItem className=''>
+          <Button
+            disableRipple
+            className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+            radius="sm"
+            variant="light"
           >
-            <DropdownItem
-              key="email"
-              href={`mailto:${profile.Email}`}
-              target='_blank'
-              description="Send me an email"
-              startContent={<MdOutlineEmail size={24} />}
+            <Link href='/blog' color='foreground'>
+              <p className='text-sm md:text-base'>Blog</p>
+            </Link>
+          </Button>
+
+        </NavbarItem>
+
+        <NavbarItem className=''>
+          <Dropdown>
+            <DropdownTrigger>
+              <Button
+                disableRipple
+                className="p-0 bg-transparent data-[hover=true]:bg-transparent"
+                radius="sm"
+                variant="light"
+              >
+                <p className='text-sm md:text-base'>Contact</p>
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Contact"
+              className="w-[340px]"
+              itemClasses={{
+                base: "gap-4",
+              }}
             >
-              Email
-            </DropdownItem>
+              <DropdownItem
+                key="email"
+                href={`mailto:${profile.Email}`}
+                target='_blank'
+                description="Send me an email"
+                startContent={<MdOutlineEmail size={24} />}
+              >
+                Email
+              </DropdownItem>
 
-            <DropdownItem
-              key="whatsapp"
+              <DropdownItem
+                key="whatsapp"
 
-              href={`https://api.whatsapp.com/send?phone=${profile.WhatsApp}`}
-              target='_blank'
-              description="Write from a more direct channel"
-              startContent={<FaWhatsapp size={24} />}
-            >
-              WhatsApp
-            </DropdownItem>
+                href={`https://api.whatsapp.com/send?phone=${profile.WhatsApp}`}
+                target='_blank'
+                description="Write from a more direct channel"
+                startContent={<FaWhatsapp size={24} />}
+              >
+                WhatsApp
+              </DropdownItem>
 
-            <DropdownItem
-              key="others"
-              onClick={onOpen}
-              description="Reach to me with other channels"
-              startContent={<TiMessages size={24} />}
-            >
-              Others
-            </DropdownItem>
+              <DropdownItem
+                key="others"
+                onClick={onOpen}
+                description="Reach to me with other channels"
+                startContent={<TiMessages size={24} />}
+              >
+                Others
+              </DropdownItem>
 
-          </DropdownMenu>
-        </Dropdown>
+            </DropdownMenu>
+          </Dropdown>
+        </NavbarItem>
       </NavbarContent>
 
-      <NavbarContent justify="end">
+      <NavbarContent justify="end" className='hidden sm:flex'>
         <NavbarItem>
           <Link color="foreground" href={`${profile.Github}`} target='_blank'>
             <GithubIcon />
