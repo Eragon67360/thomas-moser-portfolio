@@ -7,7 +7,12 @@ import { promises as fs } from "fs";
 import { redis } from './redis';
 
 export const getPosts = cache(async (includeThirdPartyPosts?: boolean) => {
-    const posts = await fs.readdir('./articles/')
+    const rootPath = process.cwd();
+    const articlesPath = path.join(rootPath, 'articles');
+    console.log("Trying to read from:", articlesPath);
+    const posts = await fs.readdir(articlesPath);
+    
+    
 
     const postsWithMetadata = await Promise.all(
         posts
@@ -81,7 +86,7 @@ export const fetchPageViews = async () => {
         keys = keys.concat(batchKeys);
         cursor = nextCursor;
 
-        if (cursor === 0) {            
+        if (cursor === 0) {
             break;
         }
         if (++iterations > 1000) {
@@ -101,7 +106,7 @@ export const fetchPageViews = async () => {
             views: values[index]
         };
     });
-    
+
     return pageViews.sort((a, b) => b.views - a.views);
 };
 

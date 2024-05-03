@@ -9,12 +9,11 @@ interface PageView {
 }
 
 const MostViewedPages = async () => {
-    const pageViews = await fetchPageViews()
-
+    const pageViews = await fetchPageViews();
 
     return (
         <div>
-            <ul className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:my-0'>
+            <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 xl:my-0'>
                 {pageViews.map((view, index) => {
                     const slug = view.slug;
                     const views = view.views;
@@ -22,7 +21,7 @@ const MostViewedPages = async () => {
                         <Post key={slug} views={views} slug={slug} />
                     );
                 })}
-            </ul>
+            </div>
         </div>
     );
 };
