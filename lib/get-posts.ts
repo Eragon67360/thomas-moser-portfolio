@@ -4,6 +4,7 @@ import path from 'path'
 import { cache } from 'react'
 import { Post } from './types'
 import { promises as fs } from "fs";
+import { redis } from './redis';
 
 export const getPosts = cache(async (includeThirdPartyPosts?: boolean) => {
     const posts = await fs.readdir('./articles/')
@@ -66,8 +67,42 @@ export const getPosts = cache(async (includeThirdPartyPosts?: boolean) => {
 })
 
 export async function getPost(slug: string) {
-    const posts = await getPosts()
+    const posts = await getPosts();
     return posts.find((post) => post.slug === slug)
 }
+
+export const fetchPageViews = async () => {
+    let cursor = 0;
+    let keys: string[] = [];
+    let iterations = 0;
+
+    while (true) {
+        const [nextCursor, batchKeys] = await redis.scan(cursor, { match: 'pageviews:posts:*', count: 100 });
+        keys = keys.concat(batchKeys);
+        cursor = nextCursor;
+
+        if (cursor === 0) {            
+            break;
+        }
+        if (++iterations > 1000) {
+            console.error("iterations Breaking out of potential infinite loop in redis scan");
+            break;
+        }
+    }
+
+    if (keys.length === 0) return [];
+
+    const values = (await redis.mget(...keys)).map(value => Number(value) || 0);
+
+    const pageViews = keys.map((key, index) => {
+        const slug = key.split(':')[2];
+        return {
+            slug,
+            views: values[index]
+        };
+    });
+    
+    return pageViews.sort((a, b) => b.views - a.views);
+};
 
 export default getPosts
