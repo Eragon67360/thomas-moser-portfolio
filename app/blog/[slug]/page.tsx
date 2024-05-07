@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import ShowPost from '@/components/blog/ShowPost';
 
 export async function generateStaticParams() {
-    const posts = await getPosts()
+    const posts = await getPosts(['english','french'])
     return posts.map((post) => ({ slug: post.slug }))
 }
 
@@ -14,7 +14,7 @@ export const generateMetadata = async ({
         slug: string
     }
 }): Promise<Metadata> => {
-    const post = (await getPosts()).find((p) => p?.slug === params.slug)
+    const post = (await getPosts(['english','french'])).find((p) => p?.slug === params.slug)
     return {
         title: post?.title,
         description: post?.description,

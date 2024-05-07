@@ -9,7 +9,6 @@ const Competencies = () => {
         <div className='flex flex-col items-center gap-3 md:gap-4 lg:gap-5 xl:gap-6'>
           <H2>Competencies</H2>
           <H3>My cross-disciplinary and technical skills </H3>
-          <HorizontalDivider/>
         </div>
       </div>
     </>

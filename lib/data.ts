@@ -2,11 +2,11 @@ import profile from '@/public/json/personal_data.json'
 
 export const dataSeo = {
     url: 'https://thomasmoserdev.com',
-    title: 'Thomas Moser — Software Developer',
+    title: 'Thomas Moser | Software Developer',
     description:
         'My personal website to share my projects, blogs, and other stuff.',
     ogimage:
-        'https://res.cloudinary.com/dluezegi8/images/upload/thomasmoserdev.com/default_social.png',
+        'https://res.cloudinary.com/dluezegi8/image/upload/v1714490007/images/upload/thomasmoserdev.com/default_social.png',
     name: 'Thomas Moser',
 };
 

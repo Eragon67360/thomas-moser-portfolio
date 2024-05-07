@@ -21,7 +21,7 @@ export const revalidate = 60
 
 
 async function getData({ slug }: { slug: string }) {
-    const posts = await getPosts()
+    const posts = await getPosts(["english","french"])
     const postIndex = posts.findIndex((p) => p?.slug === slug)
 
     if (postIndex === -1) {

@@ -9,7 +9,6 @@ const About = () => {
         <div className='flex flex-col items-center gap-3 md:gap-4 lg:gap-5 xl:gap-6'>
           <H2>About me</H2>
           <H3>Full-Stack Developer</H3>
-          <HorizontalDivider/>
         </div>
       </div>
     </>

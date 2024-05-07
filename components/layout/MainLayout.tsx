@@ -35,20 +35,23 @@ export default function MainLayout({ children }: any) {
 
     <body className={`${inter.variable} ${jetbrains.variable} background-core`}>
       <Providers>
-        <Navigation />
-        <motion.main
-          // key={pathname}
-          initial='pageInitial'
-          animate='pageAnimate'
-          variants={{
-            pageInitial: { opacity: 0 },
-            pageAnimate: { opacity: 1 },
-          }}
-          transition={{ duration: 0.4, ease: 'easeInOut' }}
-          className={`${containerClass}`}>
-          {children}
-        </motion.main>
-        <Footer />
+        <div className="flex flex-col justify-between h-screen">
+          <Navigation />
+          <motion.main
+            // key={pathname}
+            initial='pageInitial'
+            animate='pageAnimate'
+            variants={{
+              pageInitial: { opacity: 0 },
+              pageAnimate: { opacity: 1 },
+            }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            className={`${containerClass}`}>
+            {children}
+          </motion.main>
+          <Footer />
+        </div>
+
         <ScrollToTopButton />
       </Providers>
       <div className="hidden sm:block">

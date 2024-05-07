@@ -1,22 +1,6 @@
-"use client";
 import React, { ComponentPropsWithoutRef, ReactNode, useContext } from "react";
 import { ArticleWithSlug } from "@/lib/article";
-import { useRouter } from "next/navigation";
-import { BsArrowLeftCircle } from "react-icons/bs";
 import { formatDate } from "@/lib/formatDate";
-
-function ArrowLeftIcon(props: ComponentPropsWithoutRef<"svg">) {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" {...props}>
-      <path
-        d="M7.25 11.25 3.75 8m0 0 3.5-3.25M3.75 8h8.5"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 const ArticleLayout = ({
   article,
@@ -25,7 +9,6 @@ const ArticleLayout = ({
   article: ArticleWithSlug;
   children: ReactNode;
 }) => {
-  let router = useRouter();
   return (
     <div className="w-full max-w-7xl mx-auto px-10 py-20">
       <div className="xl:relative">

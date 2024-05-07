@@ -22,7 +22,6 @@ const Projects = async () => {
       <div className='w-full py-8 px-8 flex flex-col items-center justify-center h-full'>
         <div className='flex flex-col items-center gap-4 text-center'>
           <H2>Steam profile and games</H2>
-          <HorizontalDivider />
         </div>
         <div id='steam' className='w-full flex items-center justify-center'>
           <SteamLoader />
@@ -30,7 +29,6 @@ const Projects = async () => {
         <hr className='h-16' />
         <div className='flex flex-col items-center gap-4'>
           <H2>Spotify profile and streams</H2>
-          <HorizontalDivider />
         </div>
         <div id='spotify' className='w-full flex flex-col lg:flex-row gap-8 py-8 items-center transition-all duration-250'>
           <div className='flex flex-col gap-8 w-full lg:w-1/2 h-full md:h-screen'>

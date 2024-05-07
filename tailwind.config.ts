@@ -43,6 +43,7 @@ const config: Config = {
   darkMode: "class",
   plugins: [
     require('@tailwindcss/typography'),
+    require('tailwindcss-animated'),
     nextui({
       themes: {
         "dark": {

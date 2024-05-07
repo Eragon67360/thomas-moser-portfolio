@@ -1,18 +1,22 @@
 
 import matter from 'gray-matter'
-import path from 'path'
+import path, { join } from 'path';
 import { cache } from 'react'
 import { Post } from './types'
 import { promises as fs } from "fs";
 import { redis } from './redis';
+import getConfig from 'next/config'
 
-export const getPosts = cache(async (includeThirdPartyPosts?: boolean) => {
+const postsDirectory = process.cwd()+ '\\articles';
+
+export const getPosts = cache(async (languages: string[], includeThirdPartyPosts?: boolean) => {
     const rootPath = process.cwd();
-    const articlesPath = path.join(rootPath, 'articles');
+    // console.log(languages);
+    const articlesPath = join(rootPath,'articles');
+    console.log(postsDirectory);
+
     console.log("Trying to read from:", articlesPath);
     const posts = await fs.readdir(articlesPath);
-    
-    
 
     const postsWithMetadata = await Promise.all(
         posts
@@ -27,6 +31,7 @@ export const getPosts = cache(async (includeThirdPartyPosts?: boolean) => {
                 if (data.published === false) {
                     return null
                 }
+
                 const withoutLeadingChars = filePath.substring(2).replace('.mdx', '.md')
 
                 const fetchUrl =
@@ -68,11 +73,25 @@ export const getPosts = cache(async (includeThirdPartyPosts?: boolean) => {
             a && b ? new Date(b.date).getTime() - new Date(a.date).getTime() : 0,
         ) as Post[]
 
-    return filtered
+    function filterPosts(languageFilter: string[]): Post[] {
+        if (languageFilter?.includes("english") && languageFilter?.includes("french")) {
+            return filtered;
+        } else if (languageFilter?.includes("french")) {
+            return filtered.filter(post => post.slug?.startsWith("fr-"));
+        } else if (languageFilter?.includes("english")) {
+            return filtered.filter(post => !post.slug?.startsWith("fr-"));
+        } else {
+            return [];
+        }
+    }
+
+    let filteredPosts = filterPosts(languages);
+
+    return filteredPosts
 })
 
 export async function getPost(slug: string) {
-    const posts = await getPosts();
+    const posts = await getPosts(["english,french"]);
     return posts.find((post) => post.slug === slug)
 }
 

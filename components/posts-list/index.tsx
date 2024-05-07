@@ -1,17 +1,18 @@
 'use client'
 
 import BlockEntry from '@/components/entry/block'
+import getPosts from '@/lib/get-posts'
 import type { Post } from '@/lib/types'
 
 type Props =
-  | {
+  | {    
     posts: Post[]
   }
 
 
-const Posts = (props: Props) => {
+const Posts = async (props: Props) => {
   const { posts } = props
-
+  
   return (
     <ul>
       {posts.slice(0,).map((post) => {
