@@ -15,6 +15,7 @@ import Comment from './Comment'
 import { ReportView } from '../redis/ReportView'
 import { redis } from '@/lib/redis'
 import { getPostViews } from '@/hooks/useViewCount';
+import Toc from './toc';
 
 let imageSrc = "" 
 export const revalidate = 60
@@ -136,7 +137,7 @@ export default async function ShowPost({
                             </span>
                             <hr className='m-0' />
                             <div className='pr-2'>
-                                {/* <Toc toc={toc} /> */}
+                                <Toc />
                             </div>
                         </div>
                     </div>

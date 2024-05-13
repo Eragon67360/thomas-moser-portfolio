@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { Card, CardBody } from '@nextui-org/react';
 import { FaArrowRight } from "react-icons/fa";
 import Link from 'next/link';
+import { PinContainer } from '../ui/3d-pin';
+import { BentoGrid, BentoGridItem } from '../ui/bento-grid';
 
 const ProjectsViewer = () => {
     const base_URL = 'https://res.cloudinary.com/dluezegi8/image/upload/v1715078393/images/upload/thomasmoserdev.com/projects/'
@@ -48,7 +50,7 @@ const ProjectsViewer = () => {
             title: "Musescore",
             explanation: "Music creation with Musescore. Arrangements of existing songs/musics for duets, orchestra, etc...",
             screenshot: musescore,
-            link:'#',
+            link: '#',
             code: [],
             developed: 'Thomas Moser',
 
@@ -61,6 +63,7 @@ const ProjectsViewer = () => {
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2 transition-all duration-150">
                     {
                         projects.map((items, key) => (
+
                             <Card key={key}
                                 className='border border-transparent hover:border-[#ffffff33] bg-[#ccdcff1f] hover:bg-transparent p-2 group'>
                                 <Link href={items.link} target='_blank'>
@@ -95,10 +98,13 @@ const ProjectsViewer = () => {
                                 </Link>
 
                             </Card>
-
                         ))
                     }
                 </div>
+
+
+
+
             </section>
         </>
     )

@@ -6,17 +6,25 @@ import { Post } from './types'
 import { promises as fs } from "fs";
 import { redis } from './redis';
 import getConfig from 'next/config'
+import remarkGfm from 'remark-gfm'
+import rehypeSlug from 'rehype-slug'
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeCodeTitles from 'rehype-code-titles'
+import rehypePrism from 'rehype-prism-plus'
+import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
+import { bundleMDX } from 'mdx-bundler';
 
-const postsDirectory = process.cwd()+ '\\articles';
+const postsDirectory = process.cwd() + '\\articles';
 
 export const getPosts = cache(async (languages: string[], includeThirdPartyPosts?: boolean) => {
     const rootPath = process.cwd();
     // console.log(languages);
-    const articlesPath = join(rootPath,'articles');
+    const articlesPath = join(rootPath, 'articles');
     console.log(postsDirectory);
 
     console.log("Trying to read from:", articlesPath);
     const posts = await fs.readdir(articlesPath);
+
 
     const postsWithMetadata = await Promise.all(
         posts
@@ -56,10 +64,30 @@ export const getPosts = cache(async (languages: string[], includeThirdPartyPosts
                     ) {
                         lastModified = 0
                     }
-
                 }
 
-                return { ...data, body: content, lastModified, type: 'post' } as Post
+                // const result = await bundleMDX({
+                //     source: content,
+
+                //     mdxOptions(options) {
+                //         options.remarkPlugins = [
+                //             ...(options.remarkPlugins ?? [remarkGfm]),
+                //         ];
+                //         options.rehypePlugins = [
+                //             ...(options.rehypePlugins ?? [rehypeSlug,
+                //                 rehypeAutolinkHeadings,
+                //                 rehypeCodeTitles,
+                //                 rehypePrism,
+                //                 rehypeAccessibleEmojis,]),
+
+                //         ];
+
+                //         return options;
+                //     },
+                // })
+                // const { code } = result;
+
+                return { ...data, body: content, lastModified, type: 'post'} as Post
             }),
     )
 
@@ -90,8 +118,11 @@ export const getPosts = cache(async (languages: string[], includeThirdPartyPosts
     return filteredPosts
 })
 
+
 export async function getPost(slug: string) {
-    const posts = await getPosts(["english","french"]);
+    const posts = await getPosts(["english", "french"]);
+
+
     return posts.find((post) => post.slug === slug)
 }
 

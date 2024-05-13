@@ -75,7 +75,30 @@ export type Post = Base & {
     // Third party only
     isThirdParty?: boolean
     type: 'post'
+    code?: string;
+    frontmatter: {
+        slug: string;
+        title: string;
+        header: string;
+        description: string;
+        date: Date;
+        tags: Array<string>;
+    };
 }
+
+export type PostProps = {
+    content: string;
+    slug: string;
+    frontmatter: {
+        slug: string;
+        title: string;
+        header: string;
+        description: string;
+        date: Date;
+        tags: Array<string>;
+    };
+    code?: string;
+};
 
 export type TocProps = {
     id: string;
