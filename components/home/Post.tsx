@@ -7,6 +7,7 @@ import { getPost } from '@/lib/get-posts'
 const Post = async (props: { views: number; slug:string; }) => {
     const { views, slug } = props;
     const post = await getPost(slug);
+    console.log(post);
     const title = post?.title;
     const description = post?.description;
 

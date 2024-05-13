@@ -91,7 +91,7 @@ export const getPosts = cache(async (languages: string[], includeThirdPartyPosts
 })
 
 export async function getPost(slug: string) {
-    const posts = await getPosts(["english,french"]);
+    const posts = await getPosts(["english","french"]);
     return posts.find((post) => post.slug === slug)
 }
 

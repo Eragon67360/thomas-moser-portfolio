@@ -90,3 +90,29 @@
         }
     }
 }
+
+
+.image-container {
+    position: relative;
+    display: inline-block;
+}
+
+
+.image-grey {
+    display: block;
+    opacity: 10%;
+}
+
+.image-container:after {
+    transition: opacity 0.05s;
+    position: absolute;
+    content: "";
+    opacity: 100%;
+    top: 0;
+    left: var(--left, 50%); /* default to 50% if --left is not defined */
+    width: var(--width, 50%); /* default to 50% if --width is not defined */
+    
+    height: 100%;
+    background-image: url(/public/img/cool.webp);
+    background-position: top right;
+}

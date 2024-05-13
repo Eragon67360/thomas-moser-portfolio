@@ -10,6 +10,7 @@ interface PageView {
 
 const MostViewedPages = async () => {
     const pageViews = await fetchPageViews();
+    console.log(pageViews);
 
     return (
         <div>
