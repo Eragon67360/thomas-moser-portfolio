@@ -12,10 +12,19 @@ const ProjectsViewer = () => {
     const base_URL = 'https://res.cloudinary.com/dluezegi8/image/upload/v1715078393/images/upload/thomasmoserdev.com/projects/'
     const projects = [
         {
+            title: "Le Bon Tempérament Website",
+            screenshot: base_URL + 'bon-temperament.png',
+            link: 'https://lebontemperament.vercel.app/',
+            code: ['NextJS', 'TailwindCSS','Stripe'],
+            designed: 'Thomas Moser',
+            developed: 'Thomas Moser',
+
+        },
+        {
             title: "Designer Portfolio",
             screenshot: base_URL + 'portfolio-cristina.png',
             link: 'https://portfolio-cristinaandres-projects.vercel.app',
-            code: ['NextJS', 'XML'],
+            code: ['NextJS', 'TailwindCSS'],
             designed: 'Cristina Andrés',
             developed: 'Thomas Moser',
 
