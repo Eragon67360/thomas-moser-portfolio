@@ -1,0 +1,79 @@
+[
+    {
+        "title": "URL Shortener",
+        "screenshot": "urlshortener",
+        "link": "https://urlshortener-thomas.vercel.app/",
+        "code": [
+            "NextJS",
+            "PostgreSQL",
+            "Vercel Crons"
+        ],
+        "designed": "Thomas Moser",
+        "developed": "Thomas Moser"
+    },
+    {
+        "title": "Le Bon Temp\u00e9rament Website",
+        "screenshot": "bon-temperament",
+        "link": "https://lebontemperament.com/",
+        "code": [
+            "NextJS",
+            "TailwindCSS",
+            "Stripe"
+        ],
+        "designed": "Thomas Moser",
+        "developed": "Thomas Moser"
+    },
+    {
+        "title": "Designer Portfolio",
+        "screenshot": "portfolio-cristina",
+        "link": "https://portfolio-cristinaandres-projects.vercel.app",
+        "code": [
+            "NextJS",
+            "TailwindCSS"
+        ],
+        "designed": "Cristina Andr\u00e9s",
+        "developed": "Thomas Moser"
+    },
+    {
+        "title": "Curefab",
+        "screenshot": "curefab",
+        "link": "https://curefab.com",
+        "code": [
+            "PHP",
+            "ConcreteCMS",
+            "SCSS"
+        ],
+        "designed": "Cristina Andr\u00e9s",
+        "developed": "Thomas Moser"
+    },
+    {
+        "title": "StopViolence",
+        "screenshot": "stopviolence",
+        "link": "https://github.com/Eragon67360/stop-violence.git",
+        "code": [
+            "Java",
+            "XML"
+        ],
+        "designed": "Cristina Andr\u00e9s",
+        "developed": "Thomas Moser | Ronan Riboulet"
+    },
+    {
+        "title": "OpenAI Clone",
+        "explanation": "A ChatGPT and DALL\u00b7E clone in one tool. Developped with Flet (Flutter for Python) and OpenAI API.",
+        "screenshot": "chatgptv2",
+        "link": "https://github.com/Eragon67360/chatgpt_v2.git",
+        "code": [
+            "Python",
+            "Flutter"
+        ],
+        "developed": "Thomas Moser"
+    },
+    {
+        "title": "Musescore",
+        "explanation": "Music creation with Musescore. Arrangements of existing songs/musics for duets, orchestra, etc...",
+        "screenshot": "musescore",
+        "link": "https://musescore.com/thomas_moser",
+        "code": [],
+        "developed": "Thomas Moser"
+    }
+]

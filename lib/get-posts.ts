@@ -45,7 +45,7 @@ export const getPosts = cache(async (languages: string[], includeThirdPartyPosts
                 const fetchUrl =
                     process.env.NODE_ENV === 'production'
                         ? `https://api.github.com/repos/Eragon67360/thomas-moser-portfolio/commits?path=${withoutLeadingChars}&page=1&per_page=1`
-                        : `http://localhost:3001/mock-commit-response.json`
+                        : `http://localhost:3000/mock-commit-response.json`
 
                 const commitInfoResponse = await fetch(fetchUrl, {
                     headers: {
