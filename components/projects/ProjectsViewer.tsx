@@ -5,16 +5,23 @@ import Image from 'next/image';
 import { Card, CardBody } from '@nextui-org/react';
 import { FaArrowRight } from "react-icons/fa";
 import Link from 'next/link';
-import { PinContainer } from '../ui/3d-pin';
-import { BentoGrid, BentoGridItem } from '../ui/bento-grid';
 
 const ProjectsViewer = () => {
     const base_URL = 'https://res.cloudinary.com/dluezegi8/image/upload/v1715078393/images/upload/thomasmoserdev.com/projects/'
     const projects = [
         {
+            title: "URL Shortener",
+            screenshot: base_URL + 'urlshortener',
+            link: 'https://urlshortener-five-green.vercel.app/',
+            code: ['NextJS', 'TailwindCSS','Postgresql'],
+            designed: 'Thomas Moser',
+            developed: 'Thomas Moser',
+
+        },
+        {
             title: "Le Bon Tempérament Website",
             screenshot: base_URL + 'bon-temperament.png',
-            link: 'https://lebontemperament.vercel.app/',
+            link: 'https://lebontemperament.com/',
             code: ['NextJS', 'TailwindCSS','Stripe'],
             designed: 'Thomas Moser',
             developed: 'Thomas Moser',
@@ -62,7 +69,6 @@ const ProjectsViewer = () => {
             link: '#',
             code: [],
             developed: 'Thomas Moser',
-
         },
     ];
 

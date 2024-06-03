@@ -66,27 +66,6 @@ export const getPosts = cache(async (languages: string[], includeThirdPartyPosts
                     }
                 }
 
-                // const result = await bundleMDX({
-                //     source: content,
-
-                //     mdxOptions(options) {
-                //         options.remarkPlugins = [
-                //             ...(options.remarkPlugins ?? [remarkGfm]),
-                //         ];
-                //         options.rehypePlugins = [
-                //             ...(options.rehypePlugins ?? [rehypeSlug,
-                //                 rehypeAutolinkHeadings,
-                //                 rehypeCodeTitles,
-                //                 rehypePrism,
-                //                 rehypeAccessibleEmojis,]),
-
-                //         ];
-
-                //         return options;
-                //     },
-                // })
-                // const { code } = result;
-
                 return { ...data, body: content, lastModified, type: 'post'} as Post
             }),
     )
