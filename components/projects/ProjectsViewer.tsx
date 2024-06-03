@@ -13,7 +13,7 @@ const ProjectsViewer = () => {
             title: "URL Shortener",
             screenshot: base_URL + 'urlshortener',
             link: 'https://urlshortener-five-green.vercel.app/',
-            code: ['NextJS', 'TailwindCSS','Postgresql'],
+            code: ['NextJS', 'PostgreSQL','Vercel Crons',],
             designed: 'Thomas Moser',
             developed: 'Thomas Moser',
 
