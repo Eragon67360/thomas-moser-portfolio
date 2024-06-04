@@ -2,7 +2,7 @@
     {
         "title": "URL Shortener",
         "screenshot": "urlshortener",
-        "link": "https://urlshortener-thomas.vercel.app/",
+        "link": "https://urlshortener.thomasmoserdev.com",
         "code": [
             "NextJS",
             "PostgreSQL",
