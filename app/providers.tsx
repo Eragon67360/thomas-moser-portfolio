@@ -5,6 +5,7 @@ import { NextUIProvider } from '@nextui-org/react'
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 import { LanguageProvider } from '@/components/blog/LanguageContext';
+import { Analytics } from "@vercel/analytics/react"
 
 export function Providers({ children }: { children: ReactNode }) {
     return (
@@ -18,6 +19,7 @@ export function Providers({ children }: { children: ReactNode }) {
                         options={{ showSpinner: false }}
                         shallowRouting
                     />
+                    <Analytics />
                 </LanguageProvider>
             </NextThemesProvider>
         </NextUIProvider>
