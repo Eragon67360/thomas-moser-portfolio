@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://thomasmoserdev.com
+Host: https://www.thomasmoserdev.com
 
 # Sitemaps
-Sitemap: https://thomasmoserdev.com/sitemap.xml
+Sitemap: https://www.thomasmoserdev.com/sitemap.xml

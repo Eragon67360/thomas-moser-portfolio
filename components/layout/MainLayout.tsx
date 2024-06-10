@@ -33,7 +33,7 @@ export default function MainLayout({ children }: any) {
 
   return (
 
-    <body className={`${inter.variable} ${jetbrains.variable} background-core`}>
+    <body className={`${inter.variable} ${jetbrains.variable} background-core dark`}>
       <Providers>
         <div className="flex flex-col justify-between h-screen">
           <Navigation />

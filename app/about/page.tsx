@@ -6,7 +6,7 @@ import Projects from '@/components/projects/Projects'
 const page = () => {
     return (
         <>
-            <div className='w-full flex flex-col items-center h-screen'>
+            <div className='w-full flex flex-col items-center min-h-screen'>
                 <About />
                 <hr className="w-full h-px border-0 bg-gray-500/30" />
                 <Competencies />
