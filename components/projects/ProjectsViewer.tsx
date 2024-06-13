@@ -8,7 +8,7 @@ import Link from 'next/link';
 import projects from '@/public/json/projects.json'
 
 const ProjectsViewer = () => {
-    const base_URL = 'https://res.cloudinary.com/dluezegi8/image/upload/v1715078393/images/upload/thomasmoserdev.com/projects/'    
+    const base_URL = 'https://res.cloudinary.com/dluezegi8/image/upload/v1715078393/images/upload/thomasmoserdev.com/projects/'
 
     return (
         <>
@@ -21,10 +21,9 @@ const ProjectsViewer = () => {
                                 className='border border-transparent hover:border-[#ffffff33] bg-[#ccdcff1f] hover:bg-transparent p-2 group'>
                                 <Link href={item.link} target='_blank'>
                                     <CardBody className='flex flex-col gap-8'>
-
-                                        <Image data-tilt src={base_URL + item.screenshot} className='aspect-video rounded-lg' alt={'Project screenshot'} width={1920} height={1080} />
+                                        <Image data-tilt priority src={base_URL + item.screenshot} className='aspect-video rounded-lg' alt={'Project screenshot'} width={1920} height={1080} />
                                         <div className='rounded-lg bg-[#5757577b] group-hover:bg-[#57575733] py-3 px-4 flex flex-col gap-4'>
-                                            <div className='flex justify-between item-center'>
+                                            <div className='flex justify-between items-center'>
                                                 <div className="font-bold text-lg md:text-xl relative overflow-hidden">
                                                     <div className="absolute w-full transition-transform duration-300 ease-linear z-20 translate-y-0 group-hover:-translate-y-full">{item.title}</div>
                                                     <div className="w-full transition-transform duration-300 ease-linear z-10 translate-y-full group-hover:translate-y-0">{item.title}</div>
