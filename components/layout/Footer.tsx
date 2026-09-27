@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { footerNav, profile, site } from "@/config/site";
-import { NowPlaying } from "@/components/spotify/NowPlaying";
+import { LastPlayed } from "@/components/deezer/LastPlayed";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 
 export function Footer() {
@@ -8,7 +8,7 @@ export function Footer() {
     <footer className="mx-auto flex w-full max-w-7xl justify-center px-8 py-8 font-jet">
       <div className="flex w-full flex-col justify-between gap-8 md:flex-row">
         <div className="order-2 flex w-full flex-col gap-4 md:order-1 md:w-1/2">
-          <NowPlaying />
+          <LastPlayed />
           <p className="text-xs lg:text-base">
             Content licensed under{" "}
             <ExternalLink

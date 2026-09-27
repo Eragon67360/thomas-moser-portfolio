@@ -1,6 +1,6 @@
 # thomasmoserdev.com
 
-Personal website and portfolio of Thomas Moser: projects, a bilingual MDX blog with view counters and comments, and live Spotify/Steam activity.
+Personal website and portfolio of Thomas Moser: projects, a bilingual MDX blog with view counters and comments, and live Deezer/Steam activity.
 
 Built with Next.js 16, React 19, TypeScript 7, HeroUI v3 and Tailwind CSS v4.
 

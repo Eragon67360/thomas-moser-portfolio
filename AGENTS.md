@@ -11,7 +11,7 @@ Guidance for AI agents and contributors working on this repository.
 | Language  | **TypeScript 7** (native compiler, `tsc` binary only — no JS compiler API) |
 | UI        | **HeroUI v3** (React Aria based, compound components) + Tailwind CSS v4    |
 | Content   | MDX in `content/articles`, compiled server-side with `@mdx-js/mdx`         |
-| Data      | Upstash Redis (view counters, analytics), Spotify Web API, Steam Web API   |
+| Data      | Upstash Redis (view counters, analytics), Deezer API, Steam Web API        |
 | Lint      | **oxlint** + `oxlint-tsgolint` (type-aware). Not ESLint — see _Gotchas_    |
 | Format    | **oxfmt** (`printWidth` 120)                                               |
 | Dead code | knip                                                                       |
@@ -34,7 +34,7 @@ Dependencies point downward only: `app → components → hooks → lib/types`, 
 ```
 app/            Routes only. Pages compose components; no data shaping, no fetch logic.
   api/          Thin route handlers: call one service, return JSON via `jsonRoute` (lib/api.ts).
-components/     UI grouped by feature (blog, spotify, steam, contact, layout, ui, ...).
+components/     UI grouped by feature (blog, deezer, steam, contact, layout, ui, ...).
                 Server Components by default; "use client" only on interactive leaves.
 config/         env.ts (server-only, lazy env access) and site.ts (site metadata, navigation).
 content/        Articles (MDX), profile.json, projects.json. Not publicly served.
@@ -48,7 +48,7 @@ proxy.ts        Next.js 16 proxy: records home page views (non-blocking via wait
 ### Rules
 
 - **Server-only code** (`services/`, `config/env.ts`, `lib/redis.ts`, `lib/mdx.ts`, `lib/api.ts`) starts with `import "server-only"`. Never import it from a `"use client"` file.
-- **Upstream shapes stay in services.** Raw Spotify/Steam JSON types are private to their service; everything else consumes `types/*` DTOs.
+- **Upstream shapes stay in services.** Raw Deezer/Steam JSON types are private to their service; everything else consumes `types/*` DTOs.
 - **One JSON trust boundary:** parse HTTP JSON through `lib/http.ts` (`fetchJson` / `readJson`). Don't sprinkle `as T` casts on `response.json()`.
 - **Secrets never use `NEXT_PUBLIC_`.** Only genuinely public values (AdSense client id, Giscus ids) may. Read secrets through `env.*()` in `config/env.ts`.
 - **API routes are internal**: they back client widgets that poll via `useApi`. Keep them thin; logic belongs in services.
@@ -78,6 +78,7 @@ v3 is not v2 (NextUI). There is **no** `HeroUIProvider`, `Navbar`, `Image`, `Div
 - Don't wrap service calls that may run during prerendering in a catch-all that hides Next's dynamic-rendering signal; prefer making the call static-safe.
 - `config/env.ts` still falls back to the legacy `NEXT_PUBLIC_UPSTASH_REDIS_*` names. Once the deployment defines `NEXT_UPSTASH_REDIS_URL/TOKEN`, delete that fallback and the legacy variables.
 - `config/site.ts` is bundled into client components: add only fields that are safe to publish.
+- **Deezer reports errors as HTTP 200** with an `error` object in the body; `services/deezer.service.ts` checks both and retries quota errors (code 4) with backoff. It has no "currently playing" endpoint — the footer shows the last played track instead.
 - `react-animated-cursor` declares a React 18 peer; `package.json` `overrides` pins it to our React.
 
 ## Environment
@@ -88,4 +89,4 @@ Copy `.env.example` to `.env.local`. Missing variables only break the feature th
 
 1. `npm run check`
 2. `npm run build`
-3. `npm start` and load `/`, `/about`, `/projects`, `/blog`, a post, `/activities`. Widgets backed by Spotify/Steam show an error message (not an endless skeleton) when credentials are invalid.
+3. `npm start` and load `/`, `/about`, `/projects`, `/blog`, a post, `/activities`. Widgets backed by Deezer/Steam show an error message (not an endless skeleton) when credentials are invalid.

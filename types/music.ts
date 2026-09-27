@@ -5,15 +5,17 @@ export type Track = {
   imageUrl: string;
 };
 
+export type PlayedTrack = Track & {
+  /** When the track was played, in milliseconds since the epoch. */
+  playedAt: number;
+};
+
 export type Artist = {
   name: string;
   artistUrl: string;
   imageUrl: string;
-  genres: string[];
 };
 
-export type NowPlaying = { isPlaying: false } | ({ isPlaying: true; album: string } & Track);
-
 export type TracksResponse = { tracks: Track[] };
+export type PlayedTracksResponse = { tracks: PlayedTrack[] };
 export type ArtistsResponse = { artists: Artist[] };
-export type NowPlayingResponse = NowPlaying;
