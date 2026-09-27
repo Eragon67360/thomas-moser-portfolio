@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
@@ -27,6 +27,11 @@ export const metadata: Metadata = {
   publisher: site.author,
   formatDetection: { email: false, address: false, telephone: false },
   alternates: { canonical: "/" },
+};
+
+export const viewport: Viewport = {
+  // Matches the site background so mobile browser chrome blends in.
+  themeColor: "#16181d",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

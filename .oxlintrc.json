@@ -26,5 +26,5 @@
       }
     ]
   },
-  "ignorePatterns": [".next/**", "public/**", "next-env.d.ts"]
+  "ignorePatterns": [".next/**", "public/**", "next-env.d.ts", "resources/**"]
 }
