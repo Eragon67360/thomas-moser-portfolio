@@ -82,12 +82,12 @@ function RequestForm() {
           <FieldError />
         </TextField>
         <div className="flex items-end gap-4">
-          <TextField name="position" className="flex-1">
+          <TextField name="position" className="min-w-0 flex-1">
             <Label>Position & Company</Label>
             <Input placeholder="CEO" />
           </TextField>
           <span className="pb-2">at</span>
-          <TextField name="company" aria-label="Company" className="flex-1">
+          <TextField name="company" aria-label="Company" className="min-w-0 flex-1">
             <Input placeholder="Apple" />
           </TextField>
         </div>

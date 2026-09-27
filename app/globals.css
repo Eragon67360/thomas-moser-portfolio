@@ -20,6 +20,13 @@
   --link: var(--accent);
 }
 
+/* HeroUI's dark fields share the overlay colour and have no border, so inputs and
+   radio controls vanish inside modals. Lift them one step and outline them. */
+.dark {
+  --field-background: var(--default);
+  --field-border: oklch(38% 0.006 286);
+}
+
 @theme {
   --animate-equalizer: equalizer 2.2s ease infinite alternate;
 
