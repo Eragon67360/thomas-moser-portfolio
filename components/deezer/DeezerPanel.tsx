@@ -2,10 +2,10 @@ import { Card, ScrollShadow, Separator } from "@heroui/react";
 import type { ReactNode } from "react";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 
-const SPOTIFY_API_DOCS = "https://developer.spotify.com/documentation/web-api";
+const DEEZER_API_DOCS = "https://developers.deezer.com/api";
 
-/** Card shell shared by the Spotify activity widgets. */
-export function SpotifyPanel({ title, children }: { title: ReactNode; children: ReactNode }) {
+/** Card shell shared by the Deezer activity widgets. */
+export function DeezerPanel({ title, children }: { title: ReactNode; children: ReactNode }) {
   return (
     <Card className="h-full w-full">
       <Card.Header>
@@ -20,8 +20,8 @@ export function SpotifyPanel({ title, children }: { title: ReactNode; children: 
       <Separator />
       <Card.Footer className="text-xs lg:text-base">
         Data fetched with&nbsp;
-        <ExternalLink href={SPOTIFY_API_DOCS} className="text-accent hover:underline">
-          Spotify API
+        <ExternalLink href={DEEZER_API_DOCS} className="text-accent hover:underline">
+          Deezer API
         </ExternalLink>
       </Card.Footer>
     </Card>

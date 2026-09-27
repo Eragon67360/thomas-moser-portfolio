@@ -18,11 +18,6 @@ export const env = {
     url: readEnv("NEXT_UPSTASH_REDIS_URL", "NEXT_PUBLIC_UPSTASH_REDIS_URL"),
     token: readEnv("NEXT_UPSTASH_REDIS_TOKEN", "NEXT_PUBLIC_UPSTASH_REDIS_TOKEN"),
   }),
-  spotify: () => ({
-    clientId: readEnv("NEXT_SPOTIFY_CLIENT_ID"),
-    clientSecret: readEnv("NEXT_SPOTIFY_CLIENT_SECRET"),
-    refreshToken: readEnv("NEXT_SPOTIFY_REFRESH_TOKEN"),
-  }),
   deezer: () => ({
     // Owner's token with `offline_access` (never expires) and `listening_history`.
     accessToken: readEnv("DEEZER_TOKEN"),

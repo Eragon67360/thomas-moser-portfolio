@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ExternalLink } from "@/components/ui/ExternalLink";
-import type { Track } from "@/types/spotify";
+import type { Track } from "@/types/music";
 
 export function TrackRow({ track }: { track: Track }) {
   return (

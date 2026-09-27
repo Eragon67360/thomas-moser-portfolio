@@ -27,28 +27,6 @@
   --field-border: oklch(38% 0.006 286);
 }
 
-@theme {
-  --animate-equalizer: equalizer 2.2s ease infinite alternate;
-
-  @keyframes equalizer {
-    10% {
-      transform: scaleY(0.3);
-    }
-    30% {
-      transform: scaleY(1);
-    }
-    60% {
-      transform: scaleY(0.5);
-    }
-    80% {
-      transform: scaleY(0.75);
-    }
-    100% {
-      transform: scaleY(0.5);
-    }
-  }
-}
-
 @layer base {
   body {
     background-image: radial-gradient(#322e15, #16181d 60%);

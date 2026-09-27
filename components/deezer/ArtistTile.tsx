@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ExternalLink } from "@/components/ui/ExternalLink";
-import type { Artist } from "@/types/spotify";
+import type { Artist } from "@/types/music";
 
 export function ArtistTile({ artist }: { artist: Artist }) {
   return (

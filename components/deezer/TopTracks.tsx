@@ -1,15 +1,15 @@
 "use client";
 import { useApi } from "@/hooks/useApi";
-import type { TracksResponse } from "@/types/spotify";
+import type { TracksResponse } from "@/types/music";
 import { TrackRowsSkeleton } from "./skeletons";
-import { SpotifyPanel } from "./SpotifyPanel";
+import { DeezerPanel } from "./DeezerPanel";
 import { TrackRow } from "./TrackRow";
 
 export function TopTracks() {
-  const { data, error } = useApi<TracksResponse>("/api/spotify/top-tracks");
+  const { data, error } = useApi<TracksResponse>("/api/deezer/top-tracks");
 
   return (
-    <SpotifyPanel title="Top musics">
+    <DeezerPanel title="Top musics">
       {error ? (
         <p className="text-muted">Could not load top tracks.</p>
       ) : data ? (
@@ -17,6 +17,6 @@ export function TopTracks() {
       ) : (
         <TrackRowsSkeleton rows={6} />
       )}
-    </SpotifyPanel>
+    </DeezerPanel>
   );
 }

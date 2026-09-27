@@ -1,15 +1,15 @@
 "use client";
 import { useApi } from "@/hooks/useApi";
-import type { TracksResponse } from "@/types/spotify";
+import type { PlayedTracksResponse } from "@/types/music";
 import { TrackRowsSkeleton } from "./skeletons";
-import { SpotifyPanel } from "./SpotifyPanel";
+import { DeezerPanel } from "./DeezerPanel";
 import { TrackRow } from "./TrackRow";
 
 export function RecentlyPlayed() {
-  const { data, error } = useApi<TracksResponse>("/api/spotify/recently-played");
+  const { data, error } = useApi<PlayedTracksResponse>("/api/deezer/recently-played");
 
   return (
-    <SpotifyPanel title="Last played">
+    <DeezerPanel title="Last played">
       {error ? (
         <p className="text-muted">Could not load recently played tracks.</p>
       ) : data ? (
@@ -17,6 +17,6 @@ export function RecentlyPlayed() {
       ) : (
         <TrackRowsSkeleton rows={10} />
       )}
-    </SpotifyPanel>
+    </DeezerPanel>
   );
 }

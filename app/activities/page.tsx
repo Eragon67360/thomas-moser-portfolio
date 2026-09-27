@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { RecentlyPlayed } from "@/components/spotify/RecentlyPlayed";
-import { TopArtists } from "@/components/spotify/TopArtists";
-import { TopTracks } from "@/components/spotify/TopTracks";
+import { RecentlyPlayed } from "@/components/deezer/RecentlyPlayed";
+import { TopArtists } from "@/components/deezer/TopArtists";
+import { TopTracks } from "@/components/deezer/TopTracks";
 import { SteamActivity } from "@/components/steam/SteamActivity";
 import { SectionTitle } from "@/components/ui/Typography";
 
@@ -17,7 +17,7 @@ export default function ActivitiesPage() {
       <SectionTitle>Steam profile and games</SectionTitle>
       <SteamActivity />
 
-      <SectionTitle>Spotify profile and streams</SectionTitle>
+      <SectionTitle>Deezer profile and streams</SectionTitle>
       <div className="flex w-full flex-col items-center gap-8 py-8 lg:flex-row lg:items-start">
         <div className="flex w-full flex-col gap-8 lg:w-1/2">
           <TopArtists />

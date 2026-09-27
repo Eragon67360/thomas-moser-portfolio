@@ -1,15 +1,15 @@
 "use client";
 import { useApi } from "@/hooks/useApi";
-import type { ArtistsResponse } from "@/types/spotify";
+import type { ArtistsResponse } from "@/types/music";
 import { ArtistTile } from "./ArtistTile";
 import { ArtistTilesSkeleton } from "./skeletons";
-import { SpotifyPanel } from "./SpotifyPanel";
+import { DeezerPanel } from "./DeezerPanel";
 
 export function TopArtists() {
-  const { data, error } = useApi<ArtistsResponse>("/api/spotify/top-artists");
+  const { data, error } = useApi<ArtistsResponse>("/api/deezer/top-artists");
 
   return (
-    <SpotifyPanel title="Top artists">
+    <DeezerPanel title="Top artists">
       {error ? (
         <p className="text-muted">Could not load top artists.</p>
       ) : data ? (
@@ -17,6 +17,6 @@ export function TopArtists() {
       ) : (
         <ArtistTilesSkeleton count={6} />
       )}
-    </SpotifyPanel>
+    </DeezerPanel>
   );
 }
