@@ -23,6 +23,10 @@ export const env = {
     clientSecret: readEnv("NEXT_SPOTIFY_CLIENT_SECRET"),
     refreshToken: readEnv("NEXT_SPOTIFY_REFRESH_TOKEN"),
   }),
+  deezer: () => ({
+    // Owner's token with `offline_access` (never expires) and `listening_history`.
+    accessToken: readEnv("DEEZER_TOKEN"),
+  }),
   steam: () => ({
     apiKey: readEnv("NEXT_STEAM_API_KEY"),
     steamId: readEnv("NEXT_STEAM_ID"),
