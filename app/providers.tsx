@@ -1,27 +1,11 @@
-// app/providers.tsx
-'use client'
-import React, { ReactNode } from 'react'
-import { NextUIProvider } from '@nextui-org/react'
-import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
-import { LanguageProvider } from '@/components/blog/LanguageContext';
-import { Analytics } from "@vercel/analytics/react"
+"use client";
+import { ProgressProvider } from "@bprogress/next/app";
+import type { ReactNode } from "react";
 
 export function Providers({ children }: { children: ReactNode }) {
-    return (
-        <NextUIProvider>
-            <NextThemesProvider attribute="class" defaultTheme="dark">
-                <LanguageProvider>
-                    {children}
-                    <ProgressBar
-                        height="4px"
-                        color="#FFBF00"
-                        options={{ showSpinner: false }}
-                        shallowRouting
-                    />
-                    <Analytics />
-                </LanguageProvider>
-            </NextThemesProvider>
-        </NextUIProvider>
-    )
+  return (
+    <ProgressProvider height="4px" color="#ffbf00" options={{ showSpinner: false }} shallowRouting>
+      {children}
+    </ProgressProvider>
+  );
 }

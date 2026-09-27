@@ -1,12 +1,11 @@
-import Projects from '@/components/projects/Projects'
-import React from 'react'
+import type { Metadata } from "next";
+import { Projects } from "@/components/projects/Projects";
 
-const page = () => {
-  return (
-    <>
-      <Projects />
-    </>
-  )
+export const metadata: Metadata = {
+  title: "Projects",
+  alternates: { canonical: "/projects" },
+};
+
+export default function ProjectsPage() {
+  return <Projects />;
 }
-
-export default page

@@ -1,16 +1,20 @@
-import React, { } from "react";
-import MostViewedPages from "./MostViewedPages";
-import HeroComponent from "./HeroComponent";
+import { ContactMenu } from "@/components/contact/ContactMenu";
+import { ProjectRequestModal } from "@/components/contact/ProjectRequestModal";
+import { PageTitle } from "@/components/ui/Typography";
+import { site } from "@/config/site";
 
-const Hero = () => {
-    return (
-        <>
-            <div className="prose prose-invert my-8 max-w-none flex-none items-center space-x-0 text-white prose-a:no-underline sm:my-16 md:my-20 lg:flex lg:space-x-8 xl:my-24">
-                <HeroComponent/>
-                <MostViewedPages />                
-            </div>
-        </>
-    );
+export function Hero() {
+  return (
+    <div className="mx-auto w-full text-center lg:w-3/4 lg:text-left">
+      <PageTitle>{site.author}</PageTitle>
+      <p className="mb-6 text-sm font-light text-muted sm:text-base lg:mb-8">
+        Embracing curiosity and a passion for learning, I craft dynamic software and web solutions that drive innovation
+        and efficiency.
+      </p>
+      <div className="mb-10 flex items-center justify-center gap-2 md:mb-20 lg:mb-0 lg:justify-start">
+        <ProjectRequestModal />
+        <ContactMenu />
+      </div>
+    </div>
+  );
 }
-
-export default Hero
