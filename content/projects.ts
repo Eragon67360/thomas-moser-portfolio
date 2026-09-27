@@ -159,5 +159,6 @@ export const projects: Project[] = [
     credits: { developedBy: [ME] },
     links: { live: "https://musescore.com/thomas_moser" },
     screenshot: "musescore",
+    video: "/videos/projects/musescore.mp4",
   },
 ];
