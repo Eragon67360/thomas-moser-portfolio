@@ -16,6 +16,7 @@ export const projects: Project[] = [
     period: { start: "2026-04" },
     links: { live: "https://www.laminutecine.fr" },
     screenshot: "v2/la-minute-cine",
+    video: "/videos/projects/la-minute-cine.mp4",
     featured: true,
   },
   {

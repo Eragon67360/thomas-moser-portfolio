@@ -11,5 +11,7 @@ export type Project = {
   links: { live?: string; repo?: string };
   /** Cloudinary id relative to the projects folder; omitted when no screenshot exists. */
   screenshot?: string;
+  /** Silent looping preview shown on hover, under public/videos/projects/. */
+  video?: string;
   featured?: boolean;
 };
