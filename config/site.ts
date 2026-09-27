@@ -62,8 +62,14 @@ export const footerNav: { title: string; links: NavLink[] }[] = [
   {
     title: "Extra",
     links: [
-      { label: "Resume", href: "/pdf/CV_Thomas_MOSER.pdf", external: true },
+      { label: "Resume", href: "/pdf/CV_Thomas_Moser_EN.pdf", external: true },
       { label: "Source Code", href: profile.Repository, external: true },
     ],
   },
 ];
+
+export const cvDownloads = [
+  { label: "English", lang: "en", href: "/pdf/CV_Thomas_Moser_EN.pdf" },
+  { label: "Français", lang: "fr", href: "/pdf/CV_Thomas_Moser_FR.pdf" },
+  { label: "Deutsch", lang: "de", href: "/pdf/CV_Thomas_Moser_DE.pdf" },
+] as const;

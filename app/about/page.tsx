@@ -1,11 +1,12 @@
 import { Card } from "@heroui/react";
 import type { Metadata } from "next";
-import { FaBriefcase, FaMapMarkerAlt } from "react-icons/fa";
+import { FaBriefcase, FaFileDownload, FaMapMarkerAlt } from "react-icons/fa";
 import { AboutSection } from "@/components/about/AboutSection";
 import { ConnectLinks } from "@/components/about/ConnectLinks";
 import { StackGrid } from "@/components/about/StackGrid";
 import { Timeline } from "@/components/about/Timeline";
 import { SectionHeader } from "@/components/ui/Typography";
+import { cvDownloads } from "@/config/site";
 import { education, experience, intro, languages, music } from "@/content/about";
 
 export const metadata: Metadata = {
@@ -34,6 +35,24 @@ export default function AboutPage() {
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
+        <nav aria-label="Download my CV" className="flex flex-wrap items-center justify-center gap-3 text-sm">
+          <span className="flex items-center gap-2 text-muted">
+            <FaFileDownload className="text-accent" aria-hidden />
+            CV (PDF):
+          </span>
+          {cvDownloads.map(({ label, lang, href }) => (
+            <a
+              key={lang}
+              href={href}
+              hrefLang={lang}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-full border border-accent/60 px-4 py-1.5 text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              {label}
+            </a>
+          ))}
+        </nav>
       </header>
 
       <div className="grid w-full grid-cols-1 gap-16 lg:grid-cols-5 lg:gap-12">
