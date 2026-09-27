@@ -13,5 +13,15 @@ export function proxy(req: NextRequest, event: NextFetchEvent) {
 }
 
 export const config = {
-  matcher: ["/"],
+  matcher: [
+    {
+      source: "/",
+      // Every page links to "/", so skip router prefetches: only real visits count.
+      missing: [
+        { type: "header", key: "next-router-prefetch" },
+        { type: "header", key: "next-router-segment-prefetch" },
+        { type: "header", key: "purpose", value: "prefetch" },
+      ],
+    },
+  ],
 };

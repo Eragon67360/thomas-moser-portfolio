@@ -76,6 +76,8 @@ v3 is not v2 (NextUI). There is **no** `HeroUIProvider`, `Navbar`, `Image`, `Div
 - **`NextRequest.ip` / `.geo` no longer exist.** Use `lib/request.ts` (Vercel headers).
 - **Route params are async** in Next.js 16: `const { slug } = await params`.
 - Don't wrap service calls that may run during prerendering in a catch-all that hides Next's dynamic-rendering signal; prefer making the call static-safe.
+- `config/env.ts` still falls back to the legacy `NEXT_PUBLIC_UPSTASH_REDIS_*` names. Once the deployment defines `NEXT_UPSTASH_REDIS_URL/TOKEN`, delete that fallback and the legacy variables.
+- `config/site.ts` is bundled into client components: add only fields that are safe to publish.
 - `react-animated-cursor` declares a React 18 peer; `package.json` `overrides` pins it to our React.
 
 ## Environment

@@ -1,6 +1,21 @@
-import profile from "@/content/profile.json";
+import profileData from "@/content/profile.json";
 
-export { profile };
+/**
+ * Public contact details. This module is imported by client components, so only
+ * list fields that are fine to ship in the browser bundle.
+ */
+export const profile = {
+  Name: profileData.Name,
+  Email: profileData.Email,
+  WhatsApp: profileData.WhatsApp,
+  LinkedIn: profileData.LinkedIn,
+  Github: profileData.Github,
+  Instagram: profileData.Instagram,
+  Calendly: profileData.Calendly,
+  Youtube: profileData.Youtube,
+  Repository: profileData.Repository,
+  License: profileData.License,
+} as const;
 
 export const site = {
   url: "https://thomasmoserdev.com",
