@@ -1,4 +1,3 @@
-import HomeBody from '@/components/blog/HomeBody';
 import PostsList from '@/components/posts-list';
 import { HorizontalDivider } from '@/components/ui/HorizontalDivider'
 import { H2, H3 } from '@/components/ui/Typography'
