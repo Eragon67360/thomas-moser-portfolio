@@ -1,39 +1,41 @@
-'use client'
-import React, { FC, ReactNode, useEffect, useRef } from 'react'
+import type { ReactNode } from "react";
 
-interface TypographyProps {
-    children: ReactNode;
+type TextProps = { children: ReactNode };
+
+export function PageTitle({ children }: TextProps) {
+  return (
+    <h1 className="mb-4 inline-block text-center text-lg leading-none font-extrabold tracking-tight text-white transition-all sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl">
+      {children}
+    </h1>
+  );
 }
-interface AutoScrollTextProps {
-    text: string;
+
+type HeadingLevel = "h1" | "h2";
+
+export function SectionTitle({ children, as: Heading = "h2" }: TextProps & { as?: HeadingLevel }) {
+  return (
+    <Heading className="text-center text-2xl font-bold transition-all md:text-4xl lg:text-5xl">{children}</Heading>
+  );
 }
 
+function SectionSubtitle({ children }: TextProps) {
+  return <p className="w-4/5 text-center text-base text-muted transition-all lg:text-lg xl:text-xl">{children}</p>;
+}
 
-export const H1: FC<TypographyProps> = ({ children }) => {
-    return <h1 className='transition-all duration-250 text-center mb-4 text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl font-extrabold tracking-tight leading-none bg-gradient-to-r from-primary-500 via-secondary to-indigo-500 inline-block text-transparent bg-clip-text dark:text-white'>{children}</h1>;
-};
-
-export const H2: FC<TypographyProps> = ({ children }) => {
-    return <h2 className='text-center transition-all duration-250 font-bold text-2xl md:text-4xl lg:text-5xl'>{children}</h2>;
-};
-
-export const H3: FC<TypographyProps> = ({ children }) => {
-    return <h3 className='w-4/5 text-center transition-all duration-250 text-secondary text-md md:text-base lg:text-lg xl:text-xl'>{children}</h3>;
-};
-
-export const Title: FC<TypographyProps> = ({ children }) => {
-    return <h3 className='transition-all duration-250 text-sm md:text-base lg:text-lg xl:text-xl'>{children}</h3>;
-};
-
-export const FooterText: FC<TypographyProps> = ({ children }) => {
-    return <h3 className='transition-all duration-250 text-xs lg:text-base'>{children}</h3>;
-};
-
-export const TrackText: FC<TypographyProps> = ({ children }) => {
-    return <p className='transition-all duration-250 text-xs md:text-sm lg:text-base font-semibold truncate'>{children}</p>;
-};
-
-export const ArtistText: FC<TypographyProps> = ({ children }) => {
-    return <p className='transition-all duration-250 text-xs md:text-sm lg:text-base font-light opacity-80 truncate'>{children}</p>;
-};
-
+export function SectionHeader({
+  title,
+  subtitle,
+  as,
+}: {
+  title: ReactNode;
+  subtitle?: ReactNode;
+  /** Use "h1" when the header is the page's main heading. */
+  as?: HeadingLevel;
+}) {
+  return (
+    <div className="flex w-full flex-col items-center gap-3 md:gap-4 lg:gap-5 xl:gap-6">
+      <SectionTitle as={as}>{title}</SectionTitle>
+      {subtitle && <SectionSubtitle>{subtitle}</SectionSubtitle>}
+    </div>
+  );
+}

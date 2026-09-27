@@ -1,16 +1,13 @@
-import { Redis } from '@upstash/redis'
+import "server-only";
+import { Redis } from "@upstash/redis";
+import { env } from "@/config/env";
 
+let client: Redis | undefined;
 
-if (!process.env.NEXT_PUBLIC_UPSTASH_REDIS_URL) {
-  throw new Error("Missing NEXT_PUBLIC_UPSTASH_REDIS_URL");
+export function getRedis(): Redis {
+  // Upstash defaults to `cache: "no-store"`, which would force every page that
+  // reads a counter into dynamic rendering. Its requests are POSTs, which Next
+  // never caches, so "default" keeps reads fresh while pages can use ISR.
+  client ??= new Redis({ ...env.redis(), cache: "default" });
+  return client;
 }
-
-if (!process.env.NEXT_PUBLIC_UPSTASH_REDIS_TOKEN) {
-  throw new Error("Missing NEXT_PUBLIC_UPSTASH_REDIS_TOKEN");
-}
-
-
-export const redis = new Redis({
-  url: process.env.NEXT_PUBLIC_UPSTASH_REDIS_URL,
-  token: process.env.NEXT_PUBLIC_UPSTASH_REDIS_TOKEN,
-})

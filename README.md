@@ -1,40 +1,51 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# thomasmoserdev.com
 
-## Getting Started
+Personal website and portfolio of Thomas Moser: projects, a bilingual MDX blog with view counters and comments, and live Deezer/Steam activity.
 
-First, run the development server:
+Built with Next.js 16, React 19, TypeScript 7, HeroUI v3 and Tailwind CSS v4.
+
+## Getting started
+
+Requires Node.js 24 (see `.nvmrc`).
 
 ```bash
+npm install
+cp .env.example .env.local   # fill in the values you need
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+| Script           | Purpose                                                    |
+| ---------------- | ---------------------------------------------------------- |
+| `npm run dev`    | Development server                                         |
+| `npm run build`  | Production build, then sitemap generation (`next-sitemap`) |
+| `npm start`      | Serve the production build                                 |
+| `npm run check`  | Type-check, lint, format check and dead-code check         |
+| `npm run format` | Format the codebase with oxfmt                             |
 
-## Learn More
+## Writing a post
 
-To learn more about Next.js, take a look at the following resources:
+Add an `.mdx` file to `content/articles` with frontmatter:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```yaml
+---
+title: My post
+description: One-line summary
+slug: my-post
+date: Apr 29, 2024
+tags: ["nextjs"]
+---
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Set `published: false` to hide a draft. Articles can use `<AdBanner />`.
 
-## Deploy on Vercel
+## Project structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+See [AGENTS.md](AGENTS.md) for the architecture, conventions and known gotchas.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+Code is licensed under the MIT License — see [LICENSE.md](LICENSE.md). Content is licensed under CC BY-NC-SA 4.0.

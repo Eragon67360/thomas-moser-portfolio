@@ -1,118 +1,83 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind CSS v4 + HeroUI v3 (the HeroUI entry imports tailwindcss itself). */
+@import "@heroui/styles";
+@import "prismjs/themes/prism-okaidia.css";
 
-.background-core {
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* next/font exposes --next-font-*; map them to `font-inter` / `font-jet` utilities. */
+@theme inline {
+  --font-inter: var(--next-font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-jet: var(--next-font-jetbrains), ui-monospace, monospace;
+}
+
+/* Brand palette: HeroUI's `accent` token is the site's amber. */
+:root,
+.dark {
+  --accent: #ffbf00;
+  --accent-foreground: #16181d;
+  --link: var(--accent);
+}
+
+/* HeroUI's dark fields share the overlay colour and have no border, so inputs and
+   radio controls vanish inside modals. Lift them one step and outline them. */
+.dark {
+  --field-background: var(--default);
+  --field-border: oklch(38% 0.006 286);
+}
+
+@layer base {
+  body {
     background-image: radial-gradient(#322e15, #16181d 60%);
+    background-attachment: fixed;
+  }
 }
-
-.radio-hide-control .nextui-radio-button {
-    display: none;
-    /* Hides the circle control */
-}
-
-.radio-custom-label {
-    cursor: pointer;
-}
-
 
 @layer components {
-    .custom-prose {
-        @apply prose prose-invert;
+  /* Long-form article typography (blog posts). */
+  .article-prose {
+    @apply prose prose-invert max-w-none;
 
-        pre {
-            background-color: #f6f8fa;
-            @apply dark:bg-gray-500/35;
-            color: black;
-            @apply dark:text-white;
-        }
-
-        a {
-            @apply text-primary-500;
-        }
-
-        p {
-            color: black;
-            @apply dark:text-[#D1D5D8];
-        }
-
-        li {
-            color: black;
-            @apply dark:text-[#D1D5D8];
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            margin-top: 2rem;
-            font-weight: 600;
-            color: black;
-            @apply dark:text-white;
-        }
-
-        h1 {
-            font-size: 1.875rem;
-            /* 3xl */
-            line-height: 2.25rem;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            /* 2xl */
-            line-height: 2rem;
-        }
-
-        h3 {
-            font-size: 1.25rem;
-            /* xl */
-            line-height: 1.75rem;
-        }
-
-        h4 {
-            font-size: 1.125rem;
-            /* lg */
-            line-height: 1.75rem;
-        }
-
-        h5 {
-            font-size: 1rem;
-            /* base */
-            line-height: 1.5rem;
-        }
-
-        h6 {
-            font-size: 0.875rem;
-            /* sm */
-            line-height: 1.25rem;
-        }
+    pre {
+      @apply bg-gray-500/35 text-white;
     }
-}
 
+    a {
+      @apply text-accent;
+    }
 
-.image-container {
-    position: relative;
-    display: inline-block;
-}
+    p,
+    li {
+      @apply text-[#d1d5d8];
+    }
 
+    :is(h1, h2, h3, h4, h5, h6) {
+      @apply mt-8 font-semibold text-white;
+    }
 
-.image-grey {
-    display: block;
-    opacity: 10%;
-}
+    h1 {
+      @apply text-3xl;
+    }
 
-.image-container:after {
-    transition: opacity 0.05s;
-    position: absolute;
-    content: "";
-    opacity: 100%;
-    top: 0;
-    left: var(--left, 50%); /* default to 50% if --left is not defined */
-    width: var(--width, 50%); /* default to 50% if --width is not defined */
-    
-    height: 100%;
-    background-image: url(/public/img/cool.webp);
-    background-position: top right;
+    h2 {
+      @apply text-2xl;
+    }
+
+    h3 {
+      @apply text-xl;
+    }
+
+    h4 {
+      @apply text-lg;
+    }
+
+    h5 {
+      @apply text-base;
+    }
+
+    h6 {
+      @apply text-sm;
+    }
+  }
 }

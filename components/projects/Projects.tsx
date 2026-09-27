@@ -1,22 +1,20 @@
-import React from 'react'
-import ProjectsViewer from './ProjectsViewer'
-import { H2, H3 } from '../ui/Typography'
-import { HorizontalDivider } from '../ui/HorizontalDivider'
+import { SectionHeader } from "@/components/ui/Typography";
+import { projects } from "@/content/projects";
+import { ProjectCard } from "./ProjectCard";
 
-const Projects = () => {
-    return (
-        <>
-            <div id='projects' className='py-8 w-full max-w-[1440px] px-8'>
-                <div className='flex flex-col items-center gap-3 md:gap-4 lg:gap-5 xl:gap-6'>
-                    <H2>Recent Work</H2>
-                    <H3>A small selection of my work</H3>
-                </div>
-                <div className='flex'>
-                    <ProjectsViewer />
-                </div>
-            </div>
-        </>
-    )
+export function Projects() {
+  return (
+    <section id="projects" className="w-full max-w-7xl px-8 py-8">
+      <SectionHeader
+        as="h1"
+        title="Recent Work"
+        subtitle="A selection of what I have built, for clients, friends and myself"
+      />
+      <div className="mx-auto mt-12 grid w-full grid-cols-1 gap-8 sm:grid-cols-2">
+        {projects.map((project) => (
+          <ProjectCard key={project.slug} project={project} />
+        ))}
+      </div>
+    </section>
+  );
 }
-
-export default Projects

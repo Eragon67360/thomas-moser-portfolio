@@ -1,12 +1,11 @@
-import { H2 } from '@/components/ui/Typography'
-import React from 'react'
+import type { Metadata } from "next";
+import { SectionTitle } from "@/components/ui/Typography";
 
-const page = () => {
-  return (
-    <>
-    <H2>Privacy policy</H2>
-    </>
-  )
+export const metadata: Metadata = {
+  title: "Privacy policy",
+  alternates: { canonical: "/privacy" },
+};
+
+export default function PrivacyPage() {
+  return <SectionTitle>Privacy policy</SectionTitle>;
 }
-
-export default page

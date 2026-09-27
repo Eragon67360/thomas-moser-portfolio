@@ -1,0 +1,230 @@
+---
+title: How to connect the Deezer API to NextJS
+description: Learn how to display your Deezer listening activity in your NextJS application.
+tags: ["nextjs","deezerapi","tailwindcss","swr"]
+slug: connect-deezer-api-to-nextjs
+date: Sep 27, 2026
+duration: 20
+---
+
+## Introduction
+In this article, we'll integrate the Deezer API into a NextJS application to show what you have been listening to. We'll cover how to get a long-lived access token, call the API safely from the server, handle Deezer's particular error format, and display your latest track with SWR.
+
+If you have read my [Spotify tutorial](/blog/connect-spotify-api-to-nextjs), the overall architecture is the same, but Deezer differs in three important ways:
+- **Authentication is simpler**: a token with the `offline_access` permission never expires, so there is no refresh-token exchange.
+- **Errors come back with HTTP status 200**: the error is described in the JSON body, so checking `response.ok` is not enough.
+- **There is no "currently playing" endpoint**: we'll show the last played track from your listening history instead.
+
+## Prerequisites
+Before you start, make sure you have:
+- A basic understanding of JavaScript and React.
+- Node.js installed on your machine.
+- A Deezer account and an application registered on the [Deezer for Developers](https://developers.deezer.com/myapps) portal. Deezer has at times paused the creation of new applications: if you cannot create one, you cannot obtain a personal token with this method.
+
+## Step 1: Setting Up Your NextJS Project
+Create a new NextJS project if you haven't already:
+```bash
+npx create-next-app deezer-nextjs-app
+cd deezer-nextjs-app
+```
+When prompted, choose **TypeScript**, **Tailwind CSS** and the **App Router**. The rest of this guide assumes those defaults, with the `@/*` import alias.
+
+## Step 2: Registering Your Deezer Application
+In the [Deezer developer portal](https://developers.deezer.com/myapps), create an application and set its **Redirect URL after authentication** to `http://127.0.0.1:3000/callback`. Note the **Application ID** and the **Secret Key**.
+
+## Step 3: Getting a Permanent Access Token
+Your website shows *your own* listening activity, so visitors never log in. You authorize your application once and keep the token on the server. We request three permissions:
+- `basic_access`: read your basic profile.
+- `listening_history`: read the tracks you have played.
+- `offline_access`: make the token permanent, so it never needs to be refreshed.
+
+Open this URL in your browser, replacing `YOUR_APP_ID`:
+```plaintext
+https://connect.deezer.com/oauth/auth.php?app_id=YOUR_APP_ID&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Fcallback&perms=basic_access,offline_access,listening_history
+```
+After you accept, Deezer redirects to `http://127.0.0.1:3000/callback?code=...`. The page itself fails to load, which is expected: copy the value of the `code` parameter and exchange it right away:
+```bash
+curl "https://connect.deezer.com/oauth/access_token.php?app_id=YOUR_APP_ID&secret=YOUR_SECRET_KEY&code=THE_CODE&output=json"
+```
+The response contains your `access_token`, with `"expires": 0` because of `offline_access`. If you get the plain text `wrong code` instead, the code has already expired or been used: authorize again to get a new one.
+
+Store the token in a `.env.local` file at the root of your project:
+```plaintext
+DEEZER_TOKEN=your_access_token
+```
+Never prefix it with `NEXT_PUBLIC_`: that would ship your token to every visitor's browser. Treat it like a password, since it never expires. If you remove the application from your Deezer account settings, the token stops working.
+
+You can check that everything works:
+```bash
+curl "https://api.deezer.com/user/me/permissions?access_token=YOUR_ACCESS_TOKEN"
+```
+
+## Step 4: Calling the Deezer API from the Server
+Create `lib/deezer.ts`. The `deezerGet` helper checks for errors in the response body as well as in the HTTP status, and retries when Deezer's request quota is exceeded (error code 4, roughly 50 requests per 5 seconds):
+```typescript
+const API_URL = "https://api.deezer.com";
+const QUOTA_EXCEEDED = 4;
+const RETRY_DELAYS_MS = [500, 1000, 2000];
+
+type DeezerError = { error: { type: string; message: string; code: number } };
+
+export type LastPlayed = {
+  title: string;
+  artist: string;
+  coverUrl: string;
+  trackUrl: string;
+  /** Milliseconds since the epoch. */
+  playedAt: number;
+};
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function deezerGet<T>(path: string): Promise<T> {
+  const url = new URL(`${API_URL}${path}`);
+  url.searchParams.set("access_token", process.env.DEEZER_TOKEN ?? "");
+
+  for (let attempt = 0; ; attempt++) {
+    const response = await fetch(url, { cache: "no-store" });
+    if (!response.ok) throw new Error(`Deezer ${path} failed with ${response.status}`);
+
+    // Deezer usually answers 200 even on failure, with an `error` object in the body.
+    const body: T | DeezerError = await response.json();
+    if (typeof body !== "object" || body === null || !("error" in body)) return body;
+
+    const { type, message, code } = body.error;
+    const delay = RETRY_DELAYS_MS[attempt];
+    if (code === QUOTA_EXCEEDED && delay !== undefined) {
+      await sleep(delay);
+      continue;
+    }
+    throw new Error(`Deezer ${path} failed: ${type} ${code} (${message})`);
+  }
+}
+
+type HistoryTrack = {
+  title: string;
+  link: string;
+  timestamp: number;
+  artist: { name: string };
+  album: { cover_medium: string };
+};
+
+export async function getLastPlayed(): Promise<LastPlayed | null> {
+  const history = await deezerGet<{ data: HistoryTrack[] }>("/user/me/history?limit=1");
+  const track = history.data[0];
+  if (!track) return null;
+
+  return {
+    title: track.title,
+    artist: track.artist.name,
+    coverUrl: track.album.cover_medium,
+    trackUrl: track.link,
+    playedAt: track.timestamp * 1000,
+  };
+}
+```
+Error messages include the request path but never the full URL, so your token doesn't end up in your logs. The most common errors are code `300` (`Invalid OAuth access token.`) and code `200` (a permission is missing, for example `listening_history`).
+
+## Step 5: Exposing the Data with a Route Handler
+The browser must never see your token, so it talks to your own API route instead of Deezer. Create `app/api/last-played/route.ts`:
+```typescript
+import { NextResponse } from "next/server";
+import { getLastPlayed } from "@/lib/deezer";
+
+export async function GET() {
+  try {
+    return NextResponse.json({ track: await getLastPlayed() });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Deezer request failed" }, { status: 502 });
+  }
+}
+```
+Start the dev server with `npm run dev` and open [http://localhost:3000/api/last-played](http://localhost:3000/api/last-played): you should see your latest track.
+
+## Step 6: Displaying the Track with SWR
+Install [SWR](https://swr.vercel.app/) to fetch the route from the browser and refresh it automatically:
+```bash
+npm install swr
+```
+Deezer covers are served from `cdn-images.dzcdn.net`, so allow that host for `next/image` in `next.config.ts`:
+```typescript
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "cdn-images.dzcdn.net" }],
+  },
+};
+
+export default nextConfig;
+```
+Then create the widget in `components/LastPlayed.tsx`. `Intl.RelativeTimeFormat` turns the timestamp into a readable "12 minutes ago":
+```tsx
+"use client";
+import Image from "next/image";
+import useSWR from "swr";
+import type { LastPlayed as LastPlayedTrack } from "@/lib/deezer";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const relativeTime = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
+
+function timeAgo(timestamp: number): string {
+  const minutes = Math.floor((Date.now() - timestamp) / 60_000);
+  if (minutes < 1) return "just now";
+  if (minutes < 60) return relativeTime.format(-minutes, "minute");
+  if (minutes < 1440) return relativeTime.format(-Math.floor(minutes / 60), "hour");
+  return relativeTime.format(-Math.floor(minutes / 1440), "day");
+}
+
+export function LastPlayed() {
+  const { data } = useSWR<{ track: LastPlayedTrack | null }>("/api/last-played", fetcher, {
+    refreshInterval: 30_000,
+  });
+
+  const track = data?.track;
+  if (!track) {
+    return <p className="text-sm text-gray-400">Nothing played recently</p>;
+  }
+
+  return (
+    <a
+      href={track.trackUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-4 rounded-xl bg-white/5 p-3 hover:bg-white/10"
+    >
+      <Image src={track.coverUrl} alt="" width={64} height={64} className="rounded-md" />
+      <div className="min-w-0">
+        <p className="text-xs text-gray-400">Last played {timeAgo(track.playedAt)}</p>
+        <p className="truncate font-semibold">{track.title}</p>
+        <p className="truncate text-sm text-gray-400">{track.artist}</p>
+      </div>
+    </a>
+  );
+}
+```
+Importing only the `LastPlayed` **type** from `lib/deezer.ts` is safe: types are erased at build time, so none of the server code reaches the browser. Finally, render the widget anywhere, for example in `app/page.tsx`:
+```tsx
+import { LastPlayed } from "@/components/LastPlayed";
+
+export default function Home() {
+  return (
+    <main className="mx-auto max-w-md p-8">
+      <LastPlayed />
+    </main>
+  );
+}
+```
+
+## Going Further
+With the same token and helper you can add more widgets:
+- `GET /user/me/history?limit=10`: your recently played tracks.
+- `GET /user/me/charts/tracks` and `GET /user/me/charts/artists`: your top tracks and artists, as ranked by Deezer.
+
+Lists are paginated with `limit` and `index` (the position of the first item), and each response includes a `total` and a ready-made `next` URL. Note that chart items don't include a `link` field: build it yourself from the track id as `https://www.deezer.com/track/{id}`.
+
+Every visitor's widget polls your route, so on a busy site consider caching the results on the server for a few seconds to stay well below Deezer's quota.
+
+## Conclusion
+You now have a NextJS application that reads your Deezer listening history on the server and displays it live with SWR, with a permanent token that never leaves your server. From here you can build a full "what I'm listening to" page with your top tracks and artists.
