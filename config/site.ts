@@ -19,10 +19,12 @@ export const profile = {
 } as const;
 
 export const site = {
-  url: "https://thomasmoserdev.com",
+  /** Canonical origin. The apex domain 308-redirects here, so every absolute URL must use www. */
+  url: "https://www.thomasmoserdev.com",
   name: "thomasmoserdev.com",
-  title: "Thomas Moser | Software Developer",
-  description: "My personal website to share my projects, blogs, and other stuff.",
+  title: "Thomas Moser | Full-Stack Developer",
+  description:
+    "Thomas Moser, full-stack developer in the avenit group in Offenburg, Germany, living near Strasbourg. Projects built end to end and tutorials on Next.js, TypeScript and web APIs.",
   author: profile.Name,
 } as const;
 
@@ -54,6 +56,7 @@ export const footerNav: { title: string; links: NavLink[] }[] = [
     title: "General",
     links: [
       { label: "Home", href: "/" },
+      { label: "About", href: "/about" },
       { label: "Projects", href: "/projects" },
       { label: "Blog", href: "/blog" },
       { label: "Activities", href: "/activities" },

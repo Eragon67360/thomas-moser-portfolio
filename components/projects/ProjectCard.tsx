@@ -3,12 +3,10 @@ import Image from "next/image";
 import { FaArrowRight, FaGithub } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
 import { ExternalLink } from "@/components/ui/ExternalLink";
+import { projectScreenshot } from "@/lib/media";
 import type { Project } from "@/types/project";
 import { formatPeriod } from "./format";
 import { HoverVideo } from "./HoverVideo";
-
-const SCREENSHOT_BASE =
-  "https://res.cloudinary.com/dluezegi8/image/upload/v1715078393/images/upload/thomasmoserdev.com/projects";
 
 function Screenshot({ project }: { project: Project }) {
   if (!project.screenshot) {
@@ -22,7 +20,7 @@ function Screenshot({ project }: { project: Project }) {
   return (
     <div className="relative">
       <Image
-        src={`${SCREENSHOT_BASE}/${project.screenshot}`}
+        src={projectScreenshot(project.screenshot)}
         alt={`Screenshot of ${project.title}`}
         width={1440}
         height={900}
@@ -68,7 +66,10 @@ export function ProjectCard({ project }: { project: Project }) {
               <span className="absolute w-full transition-transform duration-300 ease-linear group-hover:-translate-y-full">
                 {project.title}
               </span>
-              <span className="block w-full translate-y-full transition-transform duration-300 ease-linear group-hover:translate-y-0">
+              <span
+                aria-hidden
+                className="block w-full translate-y-full transition-transform duration-300 ease-linear group-hover:translate-y-0"
+              >
                 {project.title}
               </span>
             </h2>

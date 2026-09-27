@@ -5,29 +5,34 @@ import { AboutSection } from "@/components/about/AboutSection";
 import { ConnectLinks } from "@/components/about/ConnectLinks";
 import { StackGrid } from "@/components/about/StackGrid";
 import { Timeline } from "@/components/about/Timeline";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { SectionHeader } from "@/components/ui/Typography";
 import { cvDownloads } from "@/config/site";
-import { education, experience, intro, languages, music } from "@/content/about";
+import { currentRole, education, experience, intro, languages, location, music } from "@/content/about";
+import { pageMetadata } from "@/lib/seo/metadata";
+import { profilePage } from "@/lib/seo/structured-data";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About",
-  description: "Full-stack developer at Vusyon (avenit group), based near Strasbourg and working in Offenburg.",
-  alternates: { canonical: "/about" },
-};
+  description:
+    "Thomas Moser, full-stack developer at Vusyon (avenit group) in Offenburg, living near Strasbourg: experience, education, stack and CV.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col items-center gap-16 px-8 py-8">
+      <JsonLd data={profilePage()} />
       <header className="flex w-full flex-col items-center gap-6">
         <SectionHeader as="h1" title="About me" subtitle={intro.role} />
         <ul className="flex flex-wrap justify-center gap-3 text-sm">
           <li className="flex items-center gap-2 rounded-full bg-[#ccdcff1f] px-4 py-2">
             <FaBriefcase className="text-accent" aria-hidden />
-            Web Developer at Vusyon
+            {currentRole.title} at {currentRole.organization}
           </li>
           <li className="flex items-center gap-2 rounded-full bg-[#ccdcff1f] px-4 py-2">
             <FaMapMarkerAlt className="text-accent" aria-hidden />
-            Near Strasbourg, France · Working in Offenburg, Germany
+            {location.home} · Working in {location.work}
           </li>
         </ul>
         <div className="flex max-w-3xl flex-col gap-4 text-lg leading-8">
