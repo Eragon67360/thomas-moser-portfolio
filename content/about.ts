@@ -27,14 +27,16 @@ export const experience: TimelineEntry[] = [
     organization: "avenit group",
     place: "Offenburg, Germany",
     period: "Jul 2024 – present",
-    description: "Web development at Vusyon since September 2025; at avenit from July 2024 to August 2025.",
+    description:
+      "Web development at Vusyon since September 2025. At avenit from July 2024 to August 2025: Vue.js and NestJS projects, as well as TYPO3 websites.",
   },
   {
-    title: "Web Developer",
-    organization: "Curefab Technologies GmbH",
-    place: "Munich, Germany",
-    period: "Oct 2023 – Feb 2024",
-    description: "Built the company website with ConcreteCMS and PHP.",
+    title: "Web Developer (freelance)",
+    organization: "MOCA, micro-enterprise with designer Cristina Andrés",
+    place: "France",
+    period: "Oct 2023 – Jul 2024",
+    description:
+      "Designed and built websites with Cristina Andrés. First client: Curefab Technologies (Munich), whose company website I built with ConcreteCMS and PHP (Oct 2023 – Feb 2024).",
   },
   {
     title: "Software Developer",
@@ -86,7 +88,7 @@ export const education: TimelineEntry[] = [
 export const stack: { group: string; items: string[] }[] = [
   { group: "Languages", items: ["TypeScript", "JavaScript", "Python", "Dart", "Swift", "Java", "C#", "C/C++", "PHP"] },
   { group: "Frontend", items: ["React", "Next.js", "Vue.js", "Tailwind CSS", "HeroUI"] },
-  { group: "Backend & data", items: ["NestJS", "Payload CMS", "Supabase", "PostgreSQL", "Prisma"] },
+  { group: "Backend & data", items: ["NestJS", "TYPO3", "Payload CMS", "Supabase", "PostgreSQL", "Prisma"] },
   { group: "Mobile", items: ["Flutter", "React Native", "Swift", "Android (Jetpack Compose)"] },
   { group: "Platforms & tools", items: ["Turborepo", "Docker", "Vercel", "Stripe", "Clerk", "Cloudinary", "Git"] },
 ];
