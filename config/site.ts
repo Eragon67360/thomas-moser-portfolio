@@ -13,6 +13,7 @@ export const profile = {
   Instagram: profileData.Instagram,
   Calendly: profileData.Calendly,
   Youtube: profileData.Youtube,
+  MuseScore: profileData.MuseScore,
   Repository: profileData.Repository,
   License: profileData.License,
 } as const;
