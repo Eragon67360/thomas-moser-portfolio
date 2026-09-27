@@ -1,20 +1,18 @@
-import About from '@/components/About'
-import Competencies from '@/components/Competencies'
-import React from 'react'
-import Projects from '@/components/projects/Projects'
+import type { Metadata } from "next";
+import { About } from "@/components/about/About";
+import { Competencies } from "@/components/about/Competencies";
 
-const page = () => {
-    return (
-        <>
-            <div className='w-full flex flex-col items-center min-h-screen'>
-                <About />
-                <hr className="w-full h-px border-0 bg-gray-500/30" />
-                <Competencies />
-                <hr className="w-full h-px border-0 bg-gray-500/30" />
-            </div>
-        </>
+export const metadata: Metadata = {
+  title: "About",
+  alternates: { canonical: "/about" },
+};
 
-    )
+export default function AboutPage() {
+  return (
+    <div className="flex min-h-screen w-full flex-col items-center">
+      <About />
+      <hr className="h-px w-full border-0 bg-gray-500/30" />
+      <Competencies />
+    </div>
+  );
 }
-
-export default page

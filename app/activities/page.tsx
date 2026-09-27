@@ -1,51 +1,32 @@
-import React, { } from 'react'
-import SpotifyRecentlyPlayed from '@/components/spotify/SpotifyRecentlyPlayed'
-import SteamLoader from '@/components/steam/SteamLoader'
-import { HorizontalDivider } from '@/components/ui/HorizontalDivider'
-import { H2 } from '@/components/ui/Typography'
-import SpotifyTopArtists from '@/components/spotify/SpotifyTopArtists'
-import SpotifyTopTracks from '@/components/spotify/SpotifyTopTracks'
-import { Metadata } from 'next'
+import type { Metadata } from "next";
+import { RecentlyPlayed } from "@/components/spotify/RecentlyPlayed";
+import { TopArtists } from "@/components/spotify/TopArtists";
+import { TopTracks } from "@/components/spotify/TopTracks";
+import { SteamActivity } from "@/components/steam/SteamActivity";
+import { SectionTitle } from "@/components/ui/Typography";
 
 export const metadata: Metadata = {
-  title: 'Activities',
-  description: `What I do beside programming.`,
-  alternates: {
-    canonical: 'https://thomasmoserdev.com/activities',
-},
+  title: "Activities",
+  description: "What I do beside programming.",
+  alternates: { canonical: "/activities" },
 };
 
-
-const Projects = async () => {
+export default function ActivitiesPage() {
   return (
-    <>
-      <div className='w-full py-8 px-8 flex flex-col items-center justify-center h-full'>
-        <div className='flex flex-col items-center gap-4 text-center'>
-          <H2>Steam profile and games</H2>
-        </div>
-        <div id='steam' className='w-full flex items-center justify-center'>
-          <SteamLoader />
-        </div>
-        <hr className='h-16' />
-        <div className='flex flex-col items-center gap-4'>
-          <H2>Spotify profile and streams</H2>
-        </div>
-        <div id='spotify' className='w-full flex flex-col lg:flex-row gap-8 py-8 items-center transition-all duration-250'>
-          <div className='flex flex-col gap-8 w-full lg:w-1/2 h-full md:h-screen'>
-            <SpotifyTopArtists />
-            <SpotifyTopTracks />
-          </div>
-          <div className='h-full md:h-screen w-full lg:w-1/2'>
-            <SpotifyRecentlyPlayed />
-          </div>
+    <div className="flex h-full w-full flex-col items-center justify-center gap-8 p-8">
+      <SectionTitle>Steam profile and games</SectionTitle>
+      <SteamActivity />
 
-
+      <SectionTitle>Spotify profile and streams</SectionTitle>
+      <div className="flex w-full flex-col items-center gap-8 py-8 lg:flex-row lg:items-start">
+        <div className="flex w-full flex-col gap-8 lg:w-1/2">
+          <TopArtists />
+          <TopTracks />
+        </div>
+        <div className="w-full lg:w-1/2">
+          <RecentlyPlayed />
         </div>
       </div>
-
-
-    </>
-  )
+    </div>
+  );
 }
-
-export default Projects

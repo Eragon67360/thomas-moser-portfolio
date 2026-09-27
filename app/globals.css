@@ -1,184 +1,98 @@
-/* Import Tailwind's base, components, and utilities */
-@import "tailwindcss";
+/* Tailwind CSS v4 + HeroUI v3 (the HeroUI entry imports tailwindcss itself). */
+@import "@heroui/styles";
+@import "prismjs/themes/prism-okaidia.css";
 
-/* Optional: Import any third-party CSS libraries */
-@import "tw-animate-css";
-
-/* Configuration for HeroUI theme plugin */
-@plugin '../hero.ts';
-@source '../../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
-@custom-variant dark (&:is(.dark *));
 @plugin "@tailwindcss/typography";
-@plugin "tailwindcss-animated";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* next/font exposes --next-font-*; map them to `font-inter` / `font-jet` utilities. */
+@theme inline {
+  --font-inter: var(--next-font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-jet: var(--next-font-jetbrains), ui-monospace, monospace;
+}
+
+/* Brand palette: HeroUI's `accent` token is the site's amber. */
+:root,
+.dark {
+  --accent: #ffbf00;
+  --accent-foreground: #16181d;
+  --link: var(--accent);
+}
 
 @theme {
-  /* Primary color scale */
-  --color-primary-50: #ffe100;
-  --color-primary-100: #ffe100;
-  --color-primary-200: #ffd000;
-  --color-primary-300: #ffd000;
-  --color-primary-400: #ffbf00;
-  --color-primary-500: #ffbf00;
-  --color-primary-600: #ffbf00;
-  --color-primary-700: #cc9800;
-  --color-primary-800: #cc9800;
-  --color-primary-900: #7f5f00;
-  --color-primary: #ffbf00;
+  --animate-equalizer: equalizer 2.2s ease infinite alternate;
 
-  /* Secondary color */
-  --color-secondary: #8f8f8f;
-
-  /* Font families */
-  --font-family-jet: var(--font-jetbrains);
-  --font-family-inter: var(--font-inter);
-
-  /* Background images */
-  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
-  --background-image-gradient-conic: conic-gradient(
-    from 180deg at 50% 50%,
-    var(--tw-gradient-stops)
-  );
-  --background-image-hero: url("../public/img/bg_hero.webp");
-
-  /* Background colors */
-  --color-overlay: rgba(0, 0, 0, 0.8);
-
-  /* Animations */
-  --animate-marquee: marquee 25s linear infinite;
-  --animate-marquee2: marquee2 25s linear infinite;
-}
-
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
-  }
-
-  100% {
-    transform: translateX(-100%);
+  @keyframes equalizer {
+    10% {
+      transform: scaleY(0.3);
+    }
+    30% {
+      transform: scaleY(1);
+    }
+    60% {
+      transform: scaleY(0.5);
+    }
+    80% {
+      transform: scaleY(0.75);
+    }
+    100% {
+      transform: scaleY(0.5);
+    }
   }
 }
 
-@keyframes marquee2 {
-  0% {
-    transform: translateX(100%);
+@layer base {
+  body {
+    background-image: radial-gradient(#322e15, #16181d 60%);
+    background-attachment: fixed;
   }
-
-  100% {
-    transform: translateX(0%);
-  }
-}
-
-.background-core {
-  background-image: radial-gradient(#322e15, #16181d 60%);
-}
-
-.radio-hide-control .nextui-radio-button {
-  display: none;
-  /* Hides the circle control */
-}
-
-.radio-custom-label {
-  cursor: pointer;
 }
 
 @layer components {
-  .custom-prose {
-    max-width: 65ch;
-    color: inherit;
+  /* Long-form article typography (blog posts). */
+  .article-prose {
+    @apply prose prose-invert max-w-none;
 
     pre {
-      background-color: #f6f8fa;
-      @apply dark:bg-gray-500/35;
-      color: black;
-      @apply dark:text-white;
+      @apply bg-gray-500/35 text-white;
     }
 
     a {
-      @apply text-primary-500;
+      @apply text-accent;
     }
 
-    p {
-      color: black;
-      @apply dark:text-[#D1D5D8];
-    }
-
+    p,
     li {
-      color: black;
-      @apply dark:text-[#D1D5D8];
+      @apply text-[#d1d5d8];
     }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      margin-top: 2rem;
-      font-weight: 600;
-      color: black;
-      @apply dark:text-white;
+    :is(h1, h2, h3, h4, h5, h6) {
+      @apply mt-8 font-semibold text-white;
     }
 
     h1 {
-      font-size: 1.875rem;
-      /* 3xl */
-      line-height: 2.25rem;
+      @apply text-3xl;
     }
 
     h2 {
-      font-size: 1.5rem;
-      /* 2xl */
-      line-height: 2rem;
+      @apply text-2xl;
     }
 
     h3 {
-      font-size: 1.25rem;
-      /* xl */
-      line-height: 1.75rem;
+      @apply text-xl;
     }
 
     h4 {
-      font-size: 1.125rem;
-      /* lg */
-      line-height: 1.75rem;
+      @apply text-lg;
     }
 
     h5 {
-      font-size: 1rem;
-      /* base */
-      line-height: 1.5rem;
+      @apply text-base;
     }
 
     h6 {
-      font-size: 0.875rem;
-      /* sm */
-      line-height: 1.25rem;
+      @apply text-sm;
     }
   }
-}
-
-.image-container {
-  position: relative;
-  display: inline-block;
-}
-
-.image-grey {
-  display: block;
-  opacity: 10%;
-}
-
-.image-container:after {
-  transition: opacity 0.05s;
-  position: absolute;
-  content: "";
-  opacity: 100%;
-  top: 0;
-  left: var(--left, 50%);
-  /* default to 50% if --left is not defined */
-  width: var(--width, 50%);
-  /* default to 50% if --width is not defined */
-
-  height: 100%;
-  background-image: url(/public/img/cool.webp);
-  background-position: top right;
 }

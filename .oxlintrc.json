@@ -12,8 +12,19 @@
     "typescript/no-explicit-any": "error",
     "typescript/consistent-type-imports": "error",
     "import/no-cycle": "error",
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
-    "eqeqeq": "error"
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error"]
+      }
+    ],
+    "eqeqeq": "error",
+    "import/no-unassigned-import": [
+      "warn",
+      {
+        "allow": ["server-only", "**/*.css"]
+      }
+    ]
   },
   "ignorePatterns": [".next/**", "public/**", "next-env.d.ts"]
 }

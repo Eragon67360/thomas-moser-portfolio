@@ -1,10 +1,14 @@
-import React from "react";
-import Hero from "@/components/home/Hero";
+import { Hero } from "@/components/home/Hero";
+import { MostViewedPosts } from "@/components/home/MostViewedPosts";
 
-export default function Home() {
+// View counters change constantly; refresh the statically rendered page every minute.
+export const revalidate = 60;
+
+export default function HomePage() {
   return (
-    <main className="flex w-full flex-col items-center justify-between font-jet">
+    <div className="my-8 flex w-full flex-col items-center gap-8 font-jet sm:my-16 md:my-20 lg:flex-row lg:gap-8 xl:my-24">
       <Hero />
-    </main>
+      <MostViewedPosts />
+    </div>
   );
 }

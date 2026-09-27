@@ -1,89 +1,96 @@
-if (!process.env.NEXT_SPOTIFY_CLIENT_ID) {
-  throw new Error("Missing NEXT_SPOTIFY_CLIENT_ID");
+import "server-only";
+import { env } from "@/config/env";
+import { assertOk, readJson } from "@/lib/http";
+import type { Artist, NowPlaying, Track } from "@/types/spotify";
+
+const TOKEN_URL = "https://accounts.spotify.com/api/token";
+const API_URL = "https://api.spotify.com/v1";
+
+type SpotifyImage = { url: string };
+type SpotifyTrackObject = {
+  name: string;
+  artists: { name: string }[];
+  album: { name: string; images: SpotifyImage[] };
+  external_urls: { spotify: string };
+};
+type SpotifyArtistObject = {
+  name: string;
+  genres: string[];
+  images: SpotifyImage[];
+  external_urls: { spotify: string };
+};
+
+let cachedToken: { value: string; expiresAt: number } | undefined;
+
+async function getAccessToken(): Promise<string> {
+  if (cachedToken && cachedToken.expiresAt > Date.now()) return cachedToken.value;
+
+  const { clientId, clientSecret, refreshToken } = env.spotify();
+  const response = await fetch(TOKEN_URL, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${Buffer.from(`${clientId}:${clientSecret}`).toString("base64")}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({ grant_type: "refresh_token", refresh_token: refreshToken }),
+    cache: "no-store",
+  });
+  assertOk(response, "Spotify token request");
+  const data = await readJson<{ access_token: string; expires_in: number }>(response);
+
+  // Refresh a minute early to avoid using a token that expires mid-request.
+  cachedToken = { value: data.access_token, expiresAt: Date.now() + (data.expires_in - 60) * 1000 };
+  return cachedToken.value;
 }
 
-if (!process.env.NEXT_SPOTIFY_CLIENT_SECRET) {
-  throw new Error("Missing NEXT_SPOTIFY_CLIENT_SECRET");
+async function spotifyGet<T>(path: string): Promise<T | null> {
+  const response = await fetch(`${API_URL}${path}`, {
+    headers: { Authorization: `Bearer ${await getAccessToken()}` },
+    cache: "no-store",
+  });
+  if (response.status === 204) return null;
+  assertOk(response, `Spotify ${path}`);
+  return readJson<T>(response);
 }
 
+const imageAt = (images: SpotifyImage[], index: number) => (images[index] ?? images[0])?.url ?? "";
 
-const client_id = process.env.NEXT_SPOTIFY_CLIENT_ID;
-const client_secret = process.env.NEXT_SPOTIFY_CLIENT_SECRET;
-const refresh_token = process.env.NEXT_SPOTIFY_REFRESH_TOKEN;
+function toTrack(track: SpotifyTrackObject, imageIndex: number): Track {
+  return {
+    title: track.name,
+    artist: track.artists.map((artist) => artist.name).join(", "),
+    songUrl: track.external_urls.spotify,
+    imageUrl: imageAt(track.album.images, imageIndex),
+  };
+}
 
-const basic = Buffer.from(`${client_id}:${client_secret}`).toString('base64');
-const TOKEN_ENDPOINT = `https://accounts.spotify.com/api/token`;
+export async function getNowPlaying(): Promise<NowPlaying> {
+  const data = await spotifyGet<{ is_playing: boolean; item: SpotifyTrackObject | null }>(
+    "/me/player/currently-playing",
+  );
+  if (!data?.is_playing || !data.item) return { isPlaying: false };
+  return { isPlaying: true, album: data.item.album.name, ...toTrack(data.item, 0) };
+}
 
-const TOP_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/top/tracks`;
-const TOP_ARTISTS_ENDPOINT = `https://api.spotify.com/v1/me/top/artists`;
-const RECENTLY_PLAYED_TRACKS_ENDPOINT = `https://api.spotify.com/v1/me/player/recently-played`;
-const CURRENTLY_PLAYING_URL = `https://api.spotify.com/v1/me/player/currently-playing`;
+export async function getRecentlyPlayed(limit = 10): Promise<Track[]> {
+  const data = await spotifyGet<{ items: { track: SpotifyTrackObject }[] }>(
+    `/me/player/recently-played?limit=${limit}`,
+  );
+  // The smallest album image is plenty for the compact list rows.
+  return (data?.items ?? []).map((item) => toTrack(item.track, 2));
+}
 
+export async function getTopTracks(limit = 6): Promise<Track[]> {
+  const data = await spotifyGet<{ items: SpotifyTrackObject[] }>(`/me/top/tracks?limit=${limit}`);
+  return (data?.items ?? []).map((track) => toTrack(track, 0));
+}
 
-const getAccessToken = async () => {
-  try {
-    const params = new URLSearchParams({
-      grant_type: 'refresh_token',
-      refresh_token: refresh_token || '',
-    });
-
-    const response = await fetch(TOKEN_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        Authorization: `Basic ${basic}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: params.toString(),
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(`Spotify token error: ${data.error} - ${data.error_description}`);
-    }
-    return data;
-  } catch (error) {
-    console.error('Error fetching access token', error);
-    throw error;
-  }
-};
-
-export const getRecentlyPlayedTracks = async () => {
-  const { access_token } = await getAccessToken();
-
-  return fetch(RECENTLY_PLAYED_TRACKS_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
-
-};
-
-export const getCurrentlyPlaying = async () => {
-  const { access_token } = await getAccessToken();
-
-  return fetch(CURRENTLY_PLAYING_URL, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
-};
-
-export const getTopArtists = async () => {
-  const { access_token } = await getAccessToken();
-
-  return fetch(TOP_ARTISTS_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
-};
-
-export const getTopTracks = async () => {
-  const { access_token } = await getAccessToken();
-
-  return fetch(TOP_TRACKS_ENDPOINT, {
-    headers: {
-      Authorization: `Bearer ${access_token}`,
-    },
-  });
-};
+export async function getTopArtists(limit = 6): Promise<Artist[]> {
+  const data = await spotifyGet<{ items: SpotifyArtistObject[] }>(`/me/top/artists?limit=${limit}`);
+  return (data?.items ?? []).map((artist) => ({
+    name: artist.name,
+    artistUrl: artist.external_urls.spotify,
+    imageUrl: imageAt(artist.images, 0),
+    genres: artist.genres,
+  }));
+}
