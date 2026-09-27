@@ -54,6 +54,7 @@ export const projects: Project[] = [
       repo: "https://github.com/Eragon67360/lebontemperament_turbo",
     },
     screenshot: "v2/lebontemperament",
+    video: "/videos/projects/le-bon-temperament.mp4",
   },
   {
     slug: "habit-forge",
@@ -78,6 +79,7 @@ export const projects: Project[] = [
       repo: "https://github.com/Eragon67360/taylorssecretgarden",
     },
     screenshot: "v2/taylorssecretgarden",
+    video: "/videos/projects/taylors-secret-garden.mp4",
   },
   {
     slug: "url-shortener",
