@@ -1,118 +1,184 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Import Tailwind's base, components, and utilities */
+@import "tailwindcss";
+
+/* Optional: Import any third-party CSS libraries */
+@import "tw-animate-css";
+
+/* Configuration for HeroUI theme plugin */
+@plugin '../hero.ts';
+@source '../../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
+@plugin "@tailwindcss/typography";
+@plugin "tailwindcss-animated";
+
+@theme {
+  /* Primary color scale */
+  --color-primary-50: #ffe100;
+  --color-primary-100: #ffe100;
+  --color-primary-200: #ffd000;
+  --color-primary-300: #ffd000;
+  --color-primary-400: #ffbf00;
+  --color-primary-500: #ffbf00;
+  --color-primary-600: #ffbf00;
+  --color-primary-700: #cc9800;
+  --color-primary-800: #cc9800;
+  --color-primary-900: #7f5f00;
+  --color-primary: #ffbf00;
+
+  /* Secondary color */
+  --color-secondary: #8f8f8f;
+
+  /* Font families */
+  --font-family-jet: var(--font-jetbrains);
+  --font-family-inter: var(--font-inter);
+
+  /* Background images */
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-conic: conic-gradient(
+    from 180deg at 50% 50%,
+    var(--tw-gradient-stops)
+  );
+  --background-image-hero: url("../public/img/bg_hero.webp");
+
+  /* Background colors */
+  --color-overlay: rgba(0, 0, 0, 0.8);
+
+  /* Animations */
+  --animate-marquee: marquee 25s linear infinite;
+  --animate-marquee2: marquee2 25s linear infinite;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes marquee2 {
+  0% {
+    transform: translateX(100%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
 
 .background-core {
-    background-image: radial-gradient(#322e15, #16181d 60%);
+  background-image: radial-gradient(#322e15, #16181d 60%);
 }
 
 .radio-hide-control .nextui-radio-button {
-    display: none;
-    /* Hides the circle control */
+  display: none;
+  /* Hides the circle control */
 }
 
 .radio-custom-label {
-    cursor: pointer;
+  cursor: pointer;
 }
-
 
 @layer components {
-    .custom-prose {
-        @apply prose prose-invert;
+  .custom-prose {
+    max-width: 65ch;
+    color: inherit;
 
-        pre {
-            background-color: #f6f8fa;
-            @apply dark:bg-gray-500/35;
-            color: black;
-            @apply dark:text-white;
-        }
-
-        a {
-            @apply text-primary-500;
-        }
-
-        p {
-            color: black;
-            @apply dark:text-[#D1D5D8];
-        }
-
-        li {
-            color: black;
-            @apply dark:text-[#D1D5D8];
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            margin-top: 2rem;
-            font-weight: 600;
-            color: black;
-            @apply dark:text-white;
-        }
-
-        h1 {
-            font-size: 1.875rem;
-            /* 3xl */
-            line-height: 2.25rem;
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            /* 2xl */
-            line-height: 2rem;
-        }
-
-        h3 {
-            font-size: 1.25rem;
-            /* xl */
-            line-height: 1.75rem;
-        }
-
-        h4 {
-            font-size: 1.125rem;
-            /* lg */
-            line-height: 1.75rem;
-        }
-
-        h5 {
-            font-size: 1rem;
-            /* base */
-            line-height: 1.5rem;
-        }
-
-        h6 {
-            font-size: 0.875rem;
-            /* sm */
-            line-height: 1.25rem;
-        }
+    pre {
+      background-color: #f6f8fa;
+      @apply dark:bg-gray-500/35;
+      color: black;
+      @apply dark:text-white;
     }
-}
 
+    a {
+      @apply text-primary-500;
+    }
+
+    p {
+      color: black;
+      @apply dark:text-[#D1D5D8];
+    }
+
+    li {
+      color: black;
+      @apply dark:text-[#D1D5D8];
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin-top: 2rem;
+      font-weight: 600;
+      color: black;
+      @apply dark:text-white;
+    }
+
+    h1 {
+      font-size: 1.875rem;
+      /* 3xl */
+      line-height: 2.25rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      /* 2xl */
+      line-height: 2rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      /* xl */
+      line-height: 1.75rem;
+    }
+
+    h4 {
+      font-size: 1.125rem;
+      /* lg */
+      line-height: 1.75rem;
+    }
+
+    h5 {
+      font-size: 1rem;
+      /* base */
+      line-height: 1.5rem;
+    }
+
+    h6 {
+      font-size: 0.875rem;
+      /* sm */
+      line-height: 1.25rem;
+    }
+  }
+}
 
 .image-container {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
-
 .image-grey {
-    display: block;
-    opacity: 10%;
+  display: block;
+  opacity: 10%;
 }
 
 .image-container:after {
-    transition: opacity 0.05s;
-    position: absolute;
-    content: "";
-    opacity: 100%;
-    top: 0;
-    left: var(--left, 50%); /* default to 50% if --left is not defined */
-    width: var(--width, 50%); /* default to 50% if --width is not defined */
-    
-    height: 100%;
-    background-image: url(/public/img/cool.webp);
-    background-position: top right;
+  transition: opacity 0.05s;
+  position: absolute;
+  content: "";
+  opacity: 100%;
+  top: 0;
+  left: var(--left, 50%);
+  /* default to 50% if --left is not defined */
+  width: var(--width, 50%);
+  /* default to 50% if --width is not defined */
+
+  height: 100%;
+  background-image: url(/public/img/cool.webp);
+  background-position: top right;
 }

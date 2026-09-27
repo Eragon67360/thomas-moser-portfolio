@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Avatar, Link, Card, CardBody, CardFooter, Input, RadioGroup, Radio, cn, Textarea } from '@nextui-org/react'
+import { ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Avatar, Link, Card, CardBody, CardFooter, Input, RadioGroup, Radio, cn, Textarea } from "@heroui/react"
 import { H2, H3 } from './ui/Typography'
 import { IoIosInformationCircleOutline } from "react-icons/io";
 

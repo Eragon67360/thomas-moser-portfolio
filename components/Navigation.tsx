@@ -6,7 +6,7 @@ import {
   NavbarItem,
   Link,
   Button
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useRouter } from 'next/navigation';
 
 

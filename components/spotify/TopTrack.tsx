@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardBody, Image, Divider, Link } from '@nextui-org/react';
+import { Card, CardBody, Image, Divider, Link } from "@heroui/react";
 import { TrackText, ArtistText } from '../ui/Typography';
 
 

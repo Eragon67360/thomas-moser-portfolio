@@ -1,5 +1,5 @@
 import React from 'react'
-import { ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Link } from "@nextui-org/react";
+import { ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Link } from "@heroui/react";
 import { FaInstagram, FaLinkedin, FaCalendarAlt } from 'react-icons/fa';
 
 import profile from '@/public/json/personal_data.json'

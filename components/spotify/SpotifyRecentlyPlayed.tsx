@@ -4,7 +4,7 @@ import { RecentlyPlayed } from '@/lib/types';
 import useSWR from 'swr';
 import LastPlayedLoader from '../loaders/spotify/LastPlayedLoader';
 import RecentlyPlayedTrack from './RecentlyPlayedTrack';
-import { Card, CardHeader, Divider, CardBody, CardFooter, ScrollShadow, Link } from '@nextui-org/react';
+import { Card, CardHeader, Divider, CardBody, CardFooter, ScrollShadow, Link } from "@heroui/react";
 import { FooterText, Title } from '../ui/Typography';
 
 const SpotifyRecentlyPlayed = () => {

@@ -1,4 +1,4 @@
-import { Card, CardHeader, Skeleton, Divider, CardBody, CardFooter } from '@nextui-org/react'
+import { Card, CardHeader, Skeleton, Divider, CardBody, CardFooter } from "@heroui/react"
 import React from 'react'
 
 const TopTracksLoader = () => {

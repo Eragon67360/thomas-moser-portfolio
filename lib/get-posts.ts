@@ -5,7 +5,6 @@ import { cache } from 'react'
 import { Post } from './types'
 import { promises as fs } from "fs";
 import { redis } from './redis';
-import getConfig from 'next/config'
 import remarkGfm from 'remark-gfm'
 import rehypeSlug from 'rehype-slug'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
@@ -14,17 +13,11 @@ import rehypePrism from 'rehype-prism-plus'
 import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis'
 import { bundleMDX } from 'mdx-bundler';
 
-const postsDirectory = process.cwd() + '\\articles';
-
 export const getPosts = cache(async (languages: string[], includeThirdPartyPosts?: boolean) => {
     const rootPath = process.cwd();
-    // console.log(languages);
     const articlesPath = join(rootPath, 'articles');
-    console.log(postsDirectory);
 
-    console.log("Trying to read from:", articlesPath);
     const posts = await fs.readdir(articlesPath);
-
 
     const postsWithMetadata = await Promise.all(
         posts
@@ -32,41 +25,60 @@ export const getPosts = cache(async (languages: string[], includeThirdPartyPosts
                 (file) => path.extname(file) === '.md' || path.extname(file) === '.mdx',
             )
             .map(async (file) => {
-                const filePath = `./articles/${file}`
-                const postContent = await fs.readFile(filePath, 'utf8')
-                const { data, content } = matter(postContent)
+                const filePath = join(articlesPath, file);
+                const postContent = await fs.readFile(filePath, 'utf8');
+                const { data, content } = matter(postContent);
 
                 if (data.published === false) {
-                    return null
+                    return null;
                 }
 
-                const withoutLeadingChars = filePath.substring(2).replace('.mdx', '.md')
+                // For GitHub API, we need the relative path from repo root
+                const relativePath = `articles/${file}`.replace('.mdx', '.md');
 
-                const fetchUrl =
-                    process.env.NODE_ENV === 'production'
-                        ? `https://api.github.com/repos/Eragon67360/thomas-moser-portfolio/commits?path=${withoutLeadingChars}&page=1&per_page=1`
-                        : `http://localhost:3001/mock-commit-response.json`
+                let lastModified = 0;
 
-                const commitInfoResponse = await fetch(fetchUrl, {
-                    headers: {
-                        Authorization: process.env.NEXT_GITHUB_TOKEN ?? '',
-                    },
-                })
-                const commitInfo = await commitInfoResponse.json()
-                let lastModified = 0
-                if (commitInfo?.length) {
+                try {
+                    const fetchUrl =
+                        process.env.NODE_ENV === 'production'
+                            ? `https://api.github.com/repos/Eragon67360/thomas-moser-portfolio/commits?path=${encodeURIComponent(relativePath)}&page=1&per_page=1`
+                            : `http://localhost:3001/mock-commit-response.json`
 
-                    lastModified = new Date(commitInfo[0].commit.committer.date).getTime()
+                    const commitInfoResponse = await fetch(fetchUrl, {
+                        headers: {
+                            Authorization: process.env.NEXT_GITHUB_TOKEN ? `token ${process.env.NEXT_GITHUB_TOKEN}` : '',
+                            Accept: 'application/vnd.github.v3+json',
+                        },
+                    })
 
-                    if (
-                        lastModified - new Date(data.date).getTime() <
-                        24 * 60 * 60 * 1000
-                    ) {
-                        lastModified = 0
+                    if (!commitInfoResponse.ok) {
+                        console.warn(`GitHub API error for ${relativePath}: ${commitInfoResponse.status} ${commitInfoResponse.statusText}`);
+                        // Continue without lastModified date
+                    } else {
+                        const contentType = commitInfoResponse.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const commitInfo = await commitInfoResponse.json();
+
+                            if (Array.isArray(commitInfo) && commitInfo.length > 0) {
+                                lastModified = new Date(commitInfo[0].commit.committer.date).getTime();
+
+                                if (
+                                    lastModified - new Date(data.date).getTime() <
+                                    24 * 60 * 60 * 1000
+                                ) {
+                                    lastModified = 0;
+                                }
+                            }
+                        } else {
+                            console.warn(`GitHub API returned non-JSON response for ${relativePath}`);
+                        }
                     }
+                } catch (error) {
+                    console.error(`Error fetching commit info for ${relativePath}:`, error);
+                    // Continue without lastModified date
                 }
 
-                return { ...data, body: content, lastModified, type: 'post'} as Post
+                return { ...data, body: content, lastModified, type: 'post' } as Post
             }),
     )
 
@@ -106,23 +118,20 @@ export async function getPost(slug: string) {
 }
 
 export const fetchPageViews = async () => {
-    let cursor = 0;
-    let keys: string[] = [];
-    let iterations = 0;
+    let cursor: string | number = 0;
+    const keysSet = new Set<string>();
 
-    while (true) {
-        const [nextCursor, batchKeys] = await redis.scan(cursor, { match: 'pageviews:posts:*', count: 100 });
-        keys = keys.concat(batchKeys);
+    do {
+        const reply = await redis.scan(cursor, { match: 'pageviews:posts:*', count: 100 });
+        const [nextCursor, batchKeys] = reply as [string | number, string[]];
+
+        // Add keys to Set to automatically deduplicate
+        batchKeys.forEach(key => keysSet.add(key));
+
         cursor = nextCursor;
+    } while (cursor !== 0 && cursor !== "0");
 
-        if (cursor === 0) {
-            break;
-        }
-        if (++iterations > 1000) {
-            console.error("iterations Breaking out of potential infinite loop in redis scan");
-            break;
-        }
-    }
+    const keys = Array.from(keysSet);
 
     if (keys.length === 0) return [];
 
@@ -132,7 +141,7 @@ export const fetchPageViews = async () => {
         const slug = key.split(':')[2];
         return {
             slug,
-            views: values[index]
+            views: values[index] || 0
         };
     });
 

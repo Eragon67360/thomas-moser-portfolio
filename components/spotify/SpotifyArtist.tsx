@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardFooter, Image, Link } from '@nextui-org/react';
+import { Button, Card, CardFooter, Image, Link } from "@heroui/react";
 
 export default function Artist(artist: any) {
 

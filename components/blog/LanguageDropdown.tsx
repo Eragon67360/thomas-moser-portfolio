@@ -1,6 +1,6 @@
 'use client'
 import React, { FC, useMemo, useState } from "react";
-import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@nextui-org/react";
+import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Button } from "@heroui/react";
 import { IoIosArrowDown } from "react-icons/io";
 import { Selection } from "@react-types/shared";
 import { useLanguageContext } from "./LanguageContext";
@@ -54,7 +54,7 @@ const LanguageDropdown: FC<LanguageDropdownProps> = ({ selectedLanguages, setSel
 export default LanguageDropdown;
 // "use client"
 // import React, { useState } from 'react';
-// import { Checkbox, Spacer } from '@nextui-org/react';
+// import { Checkbox, Spacer } from '@heroui/react';
 
 // interface LanguageDropdownProps {
 //   selectedLanguages: string[];

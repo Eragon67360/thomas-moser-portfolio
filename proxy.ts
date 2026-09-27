@@ -2,7 +2,7 @@ import { analytics } from '@/utils/analytics'
 import { NextRequest, NextResponse } from 'next/server'
 
 
-export default async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
     if (req.nextUrl.pathname === '/') {
         try {
             await analytics.track('pageview', {
@@ -18,6 +18,6 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next()
 }
 
-export const matcher = {
+export const config = {
     matcher: ['/'],
 }

@@ -1,4 +1,4 @@
-import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, useDisclosure, Modal } from '@nextui-org/react'
+import { Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, useDisclosure, Modal } from "@heroui/react"
 import profile from '@/public/json/personal_data.json'
 import React from 'react'
 import { FaWhatsapp } from 'react-icons/fa'

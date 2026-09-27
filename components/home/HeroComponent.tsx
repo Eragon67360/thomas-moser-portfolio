@@ -1,5 +1,5 @@
 'use client'
-import { Button, Modal, useDisclosure } from '@nextui-org/react'
+import { Button, Modal, useDisclosure } from "@heroui/react"
 import React from 'react'
 import ContactButton from '../ui/ContactButton'
 import { H1 } from '../ui/Typography'

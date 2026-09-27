@@ -3,7 +3,7 @@ import React from 'react'
 import { TopTracks } from '@/lib/types';
 import useSWR from 'swr';
 import TopTracksLoader from '../loaders/spotify/TopTracksLoader';
-import { Card, CardHeader, CardBody, CardFooter, Link, Divider, ScrollShadow } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Link, Divider, ScrollShadow } from "@heroui/react";
 import TopTrack from './TopTrack';
 import { Title, FooterText } from '../ui/Typography';
 

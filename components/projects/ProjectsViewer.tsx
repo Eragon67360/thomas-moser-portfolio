@@ -2,7 +2,7 @@
 import React from 'react'
 import musescore from '@/public/img/musescore.png';
 import Image from 'next/image';
-import { Card, CardBody } from '@nextui-org/react';
+import { Card, CardBody } from "@heroui/react";
 import { FaArrowRight } from "react-icons/fa";
 import Link from 'next/link';
 import projects from '@/public/json/projects.json'

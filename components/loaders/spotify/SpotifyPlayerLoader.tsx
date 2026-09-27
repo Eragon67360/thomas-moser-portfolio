@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardBody, CardHeader, Divider, Skeleton } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Divider, Skeleton } from "@heroui/react"
 import SpotifyLogo from '@/components/spotify/SpotifyLogo'
 
 const SpotifyPlayerLoader = () => {

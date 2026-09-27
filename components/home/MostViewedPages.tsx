@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { redis } from '@/lib/redis';
 import Post from './Post';
 import { fetchPageViews } from '@/lib/get-posts';
 

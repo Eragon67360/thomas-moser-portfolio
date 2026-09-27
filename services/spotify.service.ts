@@ -1,5 +1,3 @@
-import querystring from 'querystring';
-
 if (!process.env.NEXT_SPOTIFY_CLIENT_ID) {
   throw new Error("Missing NEXT_SPOTIFY_CLIENT_ID");
 }
@@ -24,16 +22,18 @@ const CURRENTLY_PLAYING_URL = `https://api.spotify.com/v1/me/player/currently-pl
 
 const getAccessToken = async () => {
   try {
+    const params = new URLSearchParams({
+      grant_type: 'refresh_token',
+      refresh_token: refresh_token || '',
+    });
+
     const response = await fetch(TOKEN_ENDPOINT, {
       method: 'POST',
       headers: {
         Authorization: `Basic ${basic}`,
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: querystring.stringify({
-        grant_type: 'refresh_token',
-        refresh_token,
-      }),
+      body: params.toString(),
     });
 
     const data = await response.json();

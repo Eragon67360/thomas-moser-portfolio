@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Progress } from '@nextui-org/react';
+import { Progress } from "@heroui/react";
 import InteractiveImage from './InteractiveImage';
 
 const LoadingScreen = () => {

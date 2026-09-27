@@ -4,7 +4,7 @@ import { TopArtists } from '@/lib/types';
 import useSWR from 'swr';
 import TopArtistsLoader from '../loaders/spotify/TopArtistsLoader';
 import Artist from './SpotifyArtist';
-import { Card, CardHeader, CardBody, CardFooter, Link, Divider, ScrollShadow } from '@nextui-org/react';
+import { Card, CardHeader, CardBody, CardFooter, Link, Divider, ScrollShadow } from "@heroui/react";
 import { Title, FooterText } from '../ui/Typography';
 
 const SpotifyTopArtists = () => {

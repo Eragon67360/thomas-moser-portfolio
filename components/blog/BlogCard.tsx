@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardBody, CardFooter, CardHeader, Divider } from '@nextui-org/react'
+import { Card, CardBody, CardFooter, CardHeader, Divider } from "@heroui/react"
 import Link from 'next/link';
 const BlogCard = (props: { post: any; }) => {
     const { post } = props;

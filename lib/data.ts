@@ -51,7 +51,6 @@ export const dataFooter = [
         menu: 'Extra',
         content: [
             { name: 'Resume', href: '/pdf/CV_Thomas_MOSER.pdf', target: '_blank' },
-            { name: 'Analytics', href: '/analytics', target: '_self' },
             { name: 'Source Code', href: profile.Repository, target: '_blank' },
 
         ],

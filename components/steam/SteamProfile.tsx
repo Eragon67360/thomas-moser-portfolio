@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardHeader, CardBody, CardFooter, Avatar, Button, Link } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Avatar, Button, Link } from "@heroui/react";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { analytics } from '@/utils/analytics'
-import { Card } from '@nextui-org/react'
+import { Card } from "@heroui/react"
 import { BarChart } from '@tremor/react'
 import { ArrowDownRight, ArrowRight, ArrowUpRight } from 'lucide-react'
 import ReactCountryFlag from 'react-country-flag'

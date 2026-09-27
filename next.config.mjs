@@ -1,16 +1,9 @@
 import createMDX from '@next/mdx'
-import { fileURLToPath } from 'url';
-import path from 'path';
-const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
-const __dirname = path.dirname(__filename); // get the name of the directory
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   reactStrictMode: false,
-  serverRuntimeConfig: {
-    PROJECT_ROOT: __dirname
-  },
   images: {
     remotePatterns: [
       {

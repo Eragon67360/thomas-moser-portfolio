@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardHeader, Divider, CardBody, CardFooter, Skeleton } from '@nextui-org/react'
+import { Card, CardHeader, Divider, CardBody, CardFooter, Skeleton } from "@heroui/react"
 
 const TopArtistsLoader = () => {
     return (

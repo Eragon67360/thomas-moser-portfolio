@@ -4,7 +4,7 @@ import React from 'react'
 import useSWR from 'swr';
 import SpotifyPlayerLoader from '../loaders/spotify/SpotifyPlayerLoader';
 import SpotifyLogo from './SpotifyLogo';
-import { Card, CardBody, CardHeader, Divider, Image, Link } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Divider, Image, Link } from "@heroui/react";
 import PlayingAnimation from './PlayingAnimation';
 import { ArtistText, TrackText, Title } from '../ui/Typography';
 
