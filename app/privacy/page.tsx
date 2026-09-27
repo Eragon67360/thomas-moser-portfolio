@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { SectionTitle } from "@/components/ui/Typography";
+import { pageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+// The policy text is still to be written: keep this page out of search results until then.
+export const metadata: Metadata = pageMetadata({
   title: "Privacy policy",
-  alternates: { canonical: "/privacy" },
-};
+  description: "Privacy policy of thomasmoserdev.com.",
+  path: "/privacy",
+  noindex: true,
+});
 
 export default function PrivacyPage() {
-  return <SectionTitle>Privacy policy</SectionTitle>;
+  return <SectionTitle as="h1">Privacy policy</SectionTitle>;
 }

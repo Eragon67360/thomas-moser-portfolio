@@ -18,13 +18,13 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Script           | Purpose                                                    |
-| ---------------- | ---------------------------------------------------------- |
-| `npm run dev`    | Development server                                         |
-| `npm run build`  | Production build, then sitemap generation (`next-sitemap`) |
-| `npm start`      | Serve the production build                                 |
-| `npm run check`  | Type-check, lint, format check and dead-code check         |
-| `npm run format` | Format the codebase with oxfmt                             |
+| Script           | Purpose                                            |
+| ---------------- | -------------------------------------------------- |
+| `npm run dev`    | Development server                                 |
+| `npm run build`  | Production build                                   |
+| `npm start`      | Serve the production build                         |
+| `npm run check`  | Type-check, lint, format check and dead-code check |
+| `npm run format` | Format the codebase with oxfmt                     |
 
 ## Writing a post
 
@@ -35,7 +35,9 @@ Add an `.mdx` file to `content/articles` with frontmatter:
 title: My post
 description: One-line summary
 slug: my-post
-date: Apr 29, 2024
+date: 2024-04-29 # ISO; add `updated: YYYY-MM-DD` after a substantial revision
+lang: en # or fr
+translation: fr-my-post # optional: slug of the same post in the other language
 tags: ["nextjs"]
 ---
 ```

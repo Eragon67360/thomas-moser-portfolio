@@ -4,21 +4,38 @@ import path from "node:path";
 import { cache } from "react";
 import matter from "gray-matter";
 import { getAllPostViews } from "@/services/views.service";
-import type { Post, PostWithViews } from "@/types/post";
+import type { Post, PostMeta, PostWithViews } from "@/types/post";
 
 const ARTICLES_DIR = path.join(process.cwd(), "content", "articles");
+
+/** YAML turns an unquoted `2024-04-29` into a Date; accept that or an ISO string. */
+function isoDate(file: string, field: string, value: unknown): string | undefined {
+  if (value === undefined) return undefined;
+  const iso = value instanceof Date ? value.toISOString().slice(0, 10) : value;
+  if (typeof iso !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) {
+    throw new Error(`${file}: frontmatter "${field}" must be a YYYY-MM-DD date`);
+  }
+  return iso;
+}
 
 function parseFrontmatter(file: string, data: Record<string, unknown>): Omit<Post, "body"> | null {
   if (data.published === false) return null;
 
-  const { slug, title, description, date, tags, duration } = data;
-  if (typeof slug !== "string" || typeof title !== "string" || typeof date !== "string") {
+  const { slug, title, description, tags, duration, lang, translation } = data;
+  const date = isoDate(file, "date", data.date);
+  if (typeof slug !== "string" || typeof title !== "string" || !date) {
     throw new Error(`${file}: frontmatter requires string "slug", "title" and "date"`);
+  }
+  if (lang !== undefined && lang !== "en" && lang !== "fr") {
+    throw new Error(`${file}: frontmatter "lang" must be "en" or "fr"`);
   }
   return {
     slug,
     title,
     date,
+    updated: isoDate(file, "updated", data.updated),
+    lang: lang ?? "en",
+    translation: typeof translation === "string" ? translation : undefined,
     description: typeof description === "string" ? description : "",
     tags: Array.isArray(tags) ? tags.map(String) : [],
     duration: typeof duration === "number" ? duration : undefined,
@@ -37,13 +54,24 @@ export const getPosts = cache(async (): Promise<Post[]> => {
     }),
   );
 
+  // Newest first; on the same day the English original comes before its translation.
   return posts
     .filter((post): post is Post => post !== null)
-    .toSorted((a, b) => Date.parse(b.date) - Date.parse(a.date));
+    .toSorted((a, b) => b.date.localeCompare(a.date) || Number(b.lang === "en") - Number(a.lang === "en"));
 });
 
 export async function getPost(slug: string): Promise<Post | undefined> {
   return (await getPosts()).find((post) => post.slug === slug);
+}
+
+/** The same article in the other language, if it exists and is published. */
+export async function getTranslation(post: PostMeta): Promise<Post | undefined> {
+  return post.translation ? getPost(post.translation) : undefined;
+}
+
+/** Posts without their bodies, newest first; all of them unless `limit` is given. */
+export async function getPostSummaries(limit?: number): Promise<PostMeta[]> {
+  return (await getPosts()).slice(0, limit).map(({ body: _body, ...meta }) => meta);
 }
 
 /** Posts that have recorded views, most viewed first. */

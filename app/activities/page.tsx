@@ -4,16 +4,18 @@ import { TopArtists } from "@/components/deezer/TopArtists";
 import { TopTracks } from "@/components/deezer/TopTracks";
 import { SteamActivity } from "@/components/steam/SteamActivity";
 import { SectionTitle } from "@/components/ui/Typography";
+import { pageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Activities",
-  description: "What I do beside programming.",
-  alternates: { canonical: "/activities" },
-};
+  description: "What Thomas Moser does besides programming: recent Steam games and Deezer listening.",
+  path: "/activities",
+});
 
 export default function ActivitiesPage() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-8 p-8">
+      <h1 className="sr-only">Activities</h1>
       <SectionTitle>Steam profile and games</SectionTitle>
       <SteamActivity />
 
