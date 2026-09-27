@@ -1,0 +1,112 @@
+<!doctype html>
+<!-- Cristina Andrés portfolio hover loop (8s, 1280x800). Real captures from cristinadesigns.vercel.app; see capture.mjs. -->
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../kit/base.css" />
+<style>
+  /* Site colours: the Aqualung slide's deep blue and the title hover pink. */
+  :root { --blue: rgb(0, 34, 96); --pink: #ff73f9; }
+  .wipe { position: absolute; top: 0; bottom: 0; width: 1500px; left: -1500px; z-index: 30;
+    background: var(--blue); box-shadow: 18px 0 0 var(--pink); }
+  #caseWin { position: absolute; overflow: hidden; border-radius: 8px; }
+  /* The site's modal backdrop (bg-black/90), dipped in before the window and out after it. */
+  #dim { background: #000; opacity: 0; }
+  #caseCol { position: absolute; left: 0; top: 0; width: 1100px; }
+  .piece { position: absolute; width: 1280px; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="layer" id="home">
+    <img class="shot" src="captures/home.png" />
+    <img class="shot" id="homeHover" src="captures/home-hover.png" />
+  </div>
+  <div class="layer" id="dim"></div>
+  <div class="layer" id="modal">
+    <img class="shot" src="captures/modal.png" />
+    <div id="caseWin"><div id="caseCol"></div></div>
+    <img class="shot" id="closeHover" src="captures/modal-close-hover.png" />
+  </div>
+  <div class="layer" id="next">
+    <img class="shot nx" src="captures/next-0.png" /><img class="shot nx" src="captures/next-1.png" />
+    <img class="shot nx" src="captures/next-2.png" /><img class="shot nx" src="captures/next-3.png" />
+    <img class="shot nx" src="captures/next-4.png" /><img class="shot nx" src="captures/next-5.png" />
+    <img class="shot nx" src="captures/next-6.png" /><img class="shot nx" src="captures/next-7.png" />
+    <img class="shot nx" src="captures/next-8.png" /><img class="shot nx" src="captures/next-9.png" />
+    <img class="shot nx" src="captures/next.png" />
+  </div>
+  <div class="wipe" id="wipe"></div>
+  <div class="hv-cursor" id="cursor"></div>
+</div>
+<script src="../../kit/engine.js"></script>
+<script src="captures/layout.js"></script>
+<script>
+  const { tw, seg, keys, ease } = HV;
+  const L = window.LAYOUT;
+  const $ = (id) => document.getElementById(id);
+  const center = (b) => [b.x + b.w / 2, b.y + b.h / 2];
+
+  // Tile the case-study scroll captures back into one column: each covers content [s, s + 720].
+  const M = L.modal, C = L.close;
+  const inset = (b, pad = 0) => `inset(${b.y - pad}px ${1280 - b.x - b.w - pad}px ${800 - b.y - b.h - pad}px ${b.x - pad}px)`;
+  Object.assign($("caseWin").style, { left: `${M.x}px`, top: `${M.y}px`, width: `${M.w}px`, height: `${M.h}px` });
+  $("closeHover").style.clipPath = inset(C, 2);
+  $("modal").style.transformOrigin = `${M.x + M.w / 2}px ${M.y + M.h / 2}px`;
+  const col = $("caseCol");
+  for (const s of L.pieces) {
+    const img = document.createElement("img");
+    img.className = "piece";
+    img.src = `captures/case-${s}.png`;
+    img.style.top = `${s - M.y}px`;
+    img.style.left = `${-M.x}px`;
+    img.style.clipPath = inset(M);
+    col.appendChild(img);
+  }
+  // The live case study ends in a broken image below content 1820px, so stop scrolling before it.
+  const MAX_SCROLL = 1080;
+
+  const [tx, ty] = [center(L.title)[0] + 40, center(L.title)[1] + 8];
+  const [cx, cy] = center(L.close);
+  const HOVER = 0.85, CLICK_TITLE = 1.15, OPEN = 1.2, HOVER_CLOSE = 4.35, CLICK_CLOSE = 4.6, WHEEL = 5.15;
+  const moveCursor = HV.cursor($("cursor"), [
+    [0.3, 930, 700], [HOVER, tx, ty], [CLICK_TITLE, tx, ty],
+    [1.6, 1080, 620], [3.9, 1090, 560], [HOVER_CLOSE, cx + 2, cy + 2], [CLICK_CLOSE, cx + 2, cy + 2],
+    [5.0, 1000, 640], [6.2, 1000, 640],
+  ], [CLICK_TITLE, CLICK_CLOSE]);
+
+  const wipeX = (t, start, mid, end) =>
+    t < start || t > end ? -1600 : t < mid ? tw(t, start, mid, -1600, -110, ease.in) : tw(t, mid, end, -110, 1300, ease.out);
+
+  window.DURATION = 8;
+  window.renderAt = (t) => {
+    const WIPE_MID = 6.95;
+    // Home (Aqualung slide): title turns pink under the cursor, then the case study opens over it.
+    $("homeHover").style.opacity = t < CLICK_CLOSE ? seg(t, HOVER - 0.08, HOVER + 0.08) : 0;
+    $("home").style.opacity = t < WHEEL || t >= WIPE_MID ? 1 : 0;
+
+    // Case study modal: fades in, scrolls through the Aqualung work, closes from the X button.
+    // Staged, never a crossfade of two busy layouts: dim the slide to the backdrop, then bring the
+    // window in; on close, the window goes first and the backdrop lifts after it.
+    const dim = t < 3 ? seg(t, OPEN - 0.02, OPEN + 0.14, ease.out) : 1 - seg(t, CLICK_CLOSE + 0.2, CLICK_CLOSE + 0.36);
+    $("dim").style.opacity = 0.9 * dim;
+    const mo = t < 3 ? seg(t, OPEN + 0.14, OPEN + 0.36, ease.out) : 1 - seg(t, CLICK_CLOSE + 0.04, CLICK_CLOSE + 0.2, ease.in);
+    $("modal").style.opacity = mo;
+    $("modal").style.transform = `scale(${0.96 + 0.04 * mo})`;
+    const scroll = tw(t, 1.75, 4.15, 0, MAX_SCROLL);
+    col.style.transform = `translateY(${-scroll}px)`;
+    $("closeHover").style.opacity = seg(t, HOVER_CLOSE - 0.05, HOVER_CLOSE + 0.05);
+
+    // Carousel: one wheel step to the next project; the recorded burst of real frames, then the settled slide.
+    const nx = document.querySelectorAll(".nx");
+    const idx = Math.min(nx.length - 1, Math.floor((t - WHEEL) / 0.09));
+    nx.forEach((img, i) => (img.style.opacity = i === idx ? 1 : 0));
+    $("next").style.opacity = t >= WHEEL && t < WIPE_MID ? 1 : 0;
+
+    // Deep-blue wipe back to the Aqualung slide (frame 0).
+    $("wipe").style.transform = `translateX(${wipeX(t, 6.6, WIPE_MID, 7.35) + 1500}px)`;
+    moveCursor(t);
+  };
+</script>
+</body>
+</html>
