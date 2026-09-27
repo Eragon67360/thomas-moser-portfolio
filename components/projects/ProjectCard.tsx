@@ -59,14 +59,14 @@ export function ProjectCard({ project }: { project: Project }) {
           }`}
         >
           <div className="flex items-center justify-between gap-4">
-            <h3 className="relative overflow-hidden text-lg font-bold md:text-xl">
+            <h2 className="relative overflow-hidden text-lg font-bold md:text-xl">
               <span className="absolute w-full transition-transform duration-300 ease-linear group-hover:-translate-y-full">
                 {project.title}
               </span>
               <span className="block w-full translate-y-full transition-transform duration-300 ease-linear group-hover:translate-y-0">
                 {project.title}
               </span>
-            </h3>
+            </h2>
             {primaryLink && (
               <ExternalLink href={primaryLink} aria-label={`Open ${project.title}`}>
                 <FaArrowRight className="transition-all duration-500 group-hover:-rotate-45" aria-hidden />
