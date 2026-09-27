@@ -16,6 +16,7 @@ export const projects: Project[] = [
     period: { start: "2026-04" },
     links: { live: "https://www.laminutecine.fr" },
     screenshot: "v2/la-minute-cine",
+    video: "/videos/projects/la-minute-cine.mp4",
     featured: true,
   },
   {
@@ -38,6 +39,7 @@ export const projects: Project[] = [
     period: { start: "2026-02" },
     links: { live: "https://nous-deux-website.vercel.app", repo: "https://github.com/Eragon67360/nous-deux" },
     screenshot: "v2/nous-deux",
+    video: "/videos/projects/nous-deux.mp4",
   },
   {
     slug: "le-bon-temperament",
@@ -52,6 +54,7 @@ export const projects: Project[] = [
       repo: "https://github.com/Eragon67360/lebontemperament_turbo",
     },
     screenshot: "v2/lebontemperament",
+    video: "/videos/projects/le-bon-temperament.mp4",
   },
   {
     slug: "habit-forge",
@@ -62,6 +65,7 @@ export const projects: Project[] = [
     period: { start: "2025-06" },
     links: { live: "https://habit-forge-web.vercel.app", repo: "https://github.com/Eragon67360/habit-forge" },
     screenshot: "v2/habit-forge",
+    video: "/videos/projects/habit-forge.mp4",
   },
   {
     slug: "taylors-secret-garden",
@@ -75,6 +79,7 @@ export const projects: Project[] = [
       repo: "https://github.com/Eragon67360/taylorssecretgarden",
     },
     screenshot: "v2/taylorssecretgarden",
+    video: "/videos/projects/taylors-secret-garden.mp4",
   },
   {
     slug: "url-shortener",
@@ -88,6 +93,7 @@ export const projects: Project[] = [
       repo: "https://github.com/Eragon67360/urlshortener",
     },
     screenshot: "v2/urlshortener",
+    video: "/videos/projects/url-shortener.mp4",
   },
   {
     slug: "designer-portfolio",
@@ -97,6 +103,7 @@ export const projects: Project[] = [
     credits: { designedBy: [CRISTINA], developedBy: [ME] },
     links: { live: "https://cristinadesigns.vercel.app" },
     screenshot: "v2/cristina-designs",
+    video: "/videos/projects/designer-portfolio.mp4",
   },
   {
     slug: "curefab",
@@ -108,6 +115,7 @@ export const projects: Project[] = [
     period: { start: "2023-10", end: "2024-02" },
     links: { live: "https://www.curefab.com" },
     screenshot: "v2/curefab",
+    video: "/videos/projects/curefab.mp4",
   },
   {
     slug: "moca",
@@ -119,6 +127,7 @@ export const projects: Project[] = [
     period: { start: "2023-09", end: "2023-12" },
     links: { live: "https://moca-portfolio.vercel.app", repo: "https://github.com/Eragon67360/moca-portfolio" },
     screenshot: "v2/moca",
+    video: "/videos/projects/moca.mp4",
   },
   {
     slug: "openai-clone",
@@ -129,6 +138,7 @@ export const projects: Project[] = [
     period: { start: "2023-01" },
     links: { repo: "https://github.com/Eragon67360/chatgpt_v2" },
     screenshot: "chatgptv2",
+    video: "/videos/projects/openai-clone.mp4",
   },
   {
     slug: "stopviolence",
@@ -139,6 +149,7 @@ export const projects: Project[] = [
     credits: { designedBy: [CRISTINA], developedBy: [ME, "Ronan Riboulet"] },
     links: { repo: "https://github.com/Eragon67360/stop-violence" },
     screenshot: "stopviolence",
+    video: "/videos/projects/stopviolence.mp4",
   },
   {
     slug: "musescore",
@@ -148,5 +159,6 @@ export const projects: Project[] = [
     credits: { developedBy: [ME] },
     links: { live: "https://musescore.com/thomas_moser" },
     screenshot: "musescore",
+    video: "/videos/projects/musescore.mp4",
   },
 ];

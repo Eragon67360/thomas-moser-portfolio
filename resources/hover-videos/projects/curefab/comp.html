@@ -1,0 +1,76 @@
+<!doctype html>
+<!-- Curefab hover loop (8s, 1280x800). Real captures from www.curefab.com; see capture.mjs. -->
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../kit/base.css" />
+<style>
+  /* Site colours: the teal of the "Bring your ideas to life" band and the black top bar. */
+  :root { --teal: rgb(33, 183, 144); --black: #000; }
+  .wipe { position: absolute; top: 0; bottom: 0; width: 1500px; left: -1500px; z-index: 30;
+    background: var(--teal); box-shadow: 18px 0 0 var(--black); }
+  .layer { background: #fff; }
+  /* Keep the cursor under the brand wipes. */
+  .hv-cursor { z-index: 20; } .hv-click { z-index: 19; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="layer" id="home"><img class="shot" id="homeImg" src="captures/home-full.png" /></div>
+  <div class="layer" id="menu">
+    <img class="shot" id="mHover" src="captures/markets-hover.png" />
+    <img class="shot" id="mOpen" src="captures/markets-open.png" />
+    <img class="shot" id="mMed" src="captures/markets-medtech.png" />
+  </div>
+  <div class="layer" id="med"><img class="shot" id="medImg" src="captures/medtech-full.png" /></div>
+  <div class="wipe" id="wipe"></div>
+  <div class="hv-cursor" id="cursor"></div>
+</div>
+<script src="../../kit/engine.js"></script>
+<script src="captures/layout.js"></script>
+<script>
+  const { tw, seg, keys, ease } = HV;
+  const L = window.LAYOUT;
+  const $ = (id) => document.getElementById(id);
+  const center = (b) => [b.x + b.w / 2, b.y + b.h / 2];
+
+  const [mx, my] = center(L.markets);
+  const [dx, dy] = center(L.medtech);
+  const HOVER_M = 0.8, CLICK_M = 1.0, HOVER_D = 1.38, CLICK_D = 1.55;
+  const moveCursor = HV.cursor($("cursor"), [
+    [0.3, 760, 660], [HOVER_M + 0.05, mx, my + 4], [CLICK_M, mx, my + 4], [HOVER_D, dx, dy + 4], [1.75, dx, dy + 4],
+  ], [CLICK_M, CLICK_D]);
+
+  /** A teal panel with a black edge sweeping across, fully covering the frame at `mid`. */
+  const wipeX = (t, start, mid, end) =>
+    t < start || t > end ? -1600 : t < mid ? tw(t, start, mid, -1600, -110, ease.in) : tw(t, mid, end, -110, 1300, ease.out);
+  const W1 = [1.6, 1.9, 2.25], W2 = [4.3, 4.6, 4.95], W3 = [6.6, 6.9, 7.3];
+
+  window.DURATION = 8;
+  window.renderAt = (t) => {
+    const scene = t < W1[1] ? "menu" : t < W2[1] ? "med" : "home";
+    $("home").style.opacity = 1;
+    $("menu").style.opacity = scene === "menu" && t >= HOVER_M - 0.06 ? 1 : 0;
+    $("med").style.opacity = scene === "med" ? 1 : 0;
+
+    // Markets menu: hover, open, hover "Medtech" (real captured states, stacked by opacity).
+    $("mHover").style.opacity = 1;
+    $("mOpen").style.opacity = seg(t, CLICK_M + 0.04, CLICK_M + 0.14);
+    $("mMed").style.opacity = seg(t, HOVER_D - 0.05, HOVER_D + 0.05);
+    $("menu").style.opacity = scene === "menu" ? seg(t, HOVER_M - 0.06, HOVER_M + 0.06) : 0;
+
+    // Medtech page: land on the hero, glide down to the text and the imaging render.
+    $("medImg").style.transform = `translateY(${-tw(t, 2.1, 4.35, 0, 560)}px)`;
+
+    // Home: after the second wipe, glide through Lines of Business and the teal band;
+    // the last wipe returns to the top of the page (frame 0).
+    const hy = t < W2[1] ? 0 : t < W3[1] ? tw(t, W2[1], W3[1], 330, 820, ease.out) : 0;
+    $("homeImg").style.transform = `translateY(${-hy}px)`;
+
+    const w = t < 3 ? wipeX(t, ...W1) : t < 5.5 ? wipeX(t, ...W2) : wipeX(t, ...W3);
+    $("wipe").style.transform = `translateX(${w + 1500}px)`;
+    moveCursor(t);
+  };
+</script>
+</body>
+</html>

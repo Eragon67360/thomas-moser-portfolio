@@ -5,6 +5,7 @@ import { FiExternalLink } from "react-icons/fi";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import type { Project } from "@/types/project";
 import { formatPeriod } from "./format";
+import { HoverVideo } from "./HoverVideo";
 
 const SCREENSHOT_BASE =
   "https://res.cloudinary.com/dluezegi8/image/upload/v1715078393/images/upload/thomasmoserdev.com/projects";
@@ -19,14 +20,17 @@ function Screenshot({ project }: { project: Project }) {
   }
 
   return (
-    <Image
-      src={`${SCREENSHOT_BASE}/${project.screenshot}`}
-      alt={`Screenshot of ${project.title}`}
-      width={1440}
-      height={900}
-      sizes={project.featured ? "(min-width: 1024px) 60vw, 100vw" : "(min-width: 640px) 50vw, 100vw"}
-      className="aspect-16/10 w-full rounded-lg object-cover object-top"
-    />
+    <div className="relative">
+      <Image
+        src={`${SCREENSHOT_BASE}/${project.screenshot}`}
+        alt={`Screenshot of ${project.title}`}
+        width={1440}
+        height={900}
+        sizes={project.featured ? "(min-width: 1024px) 60vw, 100vw" : "(min-width: 640px) 50vw, 100vw"}
+        className="aspect-16/10 w-full rounded-lg object-cover object-top"
+      />
+      {project.video && <HoverVideo src={project.video} label={`Animated preview of ${project.title}`} />}
+    </div>
   );
 }
 
@@ -45,6 +49,7 @@ export function ProjectCard({ project }: { project: Project }) {
 
   return (
     <Card
+      data-project-card
       className={`group border border-transparent bg-[#ccdcff1f] p-2 hover:border-white/20 hover:bg-transparent ${
         project.featured ? "sm:col-span-2" : ""
       }`}

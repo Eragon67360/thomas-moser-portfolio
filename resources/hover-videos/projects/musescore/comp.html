@@ -1,0 +1,391 @@
+<!doctype html>
+<!-- MuseScore hover loop (8s, 1280x800). Starts and ends on the card screenshot (a real MuseScore Studio 4
+     session), then pushes into the page and plays the opening of Thomas's own arrangement, drawn from the
+     notes parsed out of "Dans les yeux d'Émilie.mscz" (see parse.mjs -> captures/score.js). -->
+<html>
+<head>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="../../kit/base.css" />
+<style>
+  @font-face { font-family: "Noto Music"; src: url("captures/fonts/NotoMusic.ttf"); }
+  @font-face { font-family: "Noto Serif"; font-weight: 400; src: url("captures/fonts/NotoSerif-400.ttf"); }
+  @font-face { font-family: "Noto Serif"; font-weight: 700; font-style: italic; src: url("captures/fonts/NotoSerif-700i.ttf"); }
+  #score { position: absolute; left: 0; top: 0; width: 1280px; height: 800px; }
+  #shotWrap { position: absolute; inset: 0; transform-origin: 0 0; }
+  #dip { position: absolute; inset: 0; background: #2d2d30; opacity: 0; }
+  #shot { position: absolute; left: 0; top: 0; width: 1486.49px; height: 800px; max-width: none; }
+  .ink { fill: #111; }
+  .serif { font-family: "Noto Serif", "DejaVu Serif", serif; fill: #111; }
+  .dyn { font-family: "Noto Serif", serif; font-weight: 700; font-style: italic; fill: #111; }
+  .mus { font-family: "Noto Music"; fill: #111; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <svg id="score" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"></svg>
+  <div id="shotWrap"><img id="shot" src="captures/card.png" /></div>
+  <div id="dip"></div>
+</div>
+<script src="../../kit/engine.js"></script>
+<script src="captures/score.js"></script>
+<script>
+const { tw, seg, keys, ease, clamp } = HV;
+const S = window.SCORE;
+const $ = (id) => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+
+// ---------------------------------------------------------------- world geometry
+// World = the video frame at t=0: the card screenshot (1100x592) covers 1280x800 like object-fit: cover,
+// object-position top (height-fit, centred horizontally). The drawn page sits exactly on the screenshot's
+// first page (image px 200.5..540.5, top 95), so both layers share one camera.
+const K = 800 / 592, SHOT_X = -(1100 * K - 1280) / 2;
+const PAGE_W = 1500;                                  // page units: 1 staff space (sp) = 10u, A4 = 150sp wide
+const PX0 = 200.5 * K + SHOT_X, PY0 = 95 * K, PK = (340 * K) / PAGE_W;   // world px per page unit
+const PAGE = "#fff", BLUE = "#1c7ee6", CANVAS = "#5a5a5d", UI = "#2d2d30";   // MS4: white paper on a grey canvas
+
+// ---------------------------------------------------------------- notation helpers
+/** Flat sign drawn as a path (the bowl sits on the note's line or space at y). */
+const flat = (x, y, parent) => {
+  el("path", { d: `M${x - 3} ${y - 17} L${x - 3} ${y + 5.5}`, stroke: "#111", "stroke-width": 1.7 }, parent);
+  el("path", { d: `M${x - 3} ${y + 5.5} C ${x + 3} ${y + 2} ${x + 8} ${y - 1} ${x + 6} ${y - 4} C ${x + 4} ${y - 7} ${x} ${y - 5} ${x - 3} ${y - 1.5}`, stroke: "#111", "stroke-width": 2.4, fill: "none" }, parent);
+};
+const el = (name, attrs, parent) => {
+  const e = document.createElementNS(NS, name);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  (parent ?? svg).appendChild(e);
+  return e;
+};
+const svg = $("score");
+const STEP = [3, 0, 4, 1, 5, 2, 6];                   // tpc line-of-fifths -> C=0..B=6
+const alterOf = (tpc) => Math.floor((tpc + 1) / 7) - 2;
+const stepOf = (tpc) => STEP[(((tpc + 1) % 7) + 7) % 7];
+const diatonic = (pitch, tpc) => { const a = alterOf(tpc); return (Math.floor((pitch - a) / 12) - 1) * 7 + stepOf(tpc); };
+// Key signature accidentals: diatonic numbers on a treble staff (bass is two octaves lower).
+const FLATS = [34, 37, 33, 36, 32, 35, 31], SHARPS = [38, 35, 39, 36, 33, 37, 34];
+const FLAT_ORDER = [6, 2, 5, 1, 4, 0, 3], SHARP_ORDER = [3, 0, 4, 1, 5, 2, 6];
+
+const MEASURES = 4;                                   // the opening shown on the first system
+const X0 = 385, X1 = 1350;                            // system left/right (page units)
+const TOP = 345, PITCH = 105;                         // first staff top, staff-to-staff (4sp + 6.5sp style)
+const parts = S.parts.map((p, i) => ({ ...p, top: TOP + i * PITCH, meas: S.staves[p.staffId].slice(0, MEASURES) }));
+const perc = (p) => p.clef === "PERC";
+const clefBase = (p) => (p.clef === "F" ? 18 : 30);   // diatonic number of the bottom line
+const yOf = (p, d) => p.top + 40 - (d - clefBase(p)) * 5;
+
+// ---------------------------------------------------------------- horizontal spacing
+// Common segments per measure (union of onsets across staves), widths grow with duration like engraving.
+const HEAD = 118;                                     // clef + key + time signature
+const segs = [];
+for (let m = 0; m < MEASURES; m++) {
+  const on = new Set();
+  for (const p of parts) for (const e of p.meas[m].events) if (e.type !== "measure") on.add(e.beat);
+  on.add(0);
+  const beats = [...on].sort((a, b) => a - b);
+  const ws = beats.map((b, i) => { const g = (beats[i + 1] ?? 4) - b; return 30 * (1 + Math.log2(g / 0.25) * 0.6); });
+  segs.push({ beats, ws, total: 18 + ws.reduce((a, b) => a + b, 0) });
+}
+const stretch = (X1 - X0 - HEAD) / segs.reduce((a, s) => a + s.total, 0);
+const layout = [];                                    // per measure: {x, w, pos: Map(beat -> x)}
+let cx = X0 + HEAD;
+for (const s of segs) {
+  const w = s.total * stretch, pos = new Map();
+  let x = cx + 18 * stretch;
+  s.beats.forEach((b, i) => { pos.set(b, x); x += s.ws[i] * stretch; });
+  layout.push({ x: cx, w, pos }); cx += w;
+}
+// Cursor x for a global beat: linear between segments (and on to the next measure's first segment).
+const cursorPts = [];
+layout.forEach((L, m) => L.pos.forEach((x, b) => cursorPts.push([m * 4 + b, x])));
+cursorPts.push([MEASURES * 4, X1 - 10]);
+const beatX = (gb) => keys(gb, cursorPts, ease.linear);
+
+// ---------------------------------------------------------------- page, title, staves
+el("rect", { x: -20000, y: -20000, width: 40000, height: 40000, fill: CANVAS });
+el("rect", { x: 0, y: 0, width: PAGE_W, height: 2700, fill: PAGE });
+const text = (x, y, str, cls, size, anchor = "middle", extra = {}, parent) => {
+  const t = el("text", { x, y, class: cls, "font-size": size, "text-anchor": anchor, ...extra }, parent); t.textContent = str; return t;
+};
+const M = S.meta;
+text(PAGE_W / 2, 208, M.workTitle, "serif", 56);
+text(PAGE_W / 2, 250, M.subtitle, "serif", 30);
+text(X1, 290, M.composer, "serif", 24, "end");
+text(150, 290, M.lyricist, "serif", 24, "start");
+
+const cursor = el("rect", { x: 0, y: TOP - 30, width: 16, height: 18 * PITCH + 70, fill: BLUE, opacity: 0.28, rx: 2 });
+const notes = [];                                     // {on, off, els} for playback highlighting
+
+for (const p of parts) {
+  const lines = p.lines === 1 ? [20] : [0, 10, 20, 30, 40];
+  for (const ly of lines) el("line", { x1: X0, x2: X1, y1: p.top + ly, y2: p.top + ly, stroke: "#111", "stroke-width": 1.3 });
+  text(X0 - 28, p.top + 28, p.name, "serif", 24, "end");
+  // Clef
+  if (perc(p)) {
+    const h = p.lines === 1 ? [10, 30] : [10, 30];
+    el("rect", { x: X0 + 14, y: p.top + h[0], width: 4, height: h[1] - h[0], class: "ink" });
+    el("rect", { x: X0 + 24, y: p.top + h[0], width: 4, height: h[1] - h[0], class: "ink" });
+  } else if (p.clef === "F") text(X0 + 10, p.top + 31, "\u{1D122}", "mus", 42, "start");
+  else text(X0 + 8, p.top + 46, "\u{1D11E}", "mus", 42, "start");
+  // Key signature
+  const key = p.meas[0].key;
+  if (key) {
+    const order = key < 0 ? FLATS : SHARPS;
+    for (let i = 0; i < Math.abs(key); i++) {
+      const d = order[i] - (p.clef === "F" ? 14 : 0);
+      if (key < 0) flat(X0 + 44 + i * 11, yOf(p, d));
+      else text(X0 + 44 + i * 11, yOf(p, d) + 7, "♯", "serif", 30, "middle");
+    }
+  }
+  // Time signature (4/4)
+  const ts = S.staves["1"][0].timeSig;
+  const tsx = X0 + 96, tsy = p.lines === 1 ? p.top : p.top;
+  text(tsx, tsy + 18, String(ts[0]), "serif", 27, "middle", { "font-weight": 700 });
+  text(tsx, tsy + 38, String(ts[1]), "serif", 27, "middle", { "font-weight": 700 });
+}
+
+// ---------------------------------------------------------------- barlines and brackets
+const spanEnd = (i) => { let j = i; while (parts[j].barLineSpan && j < parts.length - 1) j++; return j; };
+for (let i = 0; i < parts.length; ) {
+  const j = spanEnd(i);
+  const y1 = parts[i].top + (parts[i].lines === 1 ? 20 : 0), y2 = parts[j].top + (parts[j].lines === 1 ? 20 : 40);
+  const L = parts[i].lines === 1 && i === j;
+  for (const Lm of layout) el("line", { x1: Lm.x + Lm.w, x2: Lm.x + Lm.w, y1: L ? y1 - 10 : y1, y2: L ? y2 + 10 : y2, stroke: "#111", "stroke-width": 1.6 });
+  i = j + 1;
+}
+el("line", { x1: X0, x2: X0, y1: TOP, y2: parts.at(-1).top + 40, stroke: "#111", "stroke-width": 1.6 });
+parts.forEach((p, i) => {
+  if (!p.bracketSpan) return;
+  const y1 = p.top - 6, y2 = parts[i + p.bracketSpan - 1].top + 46, bx = X0 - 14;
+  el("rect", { x: bx, y: y1, width: 7, height: y2 - y1, class: "ink" });
+  el("path", { d: `M${bx} ${y1 + 1} q 10 -2 20 -12 q -6 9 -20 15 z`, class: "ink" });
+  el("path", { d: `M${bx} ${y2 - 1} q 10 2 20 12 q -6 -9 -20 -15 z`, class: "ink" });
+});
+
+// Tempo marking above the first staff (quarter note = 146).
+const tempo = S.staves["1"][0].tempo;
+{
+  const tx = layout[0].x + 10, ty = TOP - 26;
+  el("ellipse", { cx: tx, cy: ty, rx: 5.2, ry: 3.8, transform: `rotate(-20 ${tx} ${ty})`, class: "ink" });
+  el("rect", { x: tx + 4.1, y: ty - 26, width: 1.3, height: 26, class: "ink" });
+  text(tx + 12, ty + 3, `= ${tempo}`, "serif", 22, "start", { "font-weight": 700 });
+}
+
+// ---------------------------------------------------------------- notes, rests, beams, ties
+function notehead(g, x, y, type, head) {
+  if (head === "cross") {
+    return [el("path", { d: `M${x - 5} ${y - 5} L${x + 5} ${y + 5} M${x - 5} ${y + 5} L${x + 5} ${y - 5}`, stroke: "#111", "stroke-width": 2.2, fill: "none" }, g)];
+  }
+  if (type === "whole") {
+    return [el("ellipse", { cx: x, cy: y, rx: 8, ry: 5.2, class: "ink" }, g),
+      el("ellipse", { cx: x, cy: y, rx: 3.6, ry: 3.2, transform: `rotate(-55 ${x} ${y})`, fill: PAGE }, g)];
+  }
+  const out = [el("ellipse", { cx: x, cy: y, rx: 6.4, ry: 4.6, transform: `rotate(-22 ${x} ${y})`, class: "ink" }, g)];
+  if (type === "half") out.push(el("ellipse", { cx: x, cy: y, rx: 4.8, ry: 1.9, transform: `rotate(-32 ${x} ${y})`, fill: PAGE }, g));
+  return out;
+}
+function rest(p, x, type, voice, g) {
+  const dy = voice === 0 ? 0 : 10, T = p.top;
+  if (type === "measure" || type === "whole") return el("rect", { x: x - 7, y: T + 10 + dy, width: 14, height: 5.5, class: "ink" }, g);
+  if (type === "half") return el("rect", { x: x - 7, y: T + 14.5 + dy, width: 14, height: 5.5, class: "ink" }, g);
+  const glyph = { quarter: "\u{1D13D}", eighth: "\u{1D13E}", "16th": "\u{1D13F}" }[type];
+  return text(x, T + 27 + dy, glyph, "mus", 40, "middle", {}, g);
+}
+const BEAMABLE = { eighth: 1, "16th": 2 };
+const ties = [];                                      // [part, fromX, y, measure index] resolved later
+const chordAt = new Map();                            // "staff:voice:globalBeat" -> drawn chord, for slurs
+
+parts.forEach((p) => {
+  const perStaffVoices = new Set(p.meas.flatMap((m) => m.events.map((e) => e.voice)));
+  const multiVoice = perStaffVoices.size > 1;
+  p.meas.forEach((m, mi) => {
+    const L = layout[mi];
+    const acc = {};                                   // accidentals already shown in this measure
+    const chords = [];
+    let lowInk = p.top + 40;                          // lowest ink in the bar, so dynamics clear it
+    for (const e of m.events) {
+      const x = e.type === "measure" ? L.x + L.w / 2 : L.pos.get(e.beat);
+      if (!e.notes) {
+        rest(p, e.type === "measure" ? x : x, e.type, multiVoice ? e.voice : 0);
+        continue;
+      }
+      const g = el("g", {});
+      const heads = [];
+      const ys = e.notes.map((n) => {
+        if (perc(p)) {
+          const dr = p.drums[n.pitch] ?? { line: 4, head: "normal" };
+          return { y: p.lines === 1 ? p.top + 20 : p.top + dr.line * 5, head: dr.head, n };
+        }
+        const wp = n.pitch - p.transposeChromatic, tpc = n.tpc2 ?? n.tpc;
+        const d = diatonic(wp, tpc), a = alterOf(tpc);
+        // Accidental needed if it differs from the key (or an earlier accidental in the bar).
+        const keyAlter = (() => { const k = m.key ?? 0, s = stepOf(tpc);
+          if (k < 0) return FLAT_ORDER.slice(0, -k).includes(s) ? -1 : 0;
+          if (k > 0) return SHARP_ORDER.slice(0, k).includes(s) ? 1 : 0; return 0; })();
+        const cur = acc[d] ?? keyAlter;
+        const y = yOf(p, d);
+        if (a !== cur) {
+          if (a === -1) flat(x - 16, y, g);
+          else text(x - 16, y + 7, ["♭♭", "", "♮", "♯"][a + 2] ?? "", "serif", 30, "middle", {}, g);
+          acc[d] = a;
+        }
+        return { y, head: "normal", n, d };
+      });
+      for (const h of ys) {
+        heads.push(...notehead(g, x, h.y, e.type, h.head));
+        // Ledger lines
+        if (!perc(p) || p.lines === 5) {
+          for (let ly = p.top - 10; ly >= h.y - 2; ly -= 10) el("line", { x1: x - 11, x2: x + 11, y1: ly, y2: ly, stroke: "#111", "stroke-width": 1.5 }, g);
+          for (let ly = p.top + 50; ly <= h.y + 2; ly += 10) el("line", { x1: x - 11, x2: x + 11, y1: ly, y2: ly, stroke: "#111", "stroke-width": 1.5 }, g);
+        }
+        if (e.dots) el("circle", { cx: x + 13, cy: (h.y - p.top) % 10 === 0 ? h.y - 5 : h.y, r: 2.1, class: "ink" }, g);
+        if (h.n.tie) ties.push({ p, mi, x, y: h.y });
+        // Chord lines stored on the note: scoop (rising into it) and fall (dropping away after it).
+        if (h.n.chordLine === "scoop") el("path", { d: `M${x - 30} ${h.y + 15} Q ${x - 20} ${h.y + 12} ${x - 10} ${h.y + 2}`, stroke: "#111", "stroke-width": 1.8, fill: "none" }, g);
+        if (h.n.chordLine === "fall") el("path", { d: `M${x + 10} ${h.y + 2} Q ${x + 20} ${h.y + 4} ${x + 30} ${h.y + 15}`, stroke: "#111", "stroke-width": 1.8, fill: "none" }, g);
+      }
+      const top = Math.min(...ys.map((h) => h.y)), bot = Math.max(...ys.map((h) => h.y));
+      lowInk = Math.max(lowInk, bot + 6);
+      let up;
+      if (multiVoice) up = e.voice === 0;
+      else if (e.stem) up = e.stem === "up";
+      else if (perc(p) && p.lines === 1) up = false;
+      else up = (top + bot) / 2 > p.top + 20;
+      const ch = { e, x, up, top, bot, g, heads, p, inkTop: top - 5, inkBot: bot + 5 };
+      chordAt.set(`${p.staffId}:${e.voice}:${mi * 4 + e.beat}`, ch);
+      if (e.type !== "whole") chords.push(ch);
+      notes.push({ on: mi * 4 + e.beat, off: mi * 4 + e.beat + e.len, heads, g });
+      // Articulations (accent / marcato), placed on the side MuseScore stored.
+      for (const a of e.articulation ?? []) {
+        const above = /Above/.test(a);
+        const ay = above ? Math.min(top, p.top) - 14 : Math.max(bot, p.top + 40) + 14;
+        if (!above) lowInk = Math.max(lowInk, ay + 6);
+        if (/Accent/.test(a)) el("path", { d: `M${x - 8} ${ay - 5} L${x + 8} ${ay} L${x - 8} ${ay + 5}`, stroke: "#111", "stroke-width": 2, fill: "none" }, g);
+        else el("path", { d: `M${x - 6} ${ay + 6} L${x} ${ay - 7} L${x + 6} ${ay + 6}`, stroke: "#111", "stroke-width": 2.6, fill: "none" }, g);
+      }
+    }
+    // Beams: consecutive 8ths/16ths in one voice, within a beat (16ths) or a half bar (8ths).
+    const groups = [];
+    for (const c of chords) {
+      const last = groups.at(-1), prev = last?.at(-1);
+      const unit = c.e.type === "16th" ? 1 : 2;
+      const contiguous = prev && BEAMABLE[c.e.type] && BEAMABLE[prev.e.type] && prev.e.voice === c.e.voice &&
+        Math.abs(prev.e.beat + prev.e.len - c.e.beat) < 1e-6 && Math.floor(prev.e.beat / unit) === Math.floor(c.e.beat / unit);
+      if (contiguous) last.push(c); else groups.push([c]);
+    }
+    for (const gr of groups) {
+      const up = gr.length > 1 ? gr.filter((c) => c.up).length * 2 >= gr.length : gr[0].up;
+      const STEM = 35;
+      const endY = up ? Math.min(...gr.map((c) => c.top)) - STEM : Math.max(...gr.map((c) => c.bot)) + STEM;
+      for (const c of gr) {
+        const sx = up ? c.x + 5.6 : c.x - 5.6;
+        const y1 = up ? c.bot - 1 : c.top + 1;
+        const y2 = gr.length > 1 ? endY : up ? c.top - STEM : c.bot + STEM;
+        c.up = up;
+        if (up) c.inkTop = Math.min(c.inkTop, y2); else c.inkBot = Math.max(c.inkBot, y2);
+        c.heads.push(el("line", { x1: sx, x2: sx, y1, y2, stroke: "#111", "stroke-width": 1.4 }, c.g));
+        if (gr.length === 1 && BEAMABLE[c.e.type]) {
+          for (let f = 0; f < BEAMABLE[c.e.type]; f++) {
+            const fy = y2 + (up ? f * 8 : -f * 8), s = up ? 1 : -1;
+            c.heads.push(el("path", { d: `M${sx} ${fy} c 2 ${10 * s} 14 ${12 * s} 10 ${26 * s} c 0 ${-10 * s} -6 ${-15 * s} -10 ${-18 * s} z`, class: "ink" }, c.g));
+          }
+        }
+      }
+      if (gr.length > 1) {
+        const xa = (up ? gr[0].x + 5.6 : gr[0].x - 5.6) - 0.7, xb = (up ? gr.at(-1).x + 5.6 : gr.at(-1).x - 5.6) + 0.7;
+        const n = Math.min(...gr.map((c) => BEAMABLE[c.e.type]));
+        const beams = [];
+        for (let b = 0; b < n; b++) {
+          const by = up ? endY + b * 8 : endY - b * 8 - 5;
+          beams.push(el("rect", { x: xa, y: by, width: xb - xa, height: 5, class: "ink" }));
+        }
+        // Beams light up while any note of the group plays.
+        notes.push({ on: gr[0].e.beat + 4 * layout.indexOf(L), off: gr.at(-1).e.beat + gr.at(-1).e.len + 4 * layout.indexOf(L), heads: beams, beam: true });
+      }
+    }
+    // Dynamics under the staff.
+    for (const d of m.dynamics) {
+      const dx = L.pos.get(d.beat) ?? L.x + 20;
+      const dy = ((p.dynY ??= [])[mi] = Math.max(p.top + (p.lines === 1 ? 50 : 72), lowInk + 24));
+      (p.dynEls ??= []).push({ x: dx, el: text(dx - 6, dy, d.text, "dyn", 25, "start") });
+    }
+  });
+});
+// Ties: from a tied note to the next note of the same staff at the same height.
+for (const t of ties) {
+  const nextL = layout[t.mi + 1];
+  const x2 = nextL ? nextL.pos.get(0) : X1 - 4;
+  const below = t.y >= t.p.top + 20;              // opposite the stem: low notes (stem up) tie below
+  const s = below ? 1 : -1, y = t.y + s * 7, mx = (t.x + x2) / 2;
+  el("path", { d: `M${t.x + 7} ${y} Q ${mx} ${y + s * 16} ${x2 - 7} ${y} Q ${mx} ${y + s * 11} ${t.x + 7} ${y} z`, class: "ink" });
+}
+// Slurs and hairpins parsed from the score's spanners (bars 1-4 only).
+for (const p of parts) {
+  for (const sp of S.spanners[p.staffId] ?? []) {
+    if (sp.start >= MEASURES * 4) continue;
+    if (sp.type === "slur") {
+      const inSpan = [...chordAt.entries()].filter(([k]) => { const [sid, v, b] = k.split(":"); return sid === p.staffId && Number(v) === sp.voice && Number(b) >= sp.start && Number(b) <= sp.end; }).map(([, c]) => c);
+      if (inSpan.length < 2) continue;
+      const a = inSpan[0], b = inSpan.at(-1);
+      const below = inSpan.every((c) => c.up);            // all stems up: slur on the notehead side
+      const s = below ? 1 : -1;
+      const ya = (below ? a.bot : a.up ? a.inkTop : a.top) + s * 9, yb = (below ? b.bot : b.up ? b.inkTop : b.top) + s * 9;
+      const ext = below ? Math.max(...inSpan.map((c) => c.inkBot)) : Math.min(...inSpan.map((c) => c.inkTop));
+      const peak = below ? Math.max(ya, yb, ext + 6) + 14 : Math.min(ya, yb, ext - 6) - 14;
+      const xa = a.x + 2, xb = b.x - 2;
+      // Dynamics under a slur that runs below the notes move down to clear it.
+      if (below) for (const d of p.dynEls ?? []) if (d.x >= xa - 20 && d.x <= xb + 20) d.el.setAttribute("y", Math.max(Number(d.el.getAttribute("y")), peak + 24));
+      el("path", { d: `M${xa} ${ya} C ${xa + (xb - xa) * 0.2} ${peak} ${xb - (xb - xa) * 0.2} ${peak} ${xb} ${yb} C ${xb - (xb - xa) * 0.2} ${peak - s * 4} ${xa + (xb - xa) * 0.2} ${peak - s * 4} ${xa} ${ya} z`, class: "ink" });
+    } else if (sp.type === "hairpin") {
+      const m0 = Math.floor(sp.start / 4);
+      const xa = layout[m0].pos.get(sp.start - m0 * 4) + 34;
+      const xb = sp.end >= MEASURES * 4 ? X1 - 10 : (layout[Math.floor(sp.end / 4)].pos.get(sp.end % 4) ?? X1) - 22;
+      const y = (p.dynY?.[m0] ?? p.top + 72) - 7, h = 7;
+      // Diminuendo: open at the start, closed at the end (crescendo the reverse).
+      const [wa, wb] = sp.dim ? [h, 0] : [0, h];
+      el("path", { d: `M${xa} ${y - wa} L${xb} ${y - wb} M${xa} ${y + wa} L${xb} ${y + wb}`, stroke: "#111", "stroke-width": 1.6, fill: "none" });
+    }
+  }
+}
+svg.appendChild(cursor);                              // keep the cursor above the notation
+
+// ---------------------------------------------------------------- timeline
+// Camera: world point (cx, cy) at the frame centre, zoom s. World = video frame at t=0.
+const PUSH = 2.7;
+const PAGE_CX = PX0 + (PAGE_W / 2) * PK;
+const topCY = PY0 + 400 / PUSH - 12;                   // page top edge just under the frame top
+const lowCY = PY0 + (parts.at(-1).top + 95) * PK - 400 / PUSH;
+const PLAY = 1.3, BPM = tempo;
+const cam = (t) => {
+  // In: push from the full screenshot into its first page. Out: the reverse, landing exactly on t=0.
+  const s = keys(t, [[0.25, 1], [1.3, PUSH], [6.5, PUSH], [7.6, 1]], ease.inOut);
+  const cxv = keys(t, [[0.25, 640], [1.3, PAGE_CX], [6.5, PAGE_CX], [7.6, 640]], ease.inOut);
+  const cyv = keys(t, [[0.25, 400], [1.3, topCY], [2.1, topCY], [6.0, lowCY], [6.5, lowCY], [7.6, 400]], ease.inOut);
+  return { s, cx: cxv, cy: cyv };
+};
+
+window.DURATION = 8;
+window.renderAt = (t) => {
+  const { s, cx: ccx, cy: ccy } = cam(t);
+  // Screenshot layer: screen = (world - c) * s + centre.
+  $("shotWrap").style.transform = `translate(${640 - ccx * s}px, ${400 - ccy * s}px) scale(${s})`;
+  $("shot").style.left = `${SHOT_X}px`;
+  // Staggered switch: dip through MuseScore's dark UI colour, swap layers while covered, reveal.
+  // From 7.6s the camera is exactly the t=0 framing and holds, so the loop seam is invisible.
+  $("shotWrap").style.opacity = t < 0.95 || t >= 7.0 ? 1 : 0;
+  $("dip").style.opacity = t < 4 ? seg(t, 0.7, 0.93) * (1 - seg(t, 0.97, 1.25)) : seg(t, 6.72, 6.96) * (1 - seg(t, 7.03, 7.32));
+  // Score layer: same camera expressed as an SVG viewBox in page units (always vector-sharp).
+  const vx = (ccx - 640 / s - PX0) / PK, vy = (ccy - 400 / s - PY0) / PK;
+  svg.setAttribute("viewBox", `${vx} ${vy} ${1280 / s / PK} ${800 / s / PK}`);
+
+  // Playback at the score's own tempo (146 bpm), from bar 1.
+  const gb = Math.max(0, (t - PLAY) * BPM / 60);
+  const playing = t >= PLAY - 0.2 && t < 7.3;
+  cursor.setAttribute("x", beatX(Math.min(gb, MEASURES * 4)) - 8);
+  cursor.setAttribute("opacity", playing ? 0.3 * seg(t, PLAY - 0.2, PLAY) : 0);
+  for (const n of notes) {
+    const on = t >= PLAY && gb >= n.on - 1e-6 && gb < n.off;
+    for (const h of n.heads) if (h.getAttribute("fill") !== PAGE) h.style.fill = on ? BLUE : "", h.style.stroke = on && h.getAttribute("stroke") ? BLUE : "";
+  }
+};
+</script>
+</body>
+</html>
