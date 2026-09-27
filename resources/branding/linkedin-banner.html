@@ -1,0 +1,120 @@
+<!doctype html>
+<!--
+  Source of resources/branding/linkedin-banner.png (1584x396, LinkedIn's banner size).
+  The lower-left corner stays free: LinkedIn overlaps it with the profile photo.
+-->
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 1584px;
+        height: 396px;
+        overflow: hidden;
+      }
+      .banner {
+        position: relative;
+        width: 1584px;
+        height: 396px;
+        background:
+          radial-gradient(700px 420px at 12% 0%, rgba(255, 191, 0, 0.22), transparent 70%),
+          radial-gradient(900px 500px at 78% 120%, rgba(255, 191, 0, 0.12), transparent 70%),
+          radial-gradient(#322e15, #16181d 60%);
+        color: #fff;
+        font-family: Inter, system-ui, sans-serif;
+      }
+      .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+        background-size: 44px 44px;
+        mask-image: linear-gradient(90deg, transparent 5%, #000 45%, #000 100%);
+      }
+      .content {
+        position: absolute;
+        right: 96px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 900px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .kicker {
+        font: 700 20px/1 "JetBrains Mono", monospace;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #ffbf00;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .kicker::before {
+        content: "";
+        width: 44px;
+        height: 5px;
+        border-radius: 3px;
+        background: #ffbf00;
+      }
+      h1 {
+        margin: 0;
+        font: 800 54px/1.05 "JetBrains Mono", monospace;
+        white-space: nowrap;
+        letter-spacing: -1px;
+      }
+      .tagline {
+        font-size: 24px;
+        color: #c9ccd6;
+      }
+      .stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 26px;
+        font: 400 19px/1 "JetBrains Mono", monospace;
+        color: #e8e9ee;
+      }
+      .stack span {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .stack span::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #ffbf00;
+      }
+      .url {
+        position: absolute;
+        right: 96px;
+        bottom: 22px;
+        font: 400 18px/1 "JetBrains Mono", monospace;
+        color: #9da1ad;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="banner">
+      <div class="grid"></div>
+      <div class="content">
+        <div class="kicker">Full-Stack Developer</div>
+        <h1>Web &amp; mobile, end to end.</h1>
+        <div class="tagline">Software developer in the avenit group · Strasbourg ↔ Offenburg</div>
+        <div class="stack">
+          <span>TypeScript</span><span>Next.js</span><span>Vue.js</span><span>NestJS</span><span>Flutter</span
+          ><span>Swift</span>
+        </div>
+      </div>
+      <div class="url">thomasmoserdev.com</div>
+    </div>
+  </body>
+</html>

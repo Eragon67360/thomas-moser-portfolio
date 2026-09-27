@@ -37,7 +37,7 @@ app/            Routes only. Pages compose components; no data shaping, no fetch
 components/     UI grouped by feature (blog, deezer, steam, contact, layout, ui, ...).
                 Server Components by default; "use client" only on interactive leaves.
 config/         env.ts (server-only, lazy env access) and site.ts (site metadata, navigation).
-content/        Articles (MDX), profile.json, projects.json. Not publicly served.
+content/        Articles (MDX), profile.json, projects.ts, about.ts. Not publicly served.
 hooks/          Client hooks (useApi = typed SWR polling, useActiveHeading).
 lib/            Framework-level helpers: http boundary, redis client, mdx compiler, request info.
 services/       Server-only data access. Owns upstream API shapes; exposes DTOs from types/.
@@ -55,6 +55,12 @@ proxy.ts        Next.js 16 proxy: records home page views (non-blocking via wait
 - **Client components** fetch only through `useApi(path)`; show a skeleton while loading and a message on error.
 - Named exports for components; default exports only where Next.js requires them (pages, layouts, route config).
 - Keep `npm run check` green. Don't disable lint rules globally; a targeted `oxlint-disable-next-line` needs a `--` reason.
+
+## Content accuracy (projects and about)
+
+- `content/projects.ts` and `content/about.ts` describe a real person's work and career. Every fact must trace to his own answers, his CV, or his repositories; never add employers, dates, titles or claims from inference.
+- Project screenshots are 1440x900 captures uploaded to Cloudinary under `images/upload/thomasmoserdev.com/projects/v2/`; the `screenshot` field is the id relative to `projects/`. Omit it when no honest screenshot exists: the card renders a placeholder.
+- `config/site.ts` is bundled into client code, so `profile` lists only public fields.
 
 ## HeroUI v3 cheatsheet
 

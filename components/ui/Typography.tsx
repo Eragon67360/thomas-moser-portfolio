@@ -10,18 +10,31 @@ export function PageTitle({ children }: TextProps) {
   );
 }
 
-export function SectionTitle({ children }: TextProps) {
-  return <h2 className="text-center text-2xl font-bold transition-all md:text-4xl lg:text-5xl">{children}</h2>;
+type HeadingLevel = "h1" | "h2";
+
+export function SectionTitle({ children, as: Heading = "h2" }: TextProps & { as?: HeadingLevel }) {
+  return (
+    <Heading className="text-center text-2xl font-bold transition-all md:text-4xl lg:text-5xl">{children}</Heading>
+  );
 }
 
 function SectionSubtitle({ children }: TextProps) {
   return <p className="w-4/5 text-center text-base text-muted transition-all lg:text-lg xl:text-xl">{children}</p>;
 }
 
-export function SectionHeader({ title, subtitle }: { title: ReactNode; subtitle?: ReactNode }) {
+export function SectionHeader({
+  title,
+  subtitle,
+  as,
+}: {
+  title: ReactNode;
+  subtitle?: ReactNode;
+  /** Use "h1" when the header is the page's main heading. */
+  as?: HeadingLevel;
+}) {
   return (
-    <div className="flex flex-col items-center gap-3 md:gap-4 lg:gap-5 xl:gap-6">
-      <SectionTitle>{title}</SectionTitle>
+    <div className="flex w-full flex-col items-center gap-3 md:gap-4 lg:gap-5 xl:gap-6">
+      <SectionTitle as={as}>{title}</SectionTitle>
       {subtitle && <SectionSubtitle>{subtitle}</SectionSubtitle>}
     </div>
   );
