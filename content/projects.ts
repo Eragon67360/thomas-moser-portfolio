@@ -113,7 +113,7 @@ export const projects: Project[] = [
     slug: "moca",
     title: "MOCA",
     summary: "Multilingual website of MOCA, with booking, subscriptions and online payments.",
-    context: `My micro-enterprise with designer ${CRISTINA}`,
+    context: `My former micro-enterprise with designer ${CRISTINA}`,
     stack: ["Next.js", "Prisma", "Clerk", "Stripe", "next-intl"],
     credits: { developedBy: [ME] },
     period: { start: "2023-09", end: "2023-12" },

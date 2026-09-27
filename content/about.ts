@@ -15,18 +15,19 @@ export type TimelineEntry = {
 export const intro = {
   role: "Full-Stack Developer",
   paragraphs: [
-    "I'm Thomas Moser, a full-stack developer. Since September 2025 I've been a web developer at Vusyon, part of the avenit group, after previously working at avenit.",
+    "I'm Thomas Moser, a full-stack developer. Since July 2024 I've been a software developer in the avenit group: first at avenit, and since September 2025 at Vusyon, where I work on web development.",
     "I live in France, near Strasbourg, and work across the border in Offenburg, Germany.",
-    "Outside work I build and ship my own projects end to end: websites, admin dashboards, mobile apps and the occasional AI experiment. With designer Cristina Andrés I run a micro-enterprise, MOCA, and we have worked on several projects together.",
+    "Outside work I build and ship my own projects end to end: websites, admin dashboards, mobile apps and the occasional AI experiment. With designer Cristina Andrés I ran a micro-enterprise, MOCA, and we worked on several projects together.",
   ],
 };
 
 export const experience: TimelineEntry[] = [
   {
-    title: "Web Developer",
-    organization: "Vusyon (avenit group)",
+    title: "Software Developer (Softwareentwickler)",
+    organization: "avenit group",
     place: "Offenburg, Germany",
-    period: "Sep 2025 – present",
+    period: "Jul 2024 – present",
+    description: "Web development at Vusyon since September 2025; at avenit from July 2024 to August 2025.",
   },
   {
     title: "Web Developer",
@@ -91,6 +92,7 @@ export const stack: { group: string; items: string[] }[] = [
 ];
 
 export const languages = [
+  { name: "French", level: "Native" },
   { name: "German", level: "C2, spoken and written" },
   { name: "English", level: "C1, spoken and written" },
 ];
