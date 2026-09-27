@@ -12,6 +12,17 @@ export type TimelineEntry = {
   description?: string;
 };
 
+/** Current position, shown on /about and published as structured data. */
+export const currentRole = {
+  title: "Web Developer",
+  organization: "Vusyon",
+  group: "avenit group",
+  city: "Offenburg",
+  country: "Germany",
+};
+
+export const location = { home: "Near Strasbourg, France", work: "Offenburg, Germany" };
+
 export const intro = {
   role: "Full-Stack Developer",
   paragraphs: [

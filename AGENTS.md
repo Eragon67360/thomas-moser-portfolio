@@ -20,7 +20,7 @@ Guidance for AI agents and contributors working on this repository.
 
 ```bash
 npm run dev          # local dev server
-npm run build        # production build (+ next-sitemap postbuild)
+npm run build        # production build
 npm run check        # typecheck + lint + format check + knip — run before every commit
 npm run format       # apply formatting
 ```
@@ -61,6 +61,16 @@ proxy.ts        Next.js 16 proxy: records home page views (non-blocking via wait
 - `content/projects.ts` and `content/about.ts` describe a real person's work and career. Every fact must trace to his own answers, his CV, or his repositories; never add employers, dates, titles or claims from inference.
 - Project screenshots are 1440x900 captures uploaded to Cloudinary under `images/upload/thomasmoserdev.com/projects/v2/`; the `screenshot` field is the id relative to `projects/`. Omit it when no honest screenshot exists: the card renders a placeholder.
 - `config/site.ts` is bundled into client code, so `profile` lists only public fields.
+
+## SEO and GEO
+
+- **Canonical host is `https://www.thomasmoserdev.com`** (`site.url`); the apex 308-redirects to it. Every absolute URL goes through `absoluteUrl()` (`lib/seo/metadata.ts`).
+- **Page metadata**: use `pageMetadata({ title, description, path })`. A page's `openGraph`, `twitter` and `alternates` replace the layout's rather than merge, so the helper restates the shared fields (site name, default social card, RSS link).
+- `lib/seo/*` is the one part of `lib/` that reads `content/*` and `config/`: it turns site content into metadata, JSON-LD, `llms.txt` and social cards.
+- **Structured data** (`lib/seo/structured-data.ts`, rendered by `components/seo/JsonLd.tsx`): Person + WebSite on every page, ProfilePage on /about, CollectionPage on /projects, Blog on /blog, BlogPosting + BreadcrumbList on posts. Built from `content/*` only; the content-accuracy rule applies.
+- **Generated files**: `app/sitemap.ts`, `app/robots.ts`, `app/feed.xml` (RSS), `app/llms.txt` and the `opengraph-image` routes (`lib/seo/og-image.tsx`, fonts in `assets/fonts/`). Don't reintroduce `next-sitemap` or files in `public/` with these names: they would shadow the routes.
+- **Posts**: frontmatter `date`/`updated` are ISO `YYYY-MM-DD`; `lang` (`en` | `fr`) and `translation` (slug of the other language) drive hreflang, `lang` attributes and the "read in" link. Set `translation` on both posts of a pair.
+- AI crawlers mostly don't run JavaScript: keep anything worth citing in Server Components.
 
 ## HeroUI v3 cheatsheet
 
