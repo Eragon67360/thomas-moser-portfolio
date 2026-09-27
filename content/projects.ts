@@ -109,7 +109,7 @@ export const projects: Project[] = [
     slug: "curefab",
     title: "Curefab",
     summary: "Company website for Curefab Technologies in Munich, built on ConcreteCMS.",
-    context: "Client project",
+    context: "Client project, through MOCA",
     stack: ["PHP", "ConcreteCMS", "SCSS"],
     credits: { designedBy: [CRISTINA], developedBy: [ME] },
     period: { start: "2023-10", end: "2024-02" },
