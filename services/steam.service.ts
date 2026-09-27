@@ -50,10 +50,13 @@ export async function getPlayer(): Promise<SteamPlayer | null> {
 
 async function getHeaderImage(appId: number): Promise<string | null> {
   try {
-    const data = await steamGet<Record<string, { data?: { header_image?: string } }>>(
+    const data = await steamGet<Record<string, { data?: { steam_appid?: number; header_image?: string } }>>(
       `${STORE_URL}/appdetails?appids=${appId}`,
     );
-    return data[appId]?.data?.header_image ?? null;
+    // The store may key the response by a different id than requested (e.g. a
+    // bundle id), so match on the app id inside the payload.
+    const details = Object.values(data).find((entry) => entry.data?.steam_appid === appId);
+    return details?.data?.header_image ?? null;
   } catch {
     return null;
   }
