@@ -70,15 +70,15 @@ export const projects: Project[] = [
   {
     slug: "taylors-secret-garden",
     title: "Taylor's Secret Garden",
-    summary: "Taylor Swift fan community with a forum, albums and tours.",
-    stack: ["Next.js", "NextUI", "Clerk", "Supabase", "Deezer API"],
+    summary: "Taylor Swift fan scrapbook: every Era's albums with 30-second previews, the tours, and Swiftter, a fan feed.",
+    stack: ["Next.js", "Tailwind CSS", "Neon Postgres", "Neon Auth", "Drizzle", "Deezer API"],
     credits: { developedBy: [ME] },
     period: { start: "2024-06" },
     links: {
       live: "https://taylorssecretgarden.vercel.app",
       repo: "https://github.com/Eragon67360/taylorssecretgarden",
     },
-    screenshot: "v2/taylorssecretgarden",
+    screenshot: "v2/taylorssecretgarden-2026",
     video: "/videos/projects/taylors-secret-garden.mp4",
   },
   {
