@@ -75,7 +75,7 @@ export const projects: Project[] = [
     credits: { developedBy: [ME] },
     period: { start: "2024-06" },
     links: {
-      live: "https://taylorssecretgarden.vercel.app",
+      live: "https://www.taylorssecretgarden.com",
       repo: "https://github.com/Eragon67360/taylorssecretgarden",
     },
     screenshot: "v2/taylorssecretgarden-2026",
