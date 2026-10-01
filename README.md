@@ -43,7 +43,7 @@ tags: ["nextjs"]
 ---
 ```
 
-Set `published: false` to hide a draft. Articles can use `<AdBanner />`.
+Set `published: false` to hide a draft.
 
 ## Project structure
 

@@ -13,7 +13,7 @@ A personal portfolio has little data, but it is **public**, about a real person,
 - Never print, echo, paste or quote a secret. Read only what you need **inside** a process (`node --env-file=.env.local -e '…'`) and print harmless facts (a hostname, a length, a boolean).
 - Never `source .env.local` or `set -a`: values with `&` or spaces break the shell and end up printed.
 - Vercel variables: list **names and targets only** (`vercel env ls` or the API without decrypting). Values are the owner's to set; give him exact steps.
-- `NEXT_PUBLIC_*` ships to every browser: only genuinely public values (AdSense client id, Giscus ids) may use it. Secrets go through `env.*()` in `config/env.ts`.
+- `NEXT_PUBLIC_*` ships to every browser: only genuinely public values (the Giscus ids) may use it. Secrets go through `env.*()` in `config/env.ts`.
 - Tokens, links or passwords the owner pastes while testing are **not** test data.
 
 ## What writes where
@@ -36,6 +36,6 @@ A personal portfolio has little data, but it is **public**, about a real person,
 - **API routes** (`app/api/*`): thin, inputs validated (`/api/views` only counts existing slugs, keep it that way), upstream errors handled, responses cacheable where public, no secret or upstream raw payload leaked to the client.
 - **Server-only boundary**: `import "server-only"` on services, `config/env.ts`, `lib/redis.ts`, `lib/mdx.ts`, `lib/api.ts`; never imported from a client file.
 - **MDX**: posts are trusted (written by the owner); still, no remote MDX, and components exposed to MDX stay a short allowlist.
-- **Third-party scripts** (AdSense, Giscus, Analytics, Spline): loaded with the right strategy, and only with the consent the law requires ([audit playbook](audit-playbook.md#5-privacy-legal-and-content)).
+- **Third-party scripts** (Giscus, Analytics, Spline): loaded with the right strategy, and only with the consent the law requires ([audit playbook](audit-playbook.md#5-privacy-legal-and-content)).
 - **Headers**: none beyond HSTS today. Adding `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `frame-ancestors`, `poweredByHeader: false`, and later a CSP compatible with AdSense, Giscus, Spline and Cloudinary, is a recommended improvement.
 - **Images**: remote hosts stay limited to the patterns in `next.config.ts`.

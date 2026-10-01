@@ -35,7 +35,7 @@ Changing any of these is a **breaking change**: describe it with before/after sc
 - **Accessibility**: contrast fixes within the palette (measure amber on every background it's used on), visible focus, target sizes (WCAG 2.2 §2.5.8, at least 24×24 px), accessible names, heading order, and **reduced-motion guards** where they're missing (the custom cursor and page transitions have none today; `HoverVideo` shows the pattern).
 - **Consistency**: use `Typography` and `ExternalLink` everywhere they fit; replace raw hex values and arbitrary sizes with tokens; one card pattern per content type.
 - **States**: skeletons that match the final layout, clear error messages in widgets (AGENTS.md requires both).
-- **Performance without visual change**: image `sizes`, LCP priority, keeping heavy things (Spline, AdSense) off the critical path.
+- **Performance without visual change**: image `sizes`, LCP priority, keeping heavy things (Spline, Giscus) off the critical path.
 
 A new token or primitive is allowed when it **names something already repeated** in the code; add it, migrate the call sites in the same PR, and update the table above.
 

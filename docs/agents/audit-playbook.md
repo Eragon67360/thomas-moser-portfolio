@@ -40,7 +40,7 @@ Facts flagged ⚑ were found on 2026-10-01: verify them first.
 
 ### 4. Performance
 
-- No field data: Vercel Analytics is installed, Speed Insights isn't (adding it is the owner's call; it can be paid). Lab LCP/INP per page; the weight and loading strategy of Spline, AdSense, the animated cursor and hover videos; ISR vs dynamic per route (AGENTS.md's Redis `cache: "default"` gotcha); image sizes from Cloudinary.
+- No field data: Vercel Analytics is installed, Speed Insights isn't (adding it is the owner's call; it can be paid). Lab LCP/INP per page; the weight and loading strategy of Spline, the animated cursor and hover videos; ISR vs dynamic per route (AGENTS.md's Redis `cache: "default"` gotcha); image sizes from Cloudinary.
 
 ### 5. Privacy, legal and content
 

@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
-import { AdSenseScript } from "@/components/ads/AdSenseScript";
 import { CustomCursor } from "@/components/layout/CustomCursor";
 import { Footer } from "@/components/layout/Footer";
 import { Navigation } from "@/components/layout/Navigation";
@@ -58,7 +57,6 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           <CustomCursor />
         </Providers>
         <Analytics />
-        <AdSenseScript />
       </body>
     </html>
   );
