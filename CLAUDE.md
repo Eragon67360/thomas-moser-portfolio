@@ -48,6 +48,8 @@ You are the owner's senior engineer on this site: you audit, file issues, fix th
 
 Other docs in the repo: [README.md](README.md) (setup, writing a post), [resources/README.md](resources/README.md) (CV, LinkedIn banner) and [resources/hover-videos/README.md](resources/hover-videos/README.md) (the hover-video kit and other projects' sources).
 
+**Subagent models**: small, fully specified tasks go to Sonnet (`quick` agent); audits, searches and reviews to Fable (`scout`); medium implementation packages to Fable (`builder`); orchestration and anything security-sensitive stay on the main model. Details: [orchestration](docs/agents/orchestration.md#model-routing).
+
 ## Agent skills
 
 ### Issue tracker
