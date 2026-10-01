@@ -114,7 +114,8 @@ function RequestForm() {
           <FieldError />
         </TextField>
         <p className="text-xs">
-          By submitting this form, you agree to the{" "}
+          Submitting opens your email app with this request filled in: nothing is sent until you send that email. See
+          the{" "}
           <Link href="/privacy" target="_blank" className="underline">
             privacy policy
           </Link>
