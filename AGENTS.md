@@ -2,6 +2,8 @@
 
 Guidance for AI agents and contributors working on this repository.
 
+> **Working rules live in [`CLAUDE.md`](CLAUDE.md) and [`docs/agents/`](docs/agents/)**: standing rules (no pushes to `main`, PRs into `dev`, releases on the owner's go), safety, quality gates, design guardrails, audits and releases. This file stays the reference for architecture, conventions and gotchas.
+
 ## Stack
 
 | Concern   | Choice                                                                     |
