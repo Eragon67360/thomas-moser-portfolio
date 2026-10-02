@@ -97,7 +97,7 @@ v3 is not v2 (NextUI). There is **no** `HeroUIProvider`, `Navbar`, `Image`, `Div
 - **`NextRequest.ip` / `.geo` no longer exist.** Use `lib/request.ts` (Vercel headers).
 - **Route params are async** in Next.js 16: `const { slug } = await params`.
 - Don't wrap service calls that may run during prerendering in a catch-all that hides Next's dynamic-rendering signal; prefer making the call static-safe.
-- `config/env.ts` still falls back to the legacy `NEXT_PUBLIC_UPSTASH_REDIS_*` names. Once the deployment defines `NEXT_UPSTASH_REDIS_URL/TOKEN`, delete that fallback and the legacy variables.
+- **Redis counters are written only in production** (`env.redisWritesAllowed()`: `VERCEL_ENV === "production"`, or `REDIS_ALLOW_WRITES=1` for a deliberate local test). Local and preview runs share the production database and only read it; never bypass the guard to "see a counter move".
 - `config/site.ts` is bundled into client components: add only fields that are safe to publish.
 - **Deezer reports errors as HTTP 200** with an `error` object in the body; `services/deezer.service.ts` checks both and retries quota errors (code 4) with backoff. It has no "currently playing" endpoint — the footer shows the last played track instead.
 - `react-animated-cursor` declares a React 18 peer; `package.json` `overrides` pins it to our React.

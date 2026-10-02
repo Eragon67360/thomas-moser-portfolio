@@ -1,5 +1,5 @@
 import "server-only";
-import { getRedis } from "@/lib/redis";
+import { getRedis, redisWritesAllowed } from "@/lib/redis";
 
 const RETENTION_SECONDS = 7 * 24 * 60 * 60;
 
@@ -12,8 +12,8 @@ function dayKey(date = new Date()): string {
 
 /** Increments a per-day counter for `event`, kept for one week. */
 export async function trackEvent(namespace: string, event: Record<string, unknown>): Promise<void> {
-  const redis = getRedis();
+  if (!redisWritesAllowed()) return;
   const key = `analytics::${namespace}::${dayKey()}`;
-  await redis.hincrby(key, JSON.stringify(event), 1);
-  await redis.expire(key, RETENTION_SECONDS);
+  // One transaction, so a counter never outlives its retention because the expire was lost.
+  await getRedis().multi().hincrby(key, JSON.stringify(event), 1).expire(key, RETENTION_SECONDS).exec();
 }

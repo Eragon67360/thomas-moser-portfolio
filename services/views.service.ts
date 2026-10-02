@@ -1,5 +1,5 @@
 import "server-only";
-import { getRedis } from "@/lib/redis";
+import { getRedis, redisWritesAllowed } from "@/lib/redis";
 
 const VIEWS_PREFIX = "pageviews:posts";
 const DEDUPE_PREFIX = "deduplicate";
@@ -42,6 +42,7 @@ async function dedupeSalts(now: number): Promise<{ today: string; yesterday: str
  * slug: no IP is stored, and one visitor's keys can't be linked across posts or days.
  */
 export async function recordPostView(slug: string, visitorIp: string): Promise<void> {
+  if (!redisWritesAllowed()) return;
   const redis = getRedis();
   const salts = await dedupeSalts(Date.now());
   const visitKey = async (salt: string) => `${DEDUPE_PREFIX}:${await sha256Hex(`${salt}:${visitorIp}:${slug}`)}`;
