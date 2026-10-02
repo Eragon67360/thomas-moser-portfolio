@@ -14,7 +14,8 @@ export type TimelineEntry = {
 
 /** Current position, shown on /about and published as structured data. */
 export const currentRole = {
-  title: "Web Developer",
+  // The CV's headline title (resources/cv/cv.html); the timeline keeps the employment title.
+  title: "Full-Stack Developer",
   organization: "Vusyon",
   group: "avenit group",
   city: "Offenburg",

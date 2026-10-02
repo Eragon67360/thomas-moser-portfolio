@@ -22,6 +22,7 @@ export const projects: Project[] = [
   {
     slug: "llm-trading-colosseum",
     title: "LLM Trading Colosseum",
+    // The €1,000 starting portfolio was confirmed by Thomas on 2026-10-02.
     summary:
       "Research harness where several LLM-powered agents each manage a simulated €1,000 portfolio, to study their reasoning and biases. No real money involved.",
     stack: ["Python", "Anthropic API", "OpenAI API", "SQLModel", "Streamlit"],
@@ -46,9 +47,10 @@ export const projects: Project[] = [
     title: "Le Bon Tempérament",
     summary:
       "Digital ecosystem of a vocal and instrumental ensemble: public website with online payments, an admin dashboard and an Android app, in one monorepo.",
-    stack: ["Next.js", "Turborepo", "Supabase", "Stripe", "HeroUI", "Cloudinary"],
+    // Still active (repo pushed 2026-10-01); the Android app is Flutter (`apps/mobile_app`). Confirmed by Thomas, 2026-10-02.
+    stack: ["Next.js", "Turborepo", "Supabase", "Flutter", "Stripe", "HeroUI", "Cloudinary"],
     credits: { designedBy: [ME], developedBy: [ME] },
-    period: { start: "2024-03", end: "2026-03" },
+    period: { start: "2024-03" },
     links: {
       live: "https://www.lebontemperament.com",
       repo: "https://github.com/Eragon67360/lebontemperament_turbo",
@@ -116,18 +118,6 @@ export const projects: Project[] = [
     links: { live: "https://www.curefab.com" },
     screenshot: "v2/curefab",
     video: "/videos/projects/curefab.mp4",
-  },
-  {
-    slug: "moca",
-    title: "MOCA",
-    summary: "Multilingual website of MOCA, with booking, subscriptions and online payments.",
-    context: `My former micro-enterprise with designer ${CRISTINA}`,
-    stack: ["Next.js", "Prisma", "Clerk", "Stripe", "next-intl"],
-    credits: { developedBy: [ME] },
-    period: { start: "2023-09", end: "2023-12" },
-    links: { live: "https://moca-portfolio.vercel.app", repo: "https://github.com/Eragon67360/moca-portfolio" },
-    screenshot: "v2/moca",
-    video: "/videos/projects/moca.mp4",
   },
   {
     slug: "openai-clone",
