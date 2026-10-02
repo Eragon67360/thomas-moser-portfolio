@@ -25,7 +25,7 @@ Facts flagged ⚑ were found on 2026-10-01: verify them first.
 
 - Security headers and CSP in `next.config.ts` (#22): check them on production with `curl -sI`, and that every origin the browser contacts is both allowed by the CSP and named in the privacy policy.
 - API routes (`app/api/*`): input validation, caching, upstream quota exposure (anyone can trigger Deezer/Steam calls through the proxies: are responses cached?), `/api/views` abuse (per-IP dedupe, existing slugs only).
-- Env hygiene: ⚑ legacy and unused Vercel variables, Redis token stored as non-Sensitive, the `NEXT_PUBLIC_UPSTASH_*` fallback still in `config/env.ts` ([project](project.md#environments-and-variables-names-only)).
+- Env hygiene: legacy and unused Vercel variables, the Redis token stored as Sensitive, nothing secret behind a `NEXT_PUBLIC_` name ([project](project.md#environments-and-variables-names-only)); the Redis write guard still in place (`env.redisWritesAllowed()`).
 - Third-party scripts and their permissions; open Dependabot and secret-scanning alerts.
 
 ### 2. SEO and GEO

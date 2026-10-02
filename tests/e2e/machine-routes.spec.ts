@@ -24,6 +24,22 @@ test.describe("/api/views", () => {
     expect(response.status()).toBe(400);
   });
 
+  test("refuses cross-site requests", async ({ request }) => {
+    const response = await request.post("/api/views", {
+      data: { slug: "connect-deezer-api-to-nextjs" },
+      headers: { "sec-fetch-site": "cross-site" },
+    });
+    expect(response.status()).toBe(403);
+  });
+
+  test("refuses a body that isn't JSON", async ({ request }) => {
+    const response = await request.post("/api/views", {
+      data: JSON.stringify({ slug: "connect-deezer-api-to-nextjs" }),
+      headers: { "content-type": "text/plain" },
+    });
+    expect(response.status()).toBe(415);
+  });
+
   test("does not count a slug that is not a post", async ({ request }) => {
     const response = await request.post("/api/views", { data: { slug: "no-such-post" } });
     expect(response.status()).toBe(404);

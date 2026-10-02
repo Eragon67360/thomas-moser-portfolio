@@ -25,10 +25,10 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 
 ## Environments and variables (names only)
 
-- Every variable in Vercel targets Development, Preview **and** Production with the same value, except `NEXT_STEAM_API_KEY` (a Sensitive value for Preview/Production, a separate Development value). So **local and preview runs read and write the production Redis**: visiting a preview's home page or a post counts in production analytics.
+- Every variable in Vercel targets Development, Preview **and** Production with the same value, except `NEXT_STEAM_API_KEY` (a Sensitive value for Preview/Production, a separate Development value). So **local and preview runs read the production Redis**; since #32 they no longer write to it (counters are written only when `VERCEL_ENV` is `production`, or with `REDIS_ALLOW_WRITES=1`).
 - Used by the code: `NEXT_UPSTASH_REDIS_URL`, `NEXT_UPSTASH_REDIS_TOKEN`, `DEEZER_TOKEN`, `NEXT_STEAM_API_KEY`, `NEXT_STEAM_ID`, `NEXT_PUBLIC_COMMENT_REPOID`, `NEXT_PUBLIC_COMMENT_CATEGORYID` (see `.env.example`, `config/env.ts`).
 - **Legacy names still defined in Vercel** and not read by the code any more (measured: grep finds no reference): `NEXT_SPOTIFY_*`, `NEXT_GITHUB_TOKEN`, `NEXT_REDIS_TOKEN`, `STEAM_TOKEN`, `STEAM_ID`, `DEEZER_ID`, `NEXT_STEAM_API_KEY_TEST`, `AD_SLOT`, `SITE_URL`, `NEXT_REDIRECT_TARGET`, and `NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID` since AdSense was removed (#17). Vercel flags several of them, and the live Redis token, as "readable secret" (stored as plain encrypted, not Sensitive).
-- `NEXT_PUBLIC_UPSTASH_REDIS_URL` / `_TOKEN` are still defined, and `config/env.ts` falls back to them. The server-only names exist in every environment now, so AGENTS.md's condition for deleting the fallback is met. Removing the fallback is a code change; deleting the variables is the owner's.
+- `NEXT_PUBLIC_UPSTASH_REDIS_URL` / `_TOKEN` are still defined in Vercel but no longer read (the fallback was removed in #34): the owner deletes them, with the legacy names above.
 
 ## Content
 
