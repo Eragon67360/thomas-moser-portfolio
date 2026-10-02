@@ -1,111 +1,205 @@
 ---
-title: Comment connecter l'API Spotify avec NextJS14 et TypeScript
+title: Comment connecter l'API Spotify à NextJS
 description: Apprenez à intégrer l'API de Spotify à votre application NextJS.
 tags: ["nextjs","spotifyapi","tailwindcss","swr"]
 slug: fr-connect-spotify-api-to-nextjs
 date: 2024-04-30
-duration: 15
+updated: 2026-10-02
+duration: 25
 lang: fr
 translation: connect-spotify-api-to-nextjs
 ---
 
 ## Introduction
-Dans cet article, nous allons explorer comment intégrer l'API Spotify dans une application NextJS. Nous couvrirons les étapes nécessaires pour s'authentifier, se connecter et récupérer les données de Spotify afin d'améliorer votre projet NextJS avec des fonctionnalités musicales.
+Dans cet article, nous allons voir comment intégrer l'API Spotify dans une application NextJS. Nous couvrirons les étapes nécessaires pour s'authentifier, se connecter et récupérer les données de Spotify afin d'enrichir votre projet NextJS de fonctionnalités musicales.
 
 ## Prérequis
+Avant de commencer, assurez-vous d'avoir :
+- Une connaissance de base de JavaScript et de React.
+- Node.js installé sur votre machine.
+- Un compte Spotify Developer et une application enregistrée pour obtenir vos clés d'API.
 
-Avant de commencer, assurez-vous d'avoir les éléments suivants installés :
-- Node.js (12.x ou plus récent)
-- npm ou yarn
-- Un éditeur de code (VSCode, par exemple)
-
-## Création du projet Next.js
-
-Pour commencer, créez un nouveau projet Next.js en exécutant la commande suivante :
-
+## Étape 1 : Création du projet NextJS
+Créez un nouveau projet NextJS si ce n'est pas déjà fait :
 ```bash
-npx create-next-app@latest mon-app-spotify --typescript
+npx create-next-app spotify-nextjs-app
+cd spotify-nextjs-app
 ```
 
-Ensuite, accédez au dossier du projet :
+Lorsque l'assistant vous le propose, choisissez **TypeScript**, **Tailwind CSS** et l'**App Router**. La suite de ce guide suppose ces choix par défaut, avec l'alias d'import `@/*`.
 
-```bash
-cd mon-app-spotify
-```
+## Étape 2 : Enregistrement de votre application Spotify
+1. Ouvrez le [Spotify Developer Dashboard](https://developer.spotify.com/dashboard) et cliquez sur **Create app**.
+2. Donnez-lui un nom et une description, et ajoutez `http://127.0.0.1:3000/callback` comme **Redirect URI**. Spotify n'accepte plus les URI de redirection en `localhost` : utilisez l'adresse de bouclage.
+3. Sélectionnez **Web API**, enregistrez, puis copiez le **Client ID** et le **Client secret** depuis les paramètres de l'application.
 
-## Installation de TailwindCSS
+## Étape 3 : Obtention d'un refresh token
+Votre site affiche *votre propre* activité d'écoute : les visiteurs ne se connectent donc jamais. À la place, vous autorisez votre application une seule fois et conservez le **refresh token** obtenu sur le serveur, où il est échangé contre des jetons d'accès de courte durée.
 
-Installez TailwindCSS en suivant les commandes ci-dessous :
-```bash
-npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
-```
-Ensuite, configurez Tailwind en exécutant :
-
-```bash
-npx tailwindcss init -p
-```
-Ajoutez `./src/**/*.{js,ts,jsx,tsx}` à la section `content` de votre fichier `tailwind.config.js` pour activer Tailwind dans vos fichiers TypeScript.
-
-## Configuration des variables d'environnement
-
-Créez un fichier `.env.local` à la racine de votre projet pour stocker les clés API sécurisées :
+Ouvrez cette URL dans votre navigateur, en remplaçant `YOUR_CLIENT_ID` :
 ```plaintext
-SPOTIFY_CLIENT_ID=your_spotify_client_id 
-SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+https://accounts.spotify.com/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=http%3A%2F%2F127.0.0.1%3A3000%2Fcallback&scope=user-read-currently-playing
 ```
-
-## Authentification Spotify
-
-Installez la bibliothèque `next-auth` pour gérer l'authentification :
+Après avoir accepté, Spotify vous redirige vers `http://127.0.0.1:3000/callback?code=...`. La page elle-même ne se charge pas, c'est normal : copiez la valeur du paramètre `code` depuis la barre d'adresse et échangez-la aussitôt (les codes expirent vite) :
 ```bash
-npm install next-auth
+curl -X POST https://accounts.spotify.com/api/token \
+  -u "YOUR_CLIENT_ID:YOUR_CLIENT_SECRET" \
+  -d grant_type=authorization_code \
+  -d code=THE_CODE \
+  --data-urlencode redirect_uri=http://127.0.0.1:3000/callback
 ```
-Configurez `next-auth` pour utiliser Spotify comme fournisseur dans `src/pages/api/auth/[...nextauth].ts` :
-```typescript
-import  NextAuth  from  "next-auth"
-import  SpotifyProvider  from  "next-auth/providers/spotify"  
-export  default  NextAuth({ 
-	providers: [ 
-		SpotifyProvider({ 
-		clientId: process.env.SPOTIFY_CLIENT_ID, 
-		clientSecret: process.env.SPOTIFY_CLIENT_SECRET, 
-		authorization: { params: { scope: 'user-read-email playlist-read-private' } } 
-		}), 
-	], 
-})
+La réponse JSON contient un `refresh_token`. Enregistrez les trois valeurs dans un fichier `.env.local` à la racine de votre projet :
+```plaintext
+SPOTIFY_CLIENT_ID=your_client_id
+SPOTIFY_CLIENT_SECRET=your_client_secret
+SPOTIFY_REFRESH_TOKEN=your_refresh_token
 ```
+Ne préfixez jamais ces variables par `NEXT_PUBLIC_` : vos secrets seraient alors envoyés au navigateur de chaque visiteur. Si vous révoquez l'accès de l'application dans les paramètres de votre compte Spotify, le refresh token cesse de fonctionner et vous devez refaire cette étape.
 
-## Récupération des données de Spotify
-
-Pour récupérer des données de l'API Spotify, vous pouvez utiliser `fetch` dans vos fonctions `getServerSideProps` ou `getStaticProps`. Voici un exemple pour obtenir le profil de l'utilisateur :
-
+## Étape 4 : Appel de l'API Spotify depuis le serveur
+Créez `lib/spotify.ts`. Il échange le refresh token contre un jeton d'accès, puis demande à Spotify ce que vous écoutez en ce moment :
 ```typescript
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
+const TOKEN_URL = "https://accounts.spotify.com/api/token";
+const NOW_PLAYING_URL = "https://api.spotify.com/v1/me/player/currently-playing";
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/api/auth/signin',
-        permanent: false,
-      },
-    }
-  }
+export type NowPlaying =
+  | { isPlaying: false }
+  | { isPlaying: true; title: string; artist: string; albumImageUrl: string; songUrl: string };
 
-  const res = await fetch('https://api.spotify.com/v1/me', {
+async function getAccessToken(): Promise<string> {
+  const credentials = Buffer.from(
+    `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`,
+  ).toString("base64");
+
+  const response = await fetch(TOKEN_URL, {
+    method: "POST",
     headers: {
-      Authorization: `Bearer ${session.accessToken}`
-    }
-  })
+      Authorization: `Basic ${credentials}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      grant_type: "refresh_token",
+      refresh_token: process.env.SPOTIFY_REFRESH_TOKEN ?? "",
+    }),
+    cache: "no-store",
+  });
+  if (!response.ok) throw new Error(`Spotify token request failed with ${response.status}`);
 
-  const data = await res.json()
+  const data: { access_token: string } = await response.json();
+  return data.access_token;
+}
+
+export async function getNowPlaying(): Promise<NowPlaying> {
+  const response = await fetch(NOW_PLAYING_URL, {
+    headers: { Authorization: `Bearer ${await getAccessToken()}` },
+    cache: "no-store",
+  });
+
+  // 204 No Content : rien n'est en cours de lecture.
+  if (response.status === 204) return { isPlaying: false };
+  if (!response.ok) throw new Error(`Spotify request failed with ${response.status}`);
+
+  const song = await response.json();
+  if (!song.is_playing || !song.item) return { isPlaying: false };
 
   return {
-    props: { data },
-  }
+    isPlaying: true,
+    title: song.item.name,
+    artist: song.item.artists.map((artist: { name: string }) => artist.name).join(", "),
+    albumImageUrl: song.item.album.images[0]?.url ?? "",
+    songUrl: song.item.external_urls.spotify,
+  };
 }
 ```
 
-## Conclusion
+## Étape 5 : Exposition des données avec un Route Handler
+Le navigateur ne doit jamais voir vos identifiants : il interroge donc votre propre route d'API plutôt que Spotify. Créez `app/api/now-playing/route.ts` :
+```typescript
+import { NextResponse } from "next/server";
+import { getNowPlaying } from "@/lib/spotify";
 
-Vous avez maintenant une application Next.js 14 avec TypeScript et TailwindCSS qui est connectée à l'API Spotify. Vous pouvez étendre ce projet en ajoutant d'autres fonctionnalités de l'API Spotify selon vos besoins.
+export async function GET() {
+  try {
+    return NextResponse.json(await getNowPlaying());
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({ error: "Spotify request failed" }, { status: 502 });
+  }
+}
+```
+Lancez le serveur de développement avec `npm run dev` et ouvrez [http://localhost:3000/api/now-playing](http://localhost:3000/api/now-playing) : vous devriez voir `{"isPlaying":false}`, ou le titre que vous écoutez.
+
+## Étape 6 : Affichage du titre avec SWR
+Installez [SWR](https://swr.vercel.app/) pour interroger la route depuis le navigateur et la rafraîchir automatiquement :
+```bash
+npm install swr
+```
+Les pochettes d'album sont servies depuis `i.scdn.co` : autorisez cet hôte pour `next/image` dans `next.config.ts` :
+```typescript
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "i.scdn.co" }],
+  },
+};
+
+export default nextConfig;
+```
+Créez ensuite le widget dans `components/NowPlaying.tsx` :
+```tsx
+"use client";
+import Image from "next/image";
+import useSWR from "swr";
+import type { NowPlaying as NowPlayingData } from "@/lib/spotify";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+export function NowPlaying() {
+  const { data } = useSWR<NowPlayingData>("/api/now-playing", fetcher, {
+    refreshInterval: 10_000,
+  });
+
+  if (!data?.isPlaying) {
+    return <p className="text-sm text-gray-400">Not playing anything right now</p>;
+  }
+
+  return (
+    <a
+      href={data.songUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-4 rounded-xl bg-white/5 p-3 hover:bg-white/10"
+    >
+      <Image src={data.albumImageUrl} alt="" width={64} height={64} className="rounded-md" />
+      <div className="min-w-0">
+        <p className="truncate font-semibold">{data.title}</p>
+        <p className="truncate text-sm text-gray-400">{data.artist}</p>
+      </div>
+    </a>
+  );
+}
+```
+Importer uniquement le **type** `NowPlaying` depuis `lib/spotify.ts` ne pose aucun problème : les types disparaissent à la compilation, donc aucun code serveur n'atteint le navigateur. Enfin, affichez le widget où vous voulez, par exemple dans `app/page.tsx` :
+```tsx
+import { NowPlaying } from "@/components/NowPlaying";
+
+export default function Home() {
+  return (
+    <main className="mx-auto max-w-md p-8">
+      <NowPlaying />
+    </main>
+  );
+}
+```
+Lancez un titre sur Spotify : le widget se met à jour en moins de dix secondes.
+
+## Pour aller plus loin
+Le même jeton d'accès ouvre de nombreux autres endpoints. Ajoutez le scope correspondant à l'étape 3 (et générez un nouveau refresh token), puis appelez-les depuis `lib/spotify.ts` :
+- `GET /v1/me/player/recently-played` avec le scope `user-read-recently-played`
+- `GET /v1/me/top/tracks` et `GET /v1/me/top/artists` avec le scope `user-top-read`
+
+Chaque nouvelle requête récupère un nouveau jeton d'accès. Les jetons d'accès restent valides une heure : sur un site très fréquenté, mieux vaut garder le jeton en mémoire jusqu'à son expiration.
+
+## Conclusion
+Vous disposez maintenant d'une application NextJS qui lit votre activité Spotify côté serveur et l'affiche en direct avec SWR, sans jamais exposer vos identifiants au navigateur. Vous pouvez désormais construire une page complète « ce que j'écoute » avec vos titres et artistes préférés.
