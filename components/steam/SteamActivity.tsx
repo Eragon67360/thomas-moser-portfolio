@@ -6,9 +6,13 @@ import { GameCard } from "./GameCard";
 import { SteamProfileCard } from "./SteamProfileCard";
 
 const CARD_SKELETON = "h-48 w-72 rounded-2xl";
+/** Online status and the current game can change within a minute. */
+const PLAYER_POLL_MS = 60_000;
+/** Two weeks of playtime moves slowly; the route is edge-cached for 10 min. */
+const GAMES_POLL_MS = 600_000;
 
 function ProfileSection() {
-  const { data, error } = useApi<SteamPlayerResponse>("/api/steam/player");
+  const { data, error } = useApi<SteamPlayerResponse>("/api/steam/player", PLAYER_POLL_MS);
 
   if (error) return <p className="text-muted">Could not load the Steam profile.</p>;
   if (!data) return <Skeleton className={CARD_SKELETON} />;
@@ -16,7 +20,7 @@ function ProfileSection() {
 }
 
 function RecentGamesSection() {
-  const { data, error } = useApi<SteamGamesResponse>("/api/steam/games");
+  const { data, error } = useApi<SteamGamesResponse>("/api/steam/games", GAMES_POLL_MS);
 
   if (error) return <p className="text-muted">Could not load recently played games.</p>;
   if (data?.games.length === 0) return <p className="text-muted">No games recently played.</p>;

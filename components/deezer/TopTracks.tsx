@@ -5,8 +5,11 @@ import { TrackRowsSkeleton } from "./skeletons";
 import { DeezerPanel } from "./DeezerPanel";
 import { TrackRow } from "./TrackRow";
 
+/** Charts aggregate weeks of listening and the route is edge-cached for 10 min. */
+const CHART_POLL_MS = 600_000;
+
 export function TopTracks() {
-  const { data, error } = useApi<TracksResponse>("/api/deezer/top-tracks");
+  const { data, error } = useApi<TracksResponse>("/api/deezer/top-tracks", CHART_POLL_MS);
 
   return (
     <DeezerPanel title="Top musics">
