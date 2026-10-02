@@ -43,7 +43,7 @@ async function deezerGet<T>(path: string): Promise<T> {
   for (let attempt = 0; ; attempt++) {
     const response = await fetch(url, { cache: "no-store" });
     // Labels use `path`, never `url`, so the token stays out of logs.
-    assertOk(response, `Deezer ${path}`);
+    await assertOk(response, `Deezer ${path}`);
     const body = await readJson<T | DeezerError>(response);
     if (typeof body !== "object" || body === null || !("error" in body)) return body;
 
