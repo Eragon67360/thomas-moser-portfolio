@@ -8,7 +8,9 @@ import type { Project } from "@/types/project";
 import { formatPeriod } from "./format";
 import { HoverVideo } from "./HoverVideo";
 
-function Screenshot({ project }: { project: Project }) {
+type ScreenshotProps = { project: Project; priority?: boolean };
+
+function Screenshot({ project, priority = false }: ScreenshotProps) {
   if (!project.screenshot) {
     return (
       <div className="flex aspect-16/10 w-full items-center justify-center rounded-lg bg-linear-to-br from-accent/20 via-surface to-surface p-6 text-center">
@@ -25,6 +27,8 @@ function Screenshot({ project }: { project: Project }) {
         width={1440}
         height={900}
         sizes={project.featured ? "(min-width: 1024px) 60vw, 100vw" : "(min-width: 640px) 50vw, 100vw"}
+        // The first card's screenshot is the page's LCP element: preload it, lazy-load the rest.
+        priority={priority}
         className="aspect-16/10 w-full rounded-lg object-cover object-top"
       />
       {project.video && <HoverVideo src={project.video} label={`Animated preview of ${project.title}`} />}
@@ -42,7 +46,13 @@ function Credits({ credits }: { credits: Project["credits"] }) {
   );
 }
 
-export function ProjectCard({ project }: { project: Project }) {
+type ProjectCardProps = {
+  project: Project;
+  /** True for the first card on the page: its screenshot loads eagerly with a preload hint. */
+  priority?: boolean;
+};
+
+export function ProjectCard({ project, priority = false }: ProjectCardProps) {
   const primaryLink = project.links.live ?? project.links.repo;
 
   return (
@@ -54,7 +64,7 @@ export function ProjectCard({ project }: { project: Project }) {
     >
       <Card.Content className={`flex flex-col gap-6 ${project.featured ? "lg:flex-row lg:items-stretch" : ""}`}>
         <div className={project.featured ? "lg:w-3/5" : ""}>
-          <Screenshot project={project} />
+          <Screenshot project={project} priority={priority} />
         </div>
         <div
           className={`flex flex-col gap-4 rounded-lg bg-[#5757577b] px-4 py-3 group-hover:bg-[#57575733] ${
