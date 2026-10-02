@@ -1,14 +1,20 @@
 # Quality gates
 
-Nothing is "done" until these pass and your report says exactly which ran and what they returned. There is **no CI and no test suite**: you are both. If you skip a gate, say which and why.
+Nothing is "done" until these pass and your report says exactly which ran and what they returned. CI runs the first three gates on every PR, but it only tells you after you push: run them yourself first. If you skip a gate, say which and why.
 
 ## Before every PR
 
-| Gate          | Command                                                                                                                 | Pass means                                                                                                                     |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Static checks | `npm run check`                                                                                                         | typecheck (after `next typegen`), oxlint type-aware, oxfmt check and knip all clean                                            |
-| Build         | `npm run build`                                                                                                         | succeeds, no new warnings; note route changes (static vs dynamic) in the build output                                          |
-| Smoke         | `npm start`, then load `/`, `/about`, `/projects`, `/blog`, one post in each language, `/activities`, `/privacy`, a 404 | each renders; Deezer/Steam widgets show data, or an error message rather than an endless skeleton when credentials are missing |
+| Gate          | Command                                                                                                           | Pass means                                                                                                                                                                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Static checks | `npm run check`                                                                                                   | typecheck (after `next typegen`), oxlint type-aware, oxfmt check and knip all clean                                                                                                                              |
+| Build         | `npm run build`                                                                                                   | succeeds, no new warnings; note route changes (static vs dynamic) in the build output                                                                                                                            |
+| Smoke         | `npm run test:e2e` (Playwright, Chromium, against the build; starts `next start -p 3220` or reuses a running one) | every page renders with one `h1`, canonical on `www`, valid JSON-LD, no unexpected third-party origin, no horizontal scroll at 390px; machine routes answer; widgets end in an error message without credentials |
+
+The suite starts the site with the Redis, Deezer and Steam variables forced empty (`webServer.env` in `playwright.config.ts`), so a local `.env.local` can't make a test run write production counters or burn quota. Pick another port with `PORT=32NN npm run test:e2e`. A failing test caused by a site bug gets `test.fixme(true, "reason")`, never a fix in unrelated code. Load the pages yourself too when you change something the suite doesn't cover.
+
+## CI
+
+`.github/workflows/ci.yml` runs one job, **`CI`** (the required status check), on pull requests to `dev`/`main` and pushes to `dev`: Node from `.nvmrc`, `npm ci`, `npm run check`, `npm run build`, Chromium, `npm run test:e2e`; the Playwright report is uploaded on failure. It runs without secrets on purpose and fails if a credential or an env file shows up.
 
 Add the checks that fit the change:
 
@@ -20,7 +26,7 @@ Add the checks that fit the change:
 
 ## Tests worth adding
 
-There are none yet. When you add some (a Playwright smoke suite with `@axe-core/playwright` is the obvious first step, and a good candidate for the first CI workflow):
+The smoke suite lives in `tests/e2e/` (`pages`, `activities`, `machine-routes`, shared fixtures). Extend it with the change you make; an axe check (`@axe-core/playwright`) joins once the open accessibility findings are fixed, so it doesn't start red.
 
 - Test what visitors and crawlers see (roles, text, status codes, headers), not implementation details.
 - Never real data in fixtures: no real emails, tokens, links or personal data, even from the owner's own messages. Use made-up values.

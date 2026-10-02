@@ -25,7 +25,10 @@ npm run dev          # local dev server
 npm run build        # production build
 npm run check        # typecheck + lint + format check + knip — run before every commit
 npm run format       # apply formatting
+npm run test:e2e     # Playwright smoke suite against a production build (`npm run build` first)
 ```
+
+CI (`.github/workflows/ci.yml`, check name `CI`) runs `check`, `build` and `test:e2e` on every pull request and on pushes to `dev`, without credentials.
 
 `npm run typecheck` runs `next typegen` first: route types such as `PageProps<"/blog/[slug]">` live in `.next/types`.
 
