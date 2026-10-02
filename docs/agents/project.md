@@ -42,7 +42,7 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 ## Known quirks
 
 - **TypeScript 7**: no ESLint (oxlint instead), `tsc` CLI only, `next typegen` before typechecking. See AGENTS.md "Gotchas".
-- **No tests and no CI**: `npm run check` and a build are the only automated gates, run by you.
+- **CI and tests**: `.github/workflows/ci.yml` (check name `CI`) runs `npm run check`, `npm run build` and the Playwright smoke suite (`tests/e2e/`) on pull requests and pushes to `dev`, with no credentials. Dependabot (`.github/dependabot.yml`) opens monthly grouped update PRs against `dev`. Unit tests: none.
 - **Branch protection is off**: a "Protect main" ruleset exists but is disabled; Dependabot alerts are off.
 - **oxfmt ignores** `content/**`, `public/**`, `resources/**` and the lockfile: format content by hand.
 - **Always dark**: `<html class="dark">` is hard-coded; there is no light theme.

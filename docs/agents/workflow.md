@@ -15,11 +15,13 @@ issue (GitHub) ──► branch from origin/dev ──► PR into dev ──► 
 1. **Issue first** for anything bigger than a typo ([issue format](audit-playbook.md#issue-format)). The repo is public: write issues as public documents (no secrets, no private details about the owner).
 2. **Branch** from a fresh `origin/dev` in a worktree: `git fetch origin && git worktree add ../portfolio-<topic> -b <type>/<topic> origin/dev`. Branch names: `feat/…`, `fix/…`, `perf/…`, `refactor/…`, `docs/…`, `chore/…`, `ci/…`.
 3. **Commits**: English Conventional Commits, as in the history (`fix(projects): Taylor's Secret Garden links to its live address`). Subject says _what_, body says _why_; `Closes #12` / `Refs #12`. End each message with the attribution lines your harness provides.
-4. **PR into `dev`**: what changed, why, how it was verified (exact commands, results, screenshots for visible changes), owner steps if any. Run the [quality gates](quality-gates.md) yourself; no CI runs on PRs.
+4. **PR into `dev`**: what changed, why, how it was verified (exact commands, results, screenshots for visible changes), owner steps if any. Run the [quality gates](quality-gates.md) yourself; the `CI` check then reruns check, build and the smoke suite on the PR.
 5. **Merge into `dev`** once the gates pass. Recent feature PRs were squash-merged (`… (#14)`), older ones merged with merge commits; either is fine for a feature branch. Never squash a PR whose commit hashes are referenced elsewhere.
 6. **Release** `dev` → `main` with a merge commit, only after the owner's explicit go: see [release.md](release.md).
 
 Never delete `dev` or `main`; never pass `--delete-branch` on a release PR (its head is `dev`).
+
+**Dependabot PRs** (`.github/dependabot.yml`, monthly, against `dev`): merge a grouped minor/patch PR once `CI` is green; for a major, read the changelog and check the gotchas in AGENTS.md first (TypeScript 7, oxlint, HeroUI v3). GitHub raises _security_ updates against `main` regardless of the config: retarget them to `dev`.
 
 ## Working with the owner
 

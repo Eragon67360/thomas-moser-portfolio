@@ -1,0 +1,44 @@
+# Version updates land on `dev` and follow the dev -> main release flow.
+# Note: GitHub raises Dependabot *security* updates against the default branch (`main`)
+# whatever `target-branch` says; retarget or re-open those on `dev` before merging.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    target-branch: dev
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps)"
+    # `react-animated-cursor` follows our React through `overrides` in package.json; nothing to pin here.
+    ignore:
+      # The runtime is Node 24 (.nvmrc): the types stay on the same major.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+    groups:
+      heroui:
+        patterns: ["@heroui/*"]
+      oxc:
+        patterns: ["oxlint", "oxlint-tsgolint", "oxfmt"]
+      react-next:
+        patterns: ["next", "react", "react-dom", "@types/react", "@types/react-dom"]
+      spline:
+        patterns: ["@splinetool/*"]
+      # Everything else: minor and patch bumps together; majors get a PR each.
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    target-branch: dev
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "ci(deps)"
+    groups:
+      github-actions:
+        patterns: ["*"]
