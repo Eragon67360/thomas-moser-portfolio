@@ -72,14 +72,13 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
           }`}
         >
           <div className="flex items-center justify-between gap-4">
-            <h2 className="relative overflow-hidden text-lg font-bold md:text-xl">
+            {/* The copy that slides in on hover is CSS-generated from `data-title` (`.project-title` in
+                globals.css), so the heading holds the title once for parsers and assistants. */}
+            <h2
+              data-title={project.title}
+              className="project-title relative overflow-hidden text-lg font-bold md:text-xl"
+            >
               <span className="absolute w-full transition-transform duration-300 ease-linear group-hover:-translate-y-full">
-                {project.title}
-              </span>
-              <span
-                aria-hidden
-                className="block w-full translate-y-full transition-transform duration-300 ease-linear group-hover:translate-y-0"
-              >
                 {project.title}
               </span>
             </h2>

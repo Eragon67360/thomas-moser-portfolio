@@ -35,6 +35,26 @@
 }
 
 @layer components {
+  /* Project card title (components/projects/ProjectCard.tsx): on hover the visible title slides up
+     and a second copy slides in from below. The copy is generated from `data-title` so the <h2>
+     holds the title once for crawlers and assistants; the `/ ""` alternative text keeps it out of
+     the accessibility tree, and the plain declaration before it is the fallback for browsers
+     without that syntax. The pseudo-element also gives the heading its height. */
+  .project-title::after {
+    content: attr(data-title);
+    content: attr(data-title) / "";
+    display: block;
+    width: 100%;
+    transform: translateY(100%);
+    transition: transform 300ms linear;
+  }
+
+  @media (hover: hover) {
+    .group:hover .project-title::after {
+      transform: translateY(0);
+    }
+  }
+
   /* Long-form article typography (blog posts). */
   .article-prose {
     @apply prose prose-invert max-w-none;
