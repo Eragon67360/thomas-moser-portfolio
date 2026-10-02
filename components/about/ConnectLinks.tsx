@@ -24,7 +24,7 @@ const CHANNELS: Channel[] = [
 ];
 
 const LINK_CLASS =
-  "flex items-center gap-4 rounded-xl bg-[#ccdcff1f] px-4 py-3 transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-accent";
+  "flex items-center gap-4 rounded-xl bg-surface-tint px-4 py-3 transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-accent";
 
 export function ConnectLinks() {
   return (

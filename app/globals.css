@@ -18,6 +18,18 @@
   --accent: #ffbf00;
   --accent-foreground: #16181d;
   --link: var(--accent);
+  /* Translucent tints over the gradient. `surface-tint`: cards, pills and link tiles (about page,
+     project cards). `panel-tint`: the project card's text panel, lighter while the card is hovered. */
+  --surface-tint: #ccdcff1f;
+  --panel-tint: #5757577b;
+  --panel-tint-hover: #57575733;
+}
+
+/* Expose the tints as colour utilities (`bg-surface-tint`, `bg-panel-tint`, `bg-panel-tint-hover`). */
+@theme inline {
+  --color-surface-tint: var(--surface-tint);
+  --color-panel-tint: var(--panel-tint);
+  --color-panel-tint-hover: var(--panel-tint-hover);
 }
 
 /* HeroUI's dark fields share the overlay colour and have no border, so inputs and

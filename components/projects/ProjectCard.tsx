@@ -58,7 +58,7 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
   return (
     <Card
       data-project-card
-      className={`group border border-transparent bg-[#ccdcff1f] p-2 hover:border-white/20 hover:bg-transparent ${
+      className={`group border border-transparent bg-surface-tint p-2 hover:border-white/20 hover:bg-transparent ${
         project.featured ? "sm:col-span-2" : ""
       }`}
     >
@@ -67,7 +67,7 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
           <Screenshot project={project} priority={priority} />
         </div>
         <div
-          className={`flex flex-col gap-4 rounded-lg bg-[#5757577b] px-4 py-3 group-hover:bg-[#57575733] ${
+          className={`flex flex-col gap-4 rounded-lg bg-panel-tint px-4 py-3 group-hover:bg-panel-tint-hover ${
             project.featured ? "lg:w-2/5 lg:justify-center" : ""
           }`}
         >
