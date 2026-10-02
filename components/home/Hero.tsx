@@ -1,5 +1,4 @@
 import { ContactMenu } from "@/components/contact/ContactMenu";
-import { ProjectRequestModal } from "@/components/contact/ProjectRequestModal";
 import { PageTitle } from "@/components/ui/Typography";
 import { site } from "@/config/site";
 import { currentRole, intro } from "@/content/about";
@@ -16,7 +15,6 @@ export function Hero() {
         and efficiency.
       </p>
       <div className="mb-10 flex items-center justify-center gap-2 md:mb-20 lg:mb-0 lg:justify-start">
-        <ProjectRequestModal />
         <ContactMenu />
       </div>
     </div>

@@ -21,14 +21,13 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 | Steam Web API (`NEXT_STEAM_API_KEY`, `NEXT_STEAM_ID`)   | player and games on `/activities`                                                                                                        | read-only                                      |
 | Cloudinary (`res.cloudinary.com/dluezegi8`)             | project screenshots                                                                                                                      | read-only from the site                        |
 | Giscus (`NEXT_PUBLIC_COMMENT_REPOID`, `..._CATEGORYID`) | blog comments, stored as GitHub Discussions                                                                                              | by visitors, on GitHub                         |
-| Google AdSense (`NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID`)     | ads on posts (`<AdBanner />`), script in the root layout                                                                                 | third-party                                    |
 | Vercel Analytics                                        | page views                                                                                                                               | third-party                                    |
 
 ## Environments and variables (names only)
 
 - Every variable in Vercel targets Development, Preview **and** Production with the same value, except `NEXT_STEAM_API_KEY` (a Sensitive value for Preview/Production, a separate Development value). So **local and preview runs read and write the production Redis**: visiting a preview's home page or a post counts in production analytics.
-- Used by the code: `NEXT_UPSTASH_REDIS_URL`, `NEXT_UPSTASH_REDIS_TOKEN`, `DEEZER_TOKEN`, `NEXT_STEAM_API_KEY`, `NEXT_STEAM_ID`, `NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID`, `NEXT_PUBLIC_COMMENT_REPOID`, `NEXT_PUBLIC_COMMENT_CATEGORYID` (see `.env.example`, `config/env.ts`).
-- **Legacy names still defined in Vercel** and not read by the code any more (measured: grep finds no reference): `NEXT_SPOTIFY_*`, `NEXT_GITHUB_TOKEN`, `NEXT_REDIS_TOKEN`, `STEAM_TOKEN`, `STEAM_ID`, `DEEZER_ID`, `NEXT_STEAM_API_KEY_TEST`, `AD_SLOT`, `SITE_URL`, `NEXT_REDIRECT_TARGET`. Vercel flags several of them, and the live Redis token, as "readable secret" (stored as plain encrypted, not Sensitive).
+- Used by the code: `NEXT_UPSTASH_REDIS_URL`, `NEXT_UPSTASH_REDIS_TOKEN`, `DEEZER_TOKEN`, `NEXT_STEAM_API_KEY`, `NEXT_STEAM_ID`, `NEXT_PUBLIC_COMMENT_REPOID`, `NEXT_PUBLIC_COMMENT_CATEGORYID` (see `.env.example`, `config/env.ts`).
+- **Legacy names still defined in Vercel** and not read by the code any more (measured: grep finds no reference): `NEXT_SPOTIFY_*`, `NEXT_GITHUB_TOKEN`, `NEXT_REDIS_TOKEN`, `STEAM_TOKEN`, `STEAM_ID`, `DEEZER_ID`, `NEXT_STEAM_API_KEY_TEST`, `AD_SLOT`, `SITE_URL`, `NEXT_REDIRECT_TARGET`, and `NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID` since AdSense was removed (#17). Vercel flags several of them, and the live Redis token, as "readable secret" (stored as plain encrypted, not Sensitive).
 - `NEXT_PUBLIC_UPSTASH_REDIS_URL` / `_TOKEN` are still defined, and `config/env.ts` falls back to them. The server-only names exist in every environment now, so AGENTS.md's condition for deleting the fallback is met. Removing the fallback is a code change; deleting the variables is the owner's.
 
 ## Content
@@ -36,6 +35,7 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 - `content/articles/*.mdx`: blog posts (frontmatter in README; `lang` `en`/`fr`, `translation` pairs them).
 - `content/projects.ts`: project cards (`slug`, `title`, `summary`, `stack`, `credits`, `period`, `links.live`/`links.repo`, `screenshot` on Cloudinary, `video` in `public/videos/projects/`, `featured`).
 - `content/about.ts`: current role, location, intro, career timeline. `content/profile.json`: public contact links (published on purpose; don't add anything private).
+- `public/spline/scroll-to-top.splinecode`: the 3D scroll-to-top scene, a copy of its Spline export (served from the site for privacy; re-download it after editing the scene, see `components/layout/ScrollToTopButton.tsx`).
 - `resources/`: sources for generated assets: CV (`public/pdf/CV_Thomas_Moser_{EN,FR,DE}.pdf`), LinkedIn banner, and the **hover-video kit** with the sources of other projects' hover videos (`resources/hover-videos/projects/<slug>/`; captures and renders are git-ignored).
 - The content accuracy rule in AGENTS.md applies to all of it.
 

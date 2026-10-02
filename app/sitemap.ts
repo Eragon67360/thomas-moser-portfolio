@@ -3,7 +3,7 @@ import { absoluteUrl } from "@/lib/seo/metadata";
 import { getPosts } from "@/services/posts.service";
 import type { Post } from "@/types/post";
 
-const STATIC_ROUTES = ["/", "/about", "/projects", "/blog", "/activities"];
+const STATIC_ROUTES = ["/", "/about", "/projects", "/blog", "/activities", "/privacy", "/legal"];
 
 /** hreflang pair for a translated post, including the post itself. */
 function languageAlternates(post: Post, posts: Post[]) {

@@ -55,7 +55,7 @@ proxy.ts        Next.js 16 proxy: records home page views (non-blocking via wait
 - **Server-only code** (`services/`, `config/env.ts`, `lib/redis.ts`, `lib/mdx.ts`, `lib/api.ts`) starts with `import "server-only"`. Never import it from a `"use client"` file.
 - **Upstream shapes stay in services.** Raw Deezer/Steam JSON types are private to their service; everything else consumes `types/*` DTOs.
 - **One JSON trust boundary:** parse HTTP JSON through `lib/http.ts` (`fetchJson` / `readJson`). Don't sprinkle `as T` casts on `response.json()`.
-- **Secrets never use `NEXT_PUBLIC_`.** Only genuinely public values (AdSense client id, Giscus ids) may. Read secrets through `env.*()` in `config/env.ts`.
+- **Secrets never use `NEXT_PUBLIC_`.** Only genuinely public values (the Giscus ids) may. Read secrets through `env.*()` in `config/env.ts`.
 - **API routes are internal**: they back client widgets that poll via `useApi`. Keep them thin; logic belongs in services.
 - **Client components** fetch only through `useApi(path)`; show a skeleton while loading and a message on error.
 - Named exports for components; default exports only where Next.js requires them (pages, layouts, route config).

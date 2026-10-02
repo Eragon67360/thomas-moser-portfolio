@@ -3,17 +3,14 @@ import { test as base } from "@playwright/test";
 /** Canonical host: every `<link rel="canonical">` points here. */
 export const CANONICAL_ORIGIN = "https://www.thomasmoserdev.com";
 
-/** The scroll-to-top button's 3D scene, the one third party every page loads (230 KB). */
-export const SPLINE_SCENE = "https://prod.spline.design/**";
+/** The scroll-to-top button's 3D scene, served from the site itself (230 KB). */
+export const SPLINE_SCENE = "**/spline/*.splinecode";
 
 /**
- * Origins a page may contact besides the site itself (always allowed, so a scene served from
- * `/spline/…` on the site needs no entry). Anything else is a regression.
- * Spline is fetched for real: a stubbed or failed scene currently takes the whole page down
- * (see the fixme in pages.spec.ts), so stubbing it would turn every test red.
+ * Origins a page may contact besides the site itself. Anything else is a regression: the privacy
+ * policy lists every third party a visitor's browser talks to.
  */
 const ALLOWED_ORIGINS = new Set([
-  "https://prod.spline.design",
   // Vercel Analytics (same-origin `/_vercel/insights` in production, these in debug mode).
   "https://va.vercel-scripts.com",
   "https://vitals.vercel-insights.com",

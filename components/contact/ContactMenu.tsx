@@ -45,7 +45,13 @@ export function ContactMenu() {
         <Dropdown.Popover className="w-85">
           <Dropdown.Menu aria-label="Contact" onAction={(key) => key === "others" && othersModal.open()}>
             {MENU_CHANNELS.map(({ id, label, description, href, Icon }) => (
-              <Dropdown.Item key={id} id={id} textValue={label} href={href} target={href ? "_blank" : undefined}>
+              <Dropdown.Item
+                key={id}
+                id={id}
+                textValue={label}
+                href={href}
+                target={href?.startsWith("https:") ? "_blank" : undefined}
+              >
                 <Icon size={24} aria-hidden />
                 <div className="flex flex-col">
                   <Label>{label}</Label>

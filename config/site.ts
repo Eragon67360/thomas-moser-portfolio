@@ -67,6 +67,8 @@ export const footerNav: { title: string; links: NavLink[] }[] = [
     links: [
       { label: "Resume", href: "/pdf/CV_Thomas_Moser_EN.pdf", external: true },
       { label: "Source Code", href: profile.Repository, external: true },
+      { label: "Privacy", href: "/privacy" },
+      { label: "Legal notice", href: "/legal" },
     ],
   },
 ];

@@ -9,7 +9,6 @@ The words the site and its code use. Use them in issues, code names and copy; ex
 - **Screenshot**: a 1440×900 capture on Cloudinary under `thomasmoserdev.com/projects/v2/`, referenced by id. Omitted when no honest capture exists (the card shows a placeholder).
 - **Hover video**: a silent 8-second loop (`public/videos/projects/<slug>.mp4`) played when a project card is hovered, on hover-capable devices without reduced motion.
 - **Hover-video kit**: the capture/compose/render tooling in `resources/hover-videos/kit/`; each project's sources in `resources/hover-videos/projects/<slug>/` (or in the project's own repo).
-- **Project request**: the contact modal that pre-fills an email (`mailto:`) to ask the owner for a project.
 
 ## About
 

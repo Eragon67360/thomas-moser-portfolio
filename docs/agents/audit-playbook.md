@@ -35,18 +35,16 @@ Facts flagged ⚑ were found on 2026-10-01: verify them first.
 
 ### 3. Design and accessibility
 
-- Within [design guardrails](design-guardrails.md): WCAG 2.2 AA keyboard paths (navigation, modals, dropdowns, project request form), focus, contrast of amber text, reduced motion (⚑ the custom cursor and page transitions have no reduced-motion guard), 390px layout, alt text on project screenshots.
+- Within [design guardrails](design-guardrails.md): WCAG 2.2 AA keyboard paths (navigation, the contact dropdown and modal), focus, contrast of amber text, reduced motion (⚑ the custom cursor and page transitions have no reduced-motion guard), 390px layout, alt text on project screenshots.
 - No axe scan exists: run one ad hoc (`@axe-core/playwright` via `npx`) and propose adding it.
 
 ### 4. Performance
 
-- No field data: Vercel Analytics is installed, Speed Insights isn't (adding it is the owner's call; it can be paid). Lab LCP/INP per page; the weight and loading strategy of Spline, AdSense, the animated cursor and hover videos; ISR vs dynamic per route (AGENTS.md's Redis `cache: "default"` gotcha); image sizes from Cloudinary.
+- No field data: Vercel Analytics is installed, Speed Insights isn't (adding it is the owner's call; it can be paid). Lab LCP/INP per page; the weight and loading strategy of Spline, the animated cursor and hover videos; ISR vs dynamic per route (AGENTS.md's Redis `cache: "default"` gotcha); image sizes from Cloudinary.
 
 ### 5. Privacy, legal and content
 
-- ⚑ `/privacy` is an empty page (measured: `app/privacy/page.tsx` renders only a title, noindex). GDPR art. 13 asks for: controller, purposes, legal bases, processors (Vercel, Upstash, Google AdSense, GitHub/Giscus, Deezer/Steam only server-side), transfers, retention (view dedupe 24 h, analytics 7 days), rights, CNIL.
-- ⚑ AdSense loads on every page as soon as its client id is set (measured: `components/ads/AdSenseScript.tsx`), with no consent banner. In the EEA, personalised ads need prior consent and Google requires a certified consent platform (estimated legal exposure; confirm current Google and CNIL requirements before recommending a fix).
-- ⚑ No legal notice ("mentions légales") page: French law (LCEN art. 6) asks publishers to identify themselves and the host (Vercel Inc.); an individual non-professional may stay anonymous towards the public if the host has his details (estimated: confirm whether the site counts as professional, since it advertises freelance work).
+- The privacy policy (`app/privacy/page.tsx`) and legal notice (`app/legal/page.tsx`) describe the site as of 2026-10 (#18: AdSense removed, salted view dedupe, Giscus lazy-loaded, Spline scene self-hosted). Re-check them whenever a third party, a browser storage, a retention period or the owner's status (personal, non-professional site) changes: measure third-party requests with Playwright, not by reading the code alone.
 - Content accuracy: every project and career fact traceable (AGENTS.md); screenshots honest; links alive (`links.live`, `links.repo`); hover videos current.
 
 ### 6. Engineering and delivery
