@@ -5,7 +5,9 @@ import { useEffect, useState } from "react";
 // The 3D scene is heavy and browser-only: load it lazily, never on the server.
 const Spline = dynamic(() => import("@splinetool/react-spline"), { ssr: false });
 
-const SCENE_URL = "https://prod.spline.design/iAkJ9isUIS3gwwqc/scene.splinecode";
+// Served from the site so visitors' browsers don't contact Spline. After editing the scene in Spline,
+// re-download its export (https://prod.spline.design/iAkJ9isUIS3gwwqc/scene.splinecode) to this path.
+const SCENE_URL = "/spline/scroll-to-top.splinecode";
 
 export function ScrollToTopButton() {
   const [isVisible, setIsVisible] = useState(false);

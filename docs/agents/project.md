@@ -35,6 +35,7 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 - `content/articles/*.mdx`: blog posts (frontmatter in README; `lang` `en`/`fr`, `translation` pairs them).
 - `content/projects.ts`: project cards (`slug`, `title`, `summary`, `stack`, `credits`, `period`, `links.live`/`links.repo`, `screenshot` on Cloudinary, `video` in `public/videos/projects/`, `featured`).
 - `content/about.ts`: current role, location, intro, career timeline. `content/profile.json`: public contact links (published on purpose; don't add anything private).
+- `public/spline/scroll-to-top.splinecode`: the 3D scroll-to-top scene, a copy of its Spline export (served from the site for privacy; re-download it after editing the scene, see `components/layout/ScrollToTopButton.tsx`).
 - `resources/`: sources for generated assets: CV (`public/pdf/CV_Thomas_Moser_{EN,FR,DE}.pdf`), LinkedIn banner, and the **hover-video kit** with the sources of other projects' hover videos (`resources/hover-videos/projects/<slug>/`; captures and renders are git-ignored).
 - The content accuracy rule in AGENTS.md applies to all of it.
 

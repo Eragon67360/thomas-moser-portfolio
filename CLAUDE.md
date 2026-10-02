@@ -18,7 +18,6 @@ You are the owner's senior engineer on this site: you audit, file issues, fix th
 
 ## Open risks to settle first (found 2026-10-01; remove each line once fixed)
 
-1. **The privacy policy is an empty page** (`app/privacy/page.tsx`, noindex), while the site loads Google AdSense unconditionally, embeds Giscus (GitHub) comments, uses Vercel Analytics, and keeps an unsalted SHA-256 of the visitor's IP for 24 h in Redis to deduplicate post views. There is no legal notice page either. See the [audit playbook](docs/agents/audit-playbook.md#5-privacy-legal-and-content).
 2. **No CI, no tests, no branch protection**: nothing checks PRs, the "Protect main" ruleset exists but is disabled, Dependabot alerts are off ([audit playbook](docs/agents/audit-playbook.md#6-engineering-and-delivery)).
 3. **No security headers** beyond HSTS, and `X-Powered-By: Next.js` is sent (measured with `curl -sI` on 2026-10-01).
 

@@ -11,7 +11,7 @@ const LAST_UPDATED = "2 October 2026";
 export const metadata: Metadata = pageMetadata({
   title: "Privacy policy",
   description:
-    "What thomasmoserdev.com processes when you visit: hosting, cookieless statistics, blog view counts, comments and the 3D scene. No ads, no tracking cookies.",
+    "What thomasmoserdev.com processes when you visit: hosting, cookieless statistics, blog view counts and comments. No ads, no tracking cookies.",
   path: "/privacy",
 });
 
@@ -59,8 +59,8 @@ export default function PrivacyPage() {
           goes up by one. To count each reader once a day, the site stores, for 24 hours, a one-way hash of a random
           daily key, your IP address and the post. Your IP address itself is never stored, and the random keys are
           deleted after 48 hours, after which the hashes can no longer be linked to anyone. The counters are plain
-          numbers per post. These data are stored with Upstash, the site&apos;s database provider. Legal basis:
-          legitimate interest in showing honest view counts.
+          numbers per post. These data are stored with Upstash, the site&apos;s database provider, in its European
+          region. Legal basis: legitimate interest in showing honest view counts.
         </p>
 
         <h3>Home page visits by country</h3>
@@ -84,13 +84,6 @@ export default function PrivacyPage() {
           own choice.
         </p>
 
-        <h3>3D scene</h3>
-        <p>
-          The animated 3D scroll-to-top button is a Spline scene: your browser downloads it from Spline&apos;s servers
-          (prod.spline.design), which therefore receive your IP address and browser information. Legal basis: legitimate
-          interest in displaying the site as designed.
-        </p>
-
         <h3>Images and activity widgets</h3>
         <p>
           Project screenshots, album covers and game images are served through the site&apos;s own image service, so
@@ -100,11 +93,9 @@ export default function PrivacyPage() {
 
         <h3>Contacting me</h3>
         <p>
-          The project request form sends nothing to the site: it opens your email app with a pre-filled message, and
-          nothing leaves your device until you send that email yourself. Emails you send me, and messages through
-          WhatsApp, LinkedIn or Calendly, are used only to answer you and are kept only as long as the conversation
-          needs. Legal basis: steps taken at your request (Article 6(1)(b) GDPR) and legitimate interest in answering
-          messages. Those services process your messages under their own privacy policies.
+          The site has no contact form. Emails you send me, and messages through WhatsApp, LinkedIn or Calendly, are
+          used only to answer you and are kept only as long as the conversation needs. Legal basis: legitimate interest
+          in answering messages. Those services process your messages under their own privacy policies.
         </p>
 
         <h2>Cookies and local storage</h2>
@@ -115,10 +106,11 @@ export default function PrivacyPage() {
 
         <h2>Recipients and transfers outside the EU</h2>
         <p>
-          The data above are processed by Vercel Inc. (hosting and statistics, United States), Upstash (database),
-          GitHub, Inc. and giscus (comments, United States) and Spline (3D scene, United States). Transfers to the
-          United States rely on the EU-U.S. Data Privacy Framework where the company is certified, and otherwise on the
-          European Commission&apos;s standard contractual clauses. Nothing is sold or shared for advertising, and no
+          The data above are processed by Vercel Inc. (hosting and statistics, United States), Upstash (database, hosted
+          in the EU by a United States company), and GitHub, Inc. and giscus (comments, United States). The site&apos;s
+          fonts, images, videos and 3D scene are all served from the site itself. Transfers to the United States rely on
+          the EU-U.S. Data Privacy Framework where the company is certified (Vercel and GitHub are), and otherwise on
+          the European Commission&apos;s standard contractual clauses. Nothing is sold or shared for advertising, and no
           profiling or automated decision-making takes place.
         </p>
 
