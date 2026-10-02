@@ -44,7 +44,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en" className={`dark scroll-smooth overflow-x-hidden ${inter.variable} ${jetbrains.variable}`}>
+    <html
+      lang="en"
+      className={`dark motion-safe:scroll-smooth overflow-x-hidden ${inter.variable} ${jetbrains.variable}`}
+    >
       <body className="font-inter text-foreground">
         <JsonLd data={siteGraph()} />
         <Providers>

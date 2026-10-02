@@ -18,7 +18,7 @@ There is no separate design document: this page records the system as it is (202
 | Headings        | `components/ui/Typography.tsx`                                                                                            | `PageTitle`, `SectionTitle` (`as` prop), `SectionHeader`                                                                                              |
 | Links out       | `components/ui/ExternalLink.tsx`                                                                                          | Always use it for external links                                                                                                                      |
 | Components      | `@heroui/react`                                                                                                           | Compound `Card`, `Modal`, `Dropdown`, `Button` (`onPress`), `Avatar`, `Separator`, forms                                                              |
-| Motion          | `components/layout/PageTransition.tsx`, `components/projects/HoverVideo.tsx`, `CustomCursor.tsx`, `ScrollToTopButton.tsx` | Fade-in page transitions; hover videos only on hover-capable devices without reduced motion; desktop animated cursor; a lazily loaded Spline 3D scene |
+| Motion          | `components/layout/PageTransition.tsx`, `components/projects/HoverVideo.tsx`, `CustomCursor.tsx`, `ScrollToTopButton.tsx` | Fade-in page transitions (`motion-safe:`); hover videos and the animated cursor only on hover-capable devices without reduced motion (`hooks/useMediaQuery.ts`); the Spline 3D scene only on `md:` hover-capable desktops without reduced motion, once the scroll-to-top button has appeared, with a plain amber arrow button otherwise |
 
 ## Invariants: never change without the owner's explicit approval
 
@@ -32,7 +32,7 @@ Changing any of these is a **breaking change**: describe it with before/after sc
 
 ## Improvements you can make without asking
 
-- **Accessibility**: contrast fixes within the palette (measure amber on every background it's used on), visible focus, target sizes (WCAG 2.2 §2.5.8, at least 24×24 px), accessible names, heading order, and **reduced-motion guards** where they're missing (the custom cursor and page transitions have none today; `HoverVideo` shows the pattern).
+- **Accessibility**: contrast fixes within the palette (measure amber on every background it's used on), visible focus, target sizes (WCAG 2.2 §2.5.8, at least 24×24 px), accessible names, heading order, and **reduced-motion guards** where they're missing (`useMediaQuery(REDUCED_MOTION)` from `hooks/useMediaQuery.ts`, or the `motion-safe:` variant, is the pattern).
 - **Consistency**: use `Typography` and `ExternalLink` everywhere they fit; replace raw hex values and arbitrary sizes with tokens; one card pattern per content type.
 - **States**: skeletons that match the final layout, clear error messages in widgets (AGENTS.md requires both).
 - **Performance without visual change**: image `sizes`, LCP priority, keeping heavy things (Spline, Giscus) off the critical path.
