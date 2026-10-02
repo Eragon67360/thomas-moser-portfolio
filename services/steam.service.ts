@@ -24,14 +24,29 @@ const PERSONA_STATES: Record<number, string> = {
   3: "Away 🥱",
 };
 
-function steamGet<T>(url: string): Promise<T> {
-  return fetchJson<T>(url, { next: { revalidate: 60 } });
+/**
+ * Seconds a Steam response is shared across function instances in Next's data
+ * cache. Steam signals failures with HTTP status codes, which the fetch cache
+ * never stores, so caching at the fetch level is safe here (unlike Deezer).
+ */
+const REVALIDATE_SECONDS = {
+  /** Online status and the current game change within minutes. */
+  player: 60,
+  /** Two weeks of playtime moves slowly. */
+  games: 600,
+  /** A store header image is effectively a static asset. */
+  appDetails: 3600,
+} as const;
+
+function steamGet<T>(url: string, revalidate: number): Promise<T> {
+  return fetchJson<T>(url, { next: { revalidate } });
 }
 
 export async function getPlayer(): Promise<SteamPlayer | null> {
   const { apiKey, steamId } = env.steam();
   const data = await steamGet<{ response: { players: RawPlayer[] } }>(
     `${API_URL}/ISteamUser/GetPlayerSummaries/v0002/?key=${apiKey}&steamids=${steamId}`,
+    REVALIDATE_SECONDS.player,
   );
   const player = data.response.players[0];
   if (!player) return null;
@@ -52,6 +67,7 @@ async function getHeaderImage(appId: number): Promise<string | null> {
   try {
     const data = await steamGet<Record<string, { data?: { steam_appid?: number; header_image?: string } }>>(
       `${STORE_URL}/appdetails?appids=${appId}`,
+      REVALIDATE_SECONDS.appDetails,
     );
     // The store may key the response by a different id than requested (e.g. a
     // bundle id), so match on the app id inside the payload.
@@ -66,6 +82,7 @@ export async function getRecentGames(): Promise<SteamGame[]> {
   const { apiKey, steamId } = env.steam();
   const data = await steamGet<{ response: { games?: RawGame[] } }>(
     `${API_URL}/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${apiKey}&steamid=${steamId}&format=json`,
+    REVALIDATE_SECONDS.games,
   );
   return Promise.all(
     (data.response.games ?? []).map(async (game) => ({
