@@ -10,6 +10,7 @@ export default function Image() {
   return renderOgImage({
     kicker: intro.role,
     title: site.author,
-    subtitle: `Web and mobile apps, built end to end. ${currentRole.title} at ${currentRole.organization} (${currentRole.group}), ${currentRole.city}.`,
+    // The kicker already gives the role: name only the employer here.
+    subtitle: `Web and mobile apps, built end to end. At ${currentRole.organization} (${currentRole.group}), ${currentRole.city}.`,
   });
 }
