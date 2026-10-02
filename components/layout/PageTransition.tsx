@@ -7,7 +7,8 @@ const CONTAINED = "mx-auto my-8 w-full max-w-7xl px-0 sm:px-6 md:my-12 md:px-24 
 /**
  * Fades each page in with a CSS animation (visible without JavaScript, unlike an
  * inline `opacity: 0` start state), unless the visitor prefers reduced motion.
- * Blog posts render full-bleed.
+ * Blog posts render full-bleed. `#content` is the skip link's target; `tabIndex={-1}`
+ * lets it take focus without joining the tab order.
  */
 export function PageTransition({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -16,6 +17,8 @@ export function PageTransition({ children }: { children: ReactNode }) {
   return (
     <main
       key={pathname}
+      id="content"
+      tabIndex={-1}
       className={`outline-none motion-safe:animate-in motion-safe:fade-in motion-safe:duration-400 motion-safe:ease-in-out ${layout}`}
     >
       {children}

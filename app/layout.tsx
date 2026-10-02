@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Navigation } from "@/components/layout/Navigation";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { ScrollToTopButton } from "@/components/layout/ScrollToTopButton";
+import { SkipLink } from "@/components/layout/SkipLink";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { site } from "@/config/site";
 import { feedAlternate, sharedOpenGraph } from "@/lib/seo/metadata";
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       className={`dark motion-safe:scroll-smooth overflow-x-hidden ${inter.variable} ${jetbrains.variable}`}
     >
       <body className="font-inter text-foreground">
+        <SkipLink />
         <JsonLd data={siteGraph()} />
         <Providers>
           <div className="flex min-h-screen flex-col justify-between">
