@@ -42,3 +42,27 @@ test("pages send the security headers and don't advertise the framework", async 
   // No third-party script host: the privacy policy promises the browser only talks to the site and Giscus.
   expect(csp).toMatch(/script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'(;|$)/);
 });
+
+/**
+ * The widgets' JSON routes. The suite runs without credentials, so each one fails upstream:
+ * that failure must reach the client as a 502 the CDN is told never to share, or one visitor's
+ * outage would be served to everyone for the route's whole TTL.
+ */
+const API_ROUTES = [
+  "/api/deezer/recently-played",
+  "/api/deezer/top-tracks",
+  "/api/deezer/top-artists",
+  "/api/steam/games",
+  "/api/steam/player",
+];
+
+for (const path of API_ROUTES) {
+  test(`${path} fails without credentials and is not publicly cacheable`, async ({ request }) => {
+    const response = await request.get(path);
+    expect(response.status()).toBe(502);
+    expect(await response.json()).toEqual({ error: "Upstream request failed" });
+    const cacheControl = response.headers()["cache-control"] ?? "";
+    expect(cacheControl).toMatch(/\bno-store\b/);
+    expect(cacheControl).not.toMatch(/\b(public|s-maxage)\b/);
+  });
+}
