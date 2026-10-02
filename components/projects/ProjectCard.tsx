@@ -38,7 +38,7 @@ function Screenshot({ project, priority = false }: ScreenshotProps) {
 
 function Credits({ credits }: { credits: Project["credits"] }) {
   return (
-    <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
+    <div className="flex flex-wrap items-center gap-2 text-xs text-foreground/70">
       {credits.designedBy && <p>Designed by: {credits.designedBy.join(", ")}</p>}
       {credits.designedBy && <span className="size-1 rounded-full bg-muted" aria-hidden />}
       <p>Developed by: {credits.developedBy.join(", ")}</p>
@@ -83,14 +83,15 @@ export function ProjectCard({ project, priority = false }: ProjectCardProps) {
               </span>
             </h2>
             {primaryLink && (
-              <ExternalLink href={primaryLink} aria-label={`Open ${project.title}`}>
+              <ExternalLink href={primaryLink} aria-label={`Open ${project.title}`} className="-m-1 p-1">
+                {/* `-m-1 p-1`: a 24x24 target around the 16px icon, icon position unchanged. */}
                 <FaArrowRight className="transition-all duration-500 group-hover:-rotate-45" aria-hidden />
               </ExternalLink>
             )}
           </div>
 
           {(project.context || project.period) && (
-            <p className="text-xs text-muted">
+            <p className="text-xs text-foreground/70">
               {[project.context, project.period && formatPeriod(project.period)].filter(Boolean).join(" · ")}
             </p>
           )}

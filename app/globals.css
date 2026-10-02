@@ -25,6 +25,11 @@
 .dark {
   --field-background: var(--default);
   --field-border: oklch(38% 0.006 286);
+  /* HeroUI's dark danger (oklch 0.594) reads 3.97:1 on `surface`; one lightness step up, same
+     hue and chroma, gives at least 4.5:1 on surface, background and the gradient centre. Danger
+     text now needs a dark foreground on danger fills. */
+  --danger: oklch(0.72 0.1967 24.63);
+  --danger-foreground: var(--accent-foreground);
 }
 
 @layer base {

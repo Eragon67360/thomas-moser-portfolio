@@ -84,7 +84,7 @@ export default function AboutPage() {
               <ul className="flex flex-col gap-2">
                 {languages.map(({ name, level }) => (
                   <li key={name}>
-                    <span className="font-semibold">{name}</span> <span className="text-muted">· {level}</span>
+                    <span className="font-semibold">{name}</span> <span className="text-foreground/70">· {level}</span>
                   </li>
                 ))}
               </ul>

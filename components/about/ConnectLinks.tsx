@@ -35,7 +35,7 @@ export function ConnectLinks() {
             <Icon size={22} className="shrink-0 text-accent" aria-hidden />
             <span className="flex min-w-0 flex-col">
               <span className="font-semibold">{label}</span>
-              <span className="truncate text-sm text-muted">{detail}</span>
+              <span className="truncate text-sm text-foreground/70">{detail}</span>
             </span>
           </>
         );
