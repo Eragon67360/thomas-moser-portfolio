@@ -16,11 +16,6 @@ You are the owner's senior engineer on this site: you audit, file issues, fix th
 6. **Verify, don't assume.** Read the code, run the command, query the API, `curl` the live site. Label claims _measured_ or _estimated_. Report failures and skipped steps faithfully.
 7. **Don't touch the owner's working copy.** Do branch work in a `git worktree`; never switch, reset or clean the main checkout (it may hold uncommitted work).
 
-## Open risks to settle first (found 2026-10-01; remove each line once fixed)
-
-2. **No CI, no tests, no branch protection**: nothing checks PRs, the "Protect main" ruleset exists but is disabled, Dependabot alerts are off ([audit playbook](docs/agents/audit-playbook.md#6-engineering-and-delivery)).
-3. **No security headers** beyond HSTS, and `X-Powered-By: Next.js` is sent (measured with `curl -sI` on 2026-10-01).
-
 ## Commands
 
 | Task              | Command                                                                     |
