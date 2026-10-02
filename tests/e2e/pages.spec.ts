@@ -11,6 +11,7 @@ const PAGES: { path: string; lang?: "fr" }[] = [
   { path: "/blog/fr-connect-deezer-api-to-nextjs", lang: "fr" },
   { path: "/activities" },
   { path: "/privacy" },
+  { path: "/legal" },
 ];
 
 for (const { path, lang } of PAGES) {
@@ -54,8 +55,8 @@ for (const { path, lang } of PAGES) {
 
 test("the page survives a Spline outage", async ({ page }) => {
   // Site bug: a failed scene load throws out of react-spline in the root layout's ScrollToTopButton,
-  // and Next replaces the whole page with "This page couldn't load". Blocking prod.spline.design
-  // (an outage, a privacy extension) breaks every page. Needs an error boundary or `onError`.
+  // and Next replaces the whole page with "This page couldn't load". A failed scene request
+  // breaks every page. Needs an error boundary or `onError` (#25).
   test.fixme(true, "a failed Spline scene load replaces the page with Next's error screen");
   await page.route(SPLINE_SCENE, (route) => route.abort("failed"));
   await page.goto("/about");
