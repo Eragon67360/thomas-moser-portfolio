@@ -23,10 +23,10 @@ Facts flagged ⚑ were found on 2026-10-01: verify them first.
 
 ### 1. Security
 
-- ⚑ No security headers beyond HSTS; `X-Powered-By: Next.js` sent (measured, `curl -sI https://www.thomasmoserdev.com/`).
+- Security headers and CSP in `next.config.ts` (#22): check them on production with `curl -sI`, and that every origin the browser contacts is both allowed by the CSP and named in the privacy policy.
 - API routes (`app/api/*`): input validation, caching, upstream quota exposure (anyone can trigger Deezer/Steam calls through the proxies: are responses cached?), `/api/views` abuse (per-IP dedupe, existing slugs only).
 - Env hygiene: ⚑ legacy and unused Vercel variables, Redis token stored as non-Sensitive, the `NEXT_PUBLIC_UPSTASH_*` fallback still in `config/env.ts` ([project](project.md#environments-and-variables-names-only)).
-- Third-party scripts and their permissions; dependency alerts (⚑ Dependabot alerts are off).
+- Third-party scripts and their permissions; open Dependabot and secret-scanning alerts.
 
 ### 2. SEO and GEO
 
@@ -49,8 +49,7 @@ Facts flagged ⚑ were found on 2026-10-01: verify them first.
 
 ### 6. Engineering and delivery
 
-- ⚑ No CI: propose a GitHub Actions workflow running `npm run check` and `npm run build` on PRs (and a smoke/axe suite once it exists).
-- ⚑ "Protect main" ruleset disabled (public repos can enforce rulesets for free): propose enabling it with a required PR (and required checks once CI exists).
+- CI (`.github/workflows/ci.yml`) runs check, build and the Playwright smoke suite, required on `main` and `dev`: look for gaps in what the suite asserts (an axe pass is the next step).
 - Dependency updates (no Dependabot config), knip findings, stale docs.
 
 ## Issue format

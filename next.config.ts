@@ -8,7 +8,9 @@ const toolbar = (...sources: string[]) => (isPreview ? sources : []);
 /**
  * Only the origins the site uses. Next.js emits inline bootstrap scripts on every page, and per-request
  * nonces would make the ISR pages dynamic, so scripts allow 'unsafe-inline' but no third-party host.
- * Spline's runtime is bundled; its WebAssembly modules (unused by the current scene) are served from 'self'.
+ * Spline's runtime and scene are served from 'self'; its WebAssembly modules (unused by the current scene) too.
+ * Its MessagePack decoder tries `Function()` first and falls back when 'unsafe-eval' is refused: the console
+ * shows one harmless `script-src` report per page, and the scene still renders. Don't add 'unsafe-eval' for it.
  */
 const contentSecurityPolicy = {
   "default-src": ["'self'"],
@@ -22,7 +24,7 @@ const contentSecurityPolicy = {
   "style-src": ["'self'", "'unsafe-inline'", ...toolbar("https://vercel.live")],
   "img-src": ["'self'", "data:", "blob:", ...toolbar("https://vercel.live", "https://vercel.com")],
   "font-src": ["'self'", ...toolbar("https://vercel.live", "https://assets.vercel.com")],
-  "connect-src": ["'self'", "https://prod.spline.design", ...toolbar("https://vercel.live", "wss://ws-us3.pusher.com")],
+  "connect-src": ["'self'", ...toolbar("https://vercel.live", "wss://ws-us3.pusher.com")],
   "media-src": ["'self'"],
   "frame-src": ["https://giscus.app", ...toolbar("https://vercel.live")],
   "worker-src": ["'self'", "blob:"],

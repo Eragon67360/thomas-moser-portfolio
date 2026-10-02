@@ -29,3 +29,16 @@ test.describe("/api/views", () => {
     expect(response.status()).toBe(404);
   });
 });
+
+test("pages send the security headers and don't advertise the framework", async ({ request }) => {
+  const headers = (await request.get("/about")).headers();
+  expect(headers["x-powered-by"]).toBeUndefined();
+  expect(headers["x-content-type-options"]).toBe("nosniff");
+  expect(headers["x-frame-options"]).toBe("DENY");
+  expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  const csp = headers["content-security-policy"] ?? "";
+  expect(csp).toContain("frame-ancestors 'none'");
+  expect(csp).toContain("object-src 'none'");
+  // No third-party script host: the privacy policy promises the browser only talks to the site and Giscus.
+  expect(csp).toMatch(/script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'(;|$)/);
+});
