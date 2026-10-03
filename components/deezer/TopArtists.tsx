@@ -5,8 +5,11 @@ import { ArtistTile } from "./ArtistTile";
 import { ArtistTilesSkeleton } from "./skeletons";
 import { DeezerPanel } from "./DeezerPanel";
 
+/** Charts aggregate weeks of listening and the route is edge-cached for 10 min. */
+const CHART_POLL_MS = 600_000;
+
 export function TopArtists() {
-  const { data, error } = useApi<ArtistsResponse>("/api/deezer/top-artists");
+  const { data, error } = useApi<ArtistsResponse>("/api/deezer/top-artists", CHART_POLL_MS);
 
   return (
     <DeezerPanel title="Top artists">

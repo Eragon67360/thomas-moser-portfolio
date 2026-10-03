@@ -8,10 +8,12 @@ import type { PlayedTracksResponse } from "@/types/music";
 import { formatTimeAgo } from "./format";
 
 const DEEZER_PURPLE = "#A238FF";
+/** A track is rarely shorter than a minute; the route is edge-cached for 30 s anyway. */
+const HISTORY_POLL_MS = 60_000;
 
 /** Most recent track from the listening history (Deezer has no "now playing" API). */
 export function LastPlayed() {
-  const { data, error } = useApi<PlayedTracksResponse>("/api/deezer/recently-played");
+  const { data, error } = useApi<PlayedTracksResponse>("/api/deezer/recently-played", HISTORY_POLL_MS);
   const track = data?.tracks[0];
 
   return (
