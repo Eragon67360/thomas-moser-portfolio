@@ -1,5 +1,6 @@
 import { Card } from "@heroui/react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { FaBriefcase, FaFileDownload, FaMapMarkerAlt } from "react-icons/fa";
 import { AboutSection } from "@/components/about/AboutSection";
 import { ConnectLinks } from "@/components/about/ConnectLinks";
@@ -40,6 +41,17 @@ export default function AboutPage() {
           {intro.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
+          <p>
+            Some of that work is on the{" "}
+            <Link href="/projects" className="text-accent hover:underline">
+              projects page
+            </Link>
+            , and the{" "}
+            <Link href="/blog" className="text-accent hover:underline">
+              blog
+            </Link>{" "}
+            has my tutorials.
+          </p>
         </div>
         <nav aria-label="Download my CV" className="flex flex-wrap items-center justify-center gap-3 text-sm">
           <span className="flex items-center gap-2 text-muted">
