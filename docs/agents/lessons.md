@@ -5,6 +5,7 @@ Mistakes and near-misses from working this way on the owner's projects (most fro
 ## Production and settings
 
 - **Code first, settings after.** On the sister site, auth and email settings switched on before their code was deployed broke sign-in for everyone. Any PR that needs a dashboard change lists the steps in order, after the deploy.
+- **A rotated secret needs a redeploy at once.** Vercel gives a variable's new value only to new deployments; when the Upstash token was rotated (2026-10-03), production kept the revoked one and every counter read and write failed (`WRONGPASS`) until the production redeploy minutes later. Rotate, update the variable, redeploy production, then check the counters.
 - **Preview and local runs can write to production.** Here they share the production Redis ([safety](safety.md#what-writes-where)).
 - **Verify settings through the API, but trust tested behaviour.** When a flag and a real test disagree, report the discrepancy; the test usually wins.
 - **Don't promise what the site can't do.** Legal and help pages describe the product as it is, not as planned.
