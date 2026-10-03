@@ -54,14 +54,16 @@ for (const { path, lang } of PAGES) {
 }
 
 test("the page survives a Spline outage", async ({ page }) => {
-  // Site bug: a failed scene load throws out of react-spline in the root layout's ScrollToTopButton,
-  // and Next replaces the whole page with "This page couldn't load". A failed scene request
-  // breaks every page. Needs an error boundary or `onError` (#25).
-  test.fixme(true, "a failed Spline scene load replaces the page with Next's error screen");
+  // The scene mounts once the button has become visible on a hover-capable desktop; a failed
+  // load must leave the plain button, not Next's error screen (#25).
   await page.route(SPLINE_SCENE, (route) => route.abort("failed"));
   await page.goto("/about");
+  const sceneRequest = page.waitForRequest(SPLINE_SCENE);
+  await page.mouse.wheel(0, 600);
+  await sceneRequest;
   await page.waitForLoadState("networkidle");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("About me");
+  await expect(page.getByRole("button", { name: "Scroll to top" })).toBeVisible();
 });
 
 test("an unknown path answers 404 with one h1", async ({ page }) => {
