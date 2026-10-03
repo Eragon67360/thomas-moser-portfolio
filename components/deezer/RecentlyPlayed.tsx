@@ -1,4 +1,5 @@
 "use client";
+import { SkeletonMessage } from "@/components/ui/SkeletonMessage";
 import { useApi } from "@/hooks/useApi";
 import type { PlayedTracksResponse } from "@/types/music";
 import { TrackRowsSkeleton } from "./skeletons";
@@ -14,7 +15,9 @@ export function RecentlyPlayed() {
   return (
     <DeezerPanel title="Last played">
       {error ? (
-        <p className="text-muted">Could not load recently played tracks.</p>
+        <SkeletonMessage skeleton={<TrackRowsSkeleton rows={10} />}>
+          Could not load recently played tracks.
+        </SkeletonMessage>
       ) : data ? (
         data.tracks.map((track, i) => <TrackRow key={`${track.songUrl}-${i}`} track={track} />)
       ) : (
