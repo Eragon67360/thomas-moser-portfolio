@@ -16,6 +16,12 @@ import type { PostLang } from "@/types/post";
 import { getPostViews } from "@/services/views.service";
 
 export const revalidate = 60;
+/**
+ * Every post is an MDX file in the repo, so `generateStaticParams` knows them all: an unknown slug
+ * is answered by the prerendered `/_not-found` page (inside the layout) instead of an on-demand
+ * render whose `notFound()` would produce Next's bare error shell.
+ */
+export const dynamicParams = false;
 
 const OG_LOCALES: Record<PostLang, string> = { en: "en_US", fr: "fr_FR" };
 
