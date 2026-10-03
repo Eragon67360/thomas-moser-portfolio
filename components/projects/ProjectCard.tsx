@@ -29,6 +29,7 @@ function Screenshot({ project, priority = false }: ScreenshotProps) {
         sizes={project.featured ? "(min-width: 1024px) 60vw, 100vw" : "(min-width: 640px) 50vw, 100vw"}
         // The first card's screenshot is the page's LCP element: preload it, lazy-load the rest.
         priority={priority}
+        fetchPriority={priority ? "high" : undefined}
         className="aspect-16/10 w-full rounded-lg object-cover object-top"
       />
       {project.video && <HoverVideo src={project.video} label={`Animated preview of ${project.title}`} />}
