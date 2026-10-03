@@ -34,6 +34,22 @@ function collectHeadings(into: TocHeading[]) {
   return () => (tree: Root) => findHeadings(tree, into);
 }
 
+function focusCodeBlocks(node: Root | Element): void {
+  for (const child of node.children) {
+    if (child.type !== "element") continue;
+    if (child.tagName === "pre") child.properties.tabIndex = 0;
+    else focusCodeBlocks(child);
+  }
+}
+
+/**
+ * Rehype plugin: code blocks scroll horizontally, and only a focusable element can be scrolled from
+ * the keyboard (WCAG 2.1.1, axe `scrollable-region-focusable`). The focus ring is `.article-prose pre`.
+ */
+function focusableCodeBlocks() {
+  return (tree: Root) => focusCodeBlocks(tree);
+}
+
 /** Compiles an MDX string (without frontmatter) into a component and its outline. */
 export async function compileMdx(source: string): Promise<CompiledMdx> {
   const headings: TocHeading[] = [];
@@ -46,6 +62,7 @@ export async function compileMdx(source: string): Promise<CompiledMdx> {
       rehypeAutolinkHeadings,
       rehypeCodeTitles,
       rehypePrism,
+      focusableCodeBlocks,
       rehypeAccessibleEmojis,
     ],
   });
