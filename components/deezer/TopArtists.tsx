@@ -1,4 +1,5 @@
 "use client";
+import { SkeletonMessage } from "@/components/ui/SkeletonMessage";
 import { useApi } from "@/hooks/useApi";
 import type { ArtistsResponse } from "@/types/music";
 import { ArtistTile } from "./ArtistTile";
@@ -14,7 +15,7 @@ export function TopArtists() {
   return (
     <DeezerPanel title="Top artists">
       {error ? (
-        <p className="text-muted">Could not load top artists.</p>
+        <SkeletonMessage skeleton={<ArtistTilesSkeleton count={6} />}>Could not load top artists.</SkeletonMessage>
       ) : data ? (
         data.artists.map((artist) => <ArtistTile key={artist.artistUrl} artist={artist} />)
       ) : (

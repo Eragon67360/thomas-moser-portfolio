@@ -7,9 +7,10 @@ const HOVER_CAPABLE = "(hover: hover) and (pointer: fine)";
 /**
  * Silent looping preview laid over the card screenshot. Nothing loads until the card is
  * hovered or focused; the video fades in once it is actually playing, so the screenshot
- * stays visible while it buffers. Skipped for reduced motion and touch devices.
+ * stays visible while it buffers. Skipped for reduced motion and touch devices. Decorative: the
+ * screenshot underneath already describes the project, so assistive tech skips the video.
  */
-export function HoverVideo({ src, label }: { src: string; label: string }) {
+export function HoverVideo({ src }: { src: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -45,7 +46,7 @@ export function HoverVideo({ src, label }: { src: string; label: string }) {
   return (
     <video
       ref={videoRef}
-      aria-label={label}
+      aria-hidden
       muted
       loop
       playsInline

@@ -66,12 +66,22 @@ test("the page survives a Spline outage", async ({ page }) => {
   await expect(page.getByRole("button", { name: "Scroll to top" })).toBeVisible();
 });
 
-test("an unknown path answers 404 with one h1", async ({ page }) => {
-  const response = await page.goto("/this-page-does-not-exist");
-  expect(response?.status()).toBe(404);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
-  await expect(page.locator("html")).toHaveAttribute("lang", "en");
-  for (const text of await page.locator('script[type="application/ld+json"]').allTextContents()) {
-    expect(() => JSON.parse(text)).not.toThrow();
-  }
-});
+/** Unknown URLs, and `notFound()` from a route with its own `generateMetadata` (an unknown post slug). */
+for (const path of ["/this-page-does-not-exist", "/blog/this-post-does-not-exist"]) {
+  test(`${path} answers 404 inside the layout, noindex, without canonical`, async ({ page }) => {
+    const response = await page.goto(path);
+    expect(response?.status()).toBe(404);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Page not found");
+    await expect(page.getByRole("banner").getByRole("navigation")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Projects" }).first()).toBeVisible();
+
+    await expect(page).toHaveTitle(/Page not found/);
+    await expect(page.locator('meta[name="robots"]')).toHaveCount(1);
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
+    await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
+    for (const text of await page.locator('script[type="application/ld+json"]').allTextContents()) {
+      expect(() => JSON.parse(text)).not.toThrow();
+    }
+  });
+}

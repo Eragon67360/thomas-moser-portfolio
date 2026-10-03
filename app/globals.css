@@ -2,6 +2,21 @@
 @import "@heroui/styles";
 @import "prismjs/themes/prism-okaidia.css";
 
+/* Okaidia's pink (#f92672) is 3.93:1 on the #272822 code background; this pink keeps the hue
+   at 5.70:1 (WCAG 1.4.3). The other token colours already pass (comment 4.66, number 5.23). */
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #ff6ea9;
+}
+
+/* A translucent token would drop any of these colours below 4.5:1. */
+.token.namespace {
+  opacity: 1;
+}
+
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -78,6 +93,11 @@
 
     pre {
       @apply bg-gray-500/35 text-white;
+
+      /* Focusable so keyboard users can scroll it (`focusableCodeBlocks` in lib/mdx.ts). */
+      &:focus-visible {
+        @apply outline-2 outline-offset-2 outline-accent;
+      }
     }
 
     a {

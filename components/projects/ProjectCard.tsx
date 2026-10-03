@@ -32,7 +32,7 @@ function Screenshot({ project, priority = false }: ScreenshotProps) {
         fetchPriority={priority ? "high" : undefined}
         className="aspect-16/10 w-full rounded-lg object-cover object-top"
       />
-      {project.video && <HoverVideo src={project.video} label={`Animated preview of ${project.title}`} />}
+      {project.video && <HoverVideo src={project.video} />}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import { SkeletonMessage } from "@/components/ui/SkeletonMessage";
 import { useApi } from "@/hooks/useApi";
 import type { TracksResponse } from "@/types/music";
 import { TrackRowsSkeleton } from "./skeletons";
@@ -14,7 +15,7 @@ export function TopTracks() {
   return (
     <DeezerPanel title="Top musics">
       {error ? (
-        <p className="text-muted">Could not load top tracks.</p>
+        <SkeletonMessage skeleton={<TrackRowsSkeleton rows={6} />}>Could not load top tracks.</SkeletonMessage>
       ) : data ? (
         data.tracks.map((track) => <TrackRow key={track.songUrl} track={track} />)
       ) : (
