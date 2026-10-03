@@ -16,6 +16,10 @@ export default function ActivitiesPage() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-8 p-8">
       <h1 className="sr-only">Activities</h1>
+      {/* Server-rendered, so crawlers that don't run the widgets' JavaScript still learn what the page is. */}
+      <p className="text-center text-muted">
+        Recent Steam games and Deezer listening, updated live from both services.
+      </p>
       <SectionTitle>Steam profile and games</SectionTitle>
       <SteamActivity />
 

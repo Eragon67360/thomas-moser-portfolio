@@ -2,6 +2,21 @@
 @import "@heroui/styles";
 @import "prismjs/themes/prism-okaidia.css";
 
+/* Okaidia's pink (#f92672) is 3.93:1 on the #272822 code background; this pink keeps the hue
+   at 5.70:1 (WCAG 1.4.3). The other token colours already pass (comment 4.66, number 5.23). */
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #ff6ea9;
+}
+
+/* A translucent token would drop any of these colours below 4.5:1. */
+.token.namespace {
+  opacity: 1;
+}
+
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -18,6 +33,18 @@
   --accent: #ffbf00;
   --accent-foreground: #16181d;
   --link: var(--accent);
+  /* Translucent tints over the gradient. `surface-tint`: cards, pills and link tiles (about page,
+     project cards). `panel-tint`: the project card's text panel, lighter while the card is hovered. */
+  --surface-tint: #ccdcff1f;
+  --panel-tint: #5757577b;
+  --panel-tint-hover: #57575733;
+}
+
+/* Expose the tints as colour utilities (`bg-surface-tint`, `bg-panel-tint`, `bg-panel-tint-hover`). */
+@theme inline {
+  --color-surface-tint: var(--surface-tint);
+  --color-panel-tint: var(--panel-tint);
+  --color-panel-tint-hover: var(--panel-tint-hover);
 }
 
 /* HeroUI's dark fields share the overlay colour and have no border, so inputs and
@@ -25,6 +52,11 @@
 .dark {
   --field-background: var(--default);
   --field-border: oklch(38% 0.006 286);
+  /* HeroUI's dark danger (oklch 0.594) reads 3.97:1 on `surface`; one lightness step up, same
+     hue and chroma, gives at least 4.5:1 on surface, background and the gradient centre. Danger
+     text now needs a dark foreground on danger fills. */
+  --danger: oklch(0.72 0.1967 24.63);
+  --danger-foreground: var(--accent-foreground);
 }
 
 @layer base {
@@ -35,12 +67,37 @@
 }
 
 @layer components {
+  /* Project card title (components/projects/ProjectCard.tsx): on hover the visible title slides up
+     and a second copy slides in from below. The copy is generated from `data-title` so the <h2>
+     holds the title once for crawlers and assistants; the `/ ""` alternative text keeps it out of
+     the accessibility tree, and the plain declaration before it is the fallback for browsers
+     without that syntax. The pseudo-element also gives the heading its height. */
+  .project-title::after {
+    content: attr(data-title);
+    content: attr(data-title) / "";
+    display: block;
+    width: 100%;
+    transform: translateY(100%);
+    transition: transform 300ms linear;
+  }
+
+  @media (hover: hover) {
+    .group:hover .project-title::after {
+      transform: translateY(0);
+    }
+  }
+
   /* Long-form article typography (blog posts). */
   .article-prose {
     @apply prose prose-invert max-w-none;
 
     pre {
       @apply bg-gray-500/35 text-white;
+
+      /* Focusable so keyboard users can scroll it (`focusableCodeBlocks` in lib/mdx.ts). */
+      &:focus-visible {
+        @apply outline-2 outline-offset-2 outline-accent;
+      }
     }
 
     a {

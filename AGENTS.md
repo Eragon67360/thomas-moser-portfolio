@@ -2,6 +2,8 @@
 
 Guidance for AI agents and contributors working on this repository.
 
+> **Working rules live in [`CLAUDE.md`](CLAUDE.md) and [`docs/agents/`](docs/agents/)**: standing rules (no pushes to `main`, PRs into `dev`, releases on the owner's go), safety, quality gates, design guardrails, audits and releases. This file stays the reference for architecture, conventions and gotchas.
+
 ## Stack
 
 | Concern   | Choice                                                                     |
@@ -23,7 +25,10 @@ npm run dev          # local dev server
 npm run build        # production build
 npm run check        # typecheck + lint + format check + knip — run before every commit
 npm run format       # apply formatting
+npm run test:e2e     # Playwright smoke suite against a production build (`npm run build` first)
 ```
+
+CI (`.github/workflows/ci.yml`, check name `CI`) runs `check`, `build` and `test:e2e` on every pull request and on pushes to `dev`, without credentials.
 
 `npm run typecheck` runs `next typegen` first: route types such as `PageProps<"/blog/[slug]">` live in `.next/types`.
 
@@ -50,7 +55,7 @@ proxy.ts        Next.js 16 proxy: records home page views (non-blocking via wait
 - **Server-only code** (`services/`, `config/env.ts`, `lib/redis.ts`, `lib/mdx.ts`, `lib/api.ts`) starts with `import "server-only"`. Never import it from a `"use client"` file.
 - **Upstream shapes stay in services.** Raw Deezer/Steam JSON types are private to their service; everything else consumes `types/*` DTOs.
 - **One JSON trust boundary:** parse HTTP JSON through `lib/http.ts` (`fetchJson` / `readJson`). Don't sprinkle `as T` casts on `response.json()`.
-- **Secrets never use `NEXT_PUBLIC_`.** Only genuinely public values (AdSense client id, Giscus ids) may. Read secrets through `env.*()` in `config/env.ts`.
+- **Secrets never use `NEXT_PUBLIC_`.** Only genuinely public values (the Giscus ids) may. Read secrets through `env.*()` in `config/env.ts`.
 - **API routes are internal**: they back client widgets that poll via `useApi`. Keep them thin; logic belongs in services.
 - **Client components** fetch only through `useApi(path)`; show a skeleton while loading and a message on error.
 - Named exports for components; default exports only where Next.js requires them (pages, layouts, route config).
@@ -92,7 +97,7 @@ v3 is not v2 (NextUI). There is **no** `HeroUIProvider`, `Navbar`, `Image`, `Div
 - **`NextRequest.ip` / `.geo` no longer exist.** Use `lib/request.ts` (Vercel headers).
 - **Route params are async** in Next.js 16: `const { slug } = await params`.
 - Don't wrap service calls that may run during prerendering in a catch-all that hides Next's dynamic-rendering signal; prefer making the call static-safe.
-- `config/env.ts` still falls back to the legacy `NEXT_PUBLIC_UPSTASH_REDIS_*` names. Once the deployment defines `NEXT_UPSTASH_REDIS_URL/TOKEN`, delete that fallback and the legacy variables.
+- **Redis counters are written only in production** (`env.redisWritesAllowed()`: `VERCEL_ENV === "production"`, or `REDIS_ALLOW_WRITES=1` for a deliberate local test). Local and preview runs share the production database and only read it; never bypass the guard to "see a counter move".
 - `config/site.ts` is bundled into client components: add only fields that are safe to publish.
 - **Deezer reports errors as HTTP 200** with an `error` object in the body; `services/deezer.service.ts` checks both and retries quota errors (code 4) with backoff. It has no "currently playing" endpoint — the footer shows the last played track instead.
 - `react-animated-cursor` declares a React 18 peer; `package.json` `overrides` pins it to our React.

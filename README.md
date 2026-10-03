@@ -18,13 +18,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Script           | Purpose                                            |
-| ---------------- | -------------------------------------------------- |
-| `npm run dev`    | Development server                                 |
-| `npm run build`  | Production build                                   |
-| `npm start`      | Serve the production build                         |
-| `npm run check`  | Type-check, lint, format check and dead-code check |
-| `npm run format` | Format the codebase with oxfmt                     |
+| Script             | Purpose                                                                       |
+| ------------------ | ----------------------------------------------------------------------------- |
+| `npm run dev`      | Development server                                                            |
+| `npm run build`    | Production build                                                              |
+| `npm start`        | Serve the production build                                                    |
+| `npm run check`    | Type-check, lint, format check and dead-code check                            |
+| `npm run format`   | Format the codebase with oxfmt                                                |
+| `npm run test:e2e` | Playwright smoke suite against a production build (run `npm run build` first) |
 
 ## Writing a post
 
@@ -42,7 +43,7 @@ tags: ["nextjs"]
 ---
 ```
 
-Set `published: false` to hide a draft. Articles can use `<AdBanner />`.
+Set `published: false` to hide a draft.
 
 ## Project structure
 

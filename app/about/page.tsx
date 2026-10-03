@@ -1,11 +1,13 @@
 import { Card } from "@heroui/react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { FaBriefcase, FaFileDownload, FaMapMarkerAlt } from "react-icons/fa";
 import { AboutSection } from "@/components/about/AboutSection";
 import { ConnectLinks } from "@/components/about/ConnectLinks";
 import { StackGrid } from "@/components/about/StackGrid";
 import { Timeline } from "@/components/about/Timeline";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { ExternalLink } from "@/components/ui/ExternalLink";
 import { SectionHeader } from "@/components/ui/Typography";
 import { cvDownloads } from "@/config/site";
 import { currentRole, education, experience, intro, languages, location, music } from "@/content/about";
@@ -26,11 +28,11 @@ export default function AboutPage() {
       <header className="flex w-full flex-col items-center gap-6">
         <SectionHeader as="h1" title="About me" subtitle={intro.role} />
         <ul className="flex flex-wrap justify-center gap-3 text-sm">
-          <li className="flex items-center gap-2 rounded-full bg-[#ccdcff1f] px-4 py-2">
+          <li className="flex items-center gap-2 rounded-full bg-surface-tint px-4 py-2">
             <FaBriefcase className="text-accent" aria-hidden />
             {currentRole.title} at {currentRole.organization}
           </li>
-          <li className="flex items-center gap-2 rounded-full bg-[#ccdcff1f] px-4 py-2">
+          <li className="flex items-center gap-2 rounded-full bg-surface-tint px-4 py-2">
             <FaMapMarkerAlt className="text-accent" aria-hidden />
             {location.home} · Working in {location.work}
           </li>
@@ -39,6 +41,17 @@ export default function AboutPage() {
           {intro.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
+          <p>
+            Some of that work is on the{" "}
+            <Link href="/projects" className="text-accent hover:underline">
+              projects page
+            </Link>
+            , and the{" "}
+            <Link href="/blog" className="text-accent hover:underline">
+              blog
+            </Link>{" "}
+            has my tutorials.
+          </p>
         </div>
         <nav aria-label="Download my CV" className="flex flex-wrap items-center justify-center gap-3 text-sm">
           <span className="flex items-center gap-2 text-muted">
@@ -46,16 +59,14 @@ export default function AboutPage() {
             CV (PDF):
           </span>
           {cvDownloads.map(({ label, lang, href }) => (
-            <a
+            <ExternalLink
               key={lang}
               href={href}
               hrefLang={lang}
-              target="_blank"
-              rel="noopener noreferrer"
               className="rounded-full border border-accent/60 px-4 py-1.5 text-accent transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               {label}
-            </a>
+            </ExternalLink>
           ))}
         </nav>
       </header>
@@ -79,12 +90,12 @@ export default function AboutPage() {
 
       <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2">
         <AboutSection id="languages" title="Languages">
-          <Card className="bg-[#ccdcff1f]">
+          <Card className="bg-surface-tint">
             <Card.Content>
               <ul className="flex flex-col gap-2">
                 {languages.map(({ name, level }) => (
                   <li key={name}>
-                    <span className="font-semibold">{name}</span> <span className="text-muted">· {level}</span>
+                    <span className="font-semibold">{name}</span> <span className="text-foreground/70">· {level}</span>
                   </li>
                 ))}
               </ul>
@@ -92,7 +103,7 @@ export default function AboutPage() {
           </Card>
         </AboutSection>
         <AboutSection id="music" title="Music">
-          <Card className="bg-[#ccdcff1f]">
+          <Card className="bg-surface-tint">
             <Card.Content>
               <p className="leading-relaxed">{music}</p>
             </Card.Content>

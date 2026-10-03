@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [dev]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  ci:
+    # The check GitHub shows (and the ruleset requires) is this job's name: "CI".
+    name: CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Refuse credentials
+        # CI runs without secrets on purpose: the build and the smoke suite work without them, and a
+        # credential here would let a test run write the production Redis or burn Deezer/Steam quota.
+        run: |
+          for name in NEXT_UPSTASH_REDIS_URL NEXT_UPSTASH_REDIS_TOKEN NEXT_PUBLIC_UPSTASH_REDIS_URL NEXT_PUBLIC_UPSTASH_REDIS_TOKEN DEEZER_TOKEN NEXT_STEAM_API_KEY; do
+            if [ -n "${!name:-}" ]; then
+              echo "::error::$name is set. CI must run without credentials."
+              exit 1
+            fi
+          done
+          for file in .env .env.local .env.production; do
+            if [ -e "$file" ]; then
+              echo "::error::$file is checked in. Env files must never be committed."
+              exit 1
+            fi
+          done
+
+      - run: npm ci
+
+      - run: npm run check
+
+      - run: npm run build
+
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Chromium system dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npx playwright install-deps chromium
+
+      - name: Smoke suite
+        run: npm run test:e2e
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7

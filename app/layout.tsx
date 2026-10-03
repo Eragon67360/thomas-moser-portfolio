@@ -2,12 +2,12 @@ import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 import { Analytics } from "@vercel/analytics/next";
-import { AdSenseScript } from "@/components/ads/AdSenseScript";
 import { CustomCursor } from "@/components/layout/CustomCursor";
 import { Footer } from "@/components/layout/Footer";
 import { Navigation } from "@/components/layout/Navigation";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { ScrollToTopButton } from "@/components/layout/ScrollToTopButton";
+import { SkipLink } from "@/components/layout/SkipLink";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { site } from "@/config/site";
 import { feedAlternate, sharedOpenGraph } from "@/lib/seo/metadata";
@@ -45,8 +45,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang="en" className={`dark scroll-smooth overflow-x-hidden ${inter.variable} ${jetbrains.variable}`}>
+    <html
+      lang="en"
+      className={`dark motion-safe:scroll-smooth overflow-x-hidden ${inter.variable} ${jetbrains.variable}`}
+    >
       <body className="font-inter text-foreground">
+        <SkipLink />
         <JsonLd data={siteGraph()} />
         <Providers>
           <div className="flex min-h-screen flex-col justify-between">
@@ -58,7 +62,6 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
           <CustomCursor />
         </Providers>
         <Analytics />
-        <AdSenseScript />
       </body>
     </html>
   );

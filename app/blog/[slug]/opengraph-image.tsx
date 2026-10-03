@@ -1,9 +1,11 @@
 import { notFound } from "next/navigation";
+import { site } from "@/config/site";
 import { postShareImage } from "@/lib/media";
 import { ogImageSize, renderOgImage } from "@/lib/seo/og-image";
 import { getPost, getPosts } from "@/services/posts.service";
 
-export const alt = "Article cover";
+// Next only allows a static alt here; it still beats a generic "cover".
+export const alt = `Social card for an article by ${site.author}`;
 export const size = ogImageSize;
 export const contentType = "image/png";
 

@@ -20,7 +20,7 @@ export function PostHeader({ post, views, translation }: PostHeaderProps) {
       <Image src={postHeaderImage(post.slug)} alt="" fill priority sizes="100vw" className="object-cover opacity-40" />
       <div className="relative flex min-h-screen w-full items-center justify-center bg-linear-to-t from-background to-transparent text-center">
         <div className="mx-5 max-w-3xl">
-          <h1 className="text-3xl font-extrabold text-white sm:text-5xl">{post.title}</h1>
+          <h1 className="text-3xl font-extrabold text-foreground sm:text-5xl">{post.title}</h1>
           <div className="relative my-10 grid grid-cols-[auto_1fr_auto] items-center gap-x-2">
             <time dateTime={post.date} className="rounded-lg bg-white/20 p-1 px-2 text-sm">
               {formatPostDate(post.date, post.lang)}
@@ -31,8 +31,8 @@ export function PostHeader({ post, views, translation }: PostHeaderProps) {
               {views}
             </div>
           </div>
-          <p className="text-md mb-6 text-gray-400 sm:text-lg">{post.description}</p>
-          <p className="mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-gray-300 lg:mb-0">
+          <p className="mb-6 text-base text-muted sm:text-lg">{post.description}</p>
+          <p className="mb-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-foreground/80 lg:mb-0">
             <span>
               {labels.by}{" "}
               <Link href="/about" rel="author" className="text-accent hover:underline">

@@ -17,6 +17,8 @@ export function Comments() {
       emitMetadata="0"
       theme="preferred_color_scheme"
       inputPosition="top"
+      // The iframe (giscus.app, GitHub) loads only when a reader scrolls near the comments.
+      loading="lazy"
     />
   );
 }

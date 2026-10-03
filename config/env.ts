@@ -14,10 +14,14 @@ function readEnv(...names: string[]): string {
 
 export const env = {
   redis: () => ({
-    // NEXT_PUBLIC_* names are legacy fallbacks; prefer the server-only names.
-    url: readEnv("NEXT_UPSTASH_REDIS_URL", "NEXT_PUBLIC_UPSTASH_REDIS_URL"),
-    token: readEnv("NEXT_UPSTASH_REDIS_TOKEN", "NEXT_PUBLIC_UPSTASH_REDIS_TOKEN"),
+    url: readEnv("NEXT_UPSTASH_REDIS_URL"),
+    token: readEnv("NEXT_UPSTASH_REDIS_TOKEN"),
   }),
+  /**
+   * Every Vercel environment shares the production database, so only production writes counters,
+   * unless a run opts in with REDIS_ALLOW_WRITES=1. Reads work everywhere.
+   */
+  redisWritesAllowed: () => process.env.VERCEL_ENV === "production" || process.env.REDIS_ALLOW_WRITES === "1",
   deezer: () => ({
     // Owner's token with `offline_access` (never expires) and `listening_history`.
     accessToken: readEnv("DEEZER_TOKEN"),

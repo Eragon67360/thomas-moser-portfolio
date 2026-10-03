@@ -33,7 +33,8 @@ export function Navigation() {
           <Link
             key={href}
             href={href}
-            className="text-xs text-foreground transition-colors hover:text-accent sm:text-sm md:text-base lg:text-lg xl:text-xl"
+            // `-mx-1 px-1 py-4` grows the hit area to at least 36x48 (WCAG 2.5.8) without moving the text.
+            className="-mx-1 px-1 py-4 text-xs text-foreground transition-colors hover:text-accent sm:text-sm md:text-base lg:text-lg xl:text-xl"
           >
             {label}
           </Link>
