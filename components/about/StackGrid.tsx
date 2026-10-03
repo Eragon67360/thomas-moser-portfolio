@@ -5,7 +5,7 @@ export function StackGrid() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {stack.map(({ group, items }) => (
-        <Card key={group} className="bg-[#ccdcff1f]">
+        <Card key={group} className="bg-surface-tint">
           <Card.Header>
             <Card.Title className="text-base font-semibold">{group}</Card.Title>
           </Card.Header>

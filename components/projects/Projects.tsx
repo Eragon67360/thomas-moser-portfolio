@@ -11,8 +11,8 @@ export function Projects() {
         subtitle="A selection of what I have built, for clients, friends and myself"
       />
       <div className="mx-auto mt-12 grid w-full grid-cols-1 gap-8 sm:grid-cols-2">
-        {projects.map((project) => (
-          <ProjectCard key={project.slug} project={project} />
+        {projects.map((project, index) => (
+          <ProjectCard key={project.slug} project={project} priority={index === 0} />
         ))}
       </div>
     </section>

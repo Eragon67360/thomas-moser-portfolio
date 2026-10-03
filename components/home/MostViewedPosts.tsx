@@ -9,7 +9,7 @@ function PostCard({ post }: { post: PostCardData }) {
     <Link
       href={`/blog/${post.slug}`}
       hrefLang={post.lang}
-      className="flex h-full flex-col gap-4 rounded-lg border border-gray-700 bg-white/5 p-4 text-start backdrop-blur-sm transition-colors hover:border-accent/60"
+      className="flex h-full flex-col gap-4 rounded-lg border border-white/15 bg-white/5 p-4 text-start backdrop-blur-sm transition-colors hover:border-accent/60"
     >
       {post.views !== undefined && (
         <span className="self-start rounded-lg bg-accent/10 p-1 text-xs text-accent">{post.views} views</span>
@@ -17,7 +17,7 @@ function PostCard({ post }: { post: PostCardData }) {
       <h3 lang={post.lang} className="font-semibold">
         {post.title}
       </h3>
-      <p lang={post.lang} className="text-sm text-gray-300">
+      <p lang={post.lang} className="text-sm text-foreground/80">
         {post.description}
       </p>
     </Link>
