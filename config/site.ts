@@ -23,8 +23,9 @@ export const site = {
   url: "https://www.thomasmoserdev.com",
   name: "thomasmoserdev.com",
   title: "Thomas Moser | Full-Stack Developer",
+  // Under ~155 characters, so search results show it whole.
   description:
-    "Thomas Moser, full-stack developer in the avenit group in Offenburg, Germany, living near Strasbourg. Projects built end to end and tutorials on Next.js, TypeScript and web APIs.",
+    "Thomas Moser, full-stack developer in the avenit group in Offenburg, living near Strasbourg: projects built end to end, tutorials on Next.js and web APIs.",
   author: profile.Name,
 } as const;
 
