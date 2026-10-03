@@ -1,7 +1,14 @@
 import { Avatar, Card } from "@heroui/react";
+import { getImageProps } from "next/image";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 import type { SteamPlayer } from "@/types/steam";
 import { formatTimeSince } from "./format";
+
+/** HeroUI's avatar renders a plain <img>: give it the image optimizer's URLs, so visitors never fetch from Steam. */
+function avatarSources(url: string) {
+  const { props } = getImageProps({ src: url, alt: "", width: 40, height: 40 });
+  return { src: props.src, srcSet: props.srcSet };
+}
 
 export function SteamProfileCard({ player }: { player: SteamPlayer }) {
   return (
@@ -9,7 +16,7 @@ export function SteamProfileCard({ player }: { player: SteamPlayer }) {
       <Card.Header className="flex flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <Avatar>
-            <Avatar.Image src={player.avatarUrl} alt={player.personaName} />
+            <Avatar.Image {...avatarSources(player.avatarUrl)} alt={player.personaName} />
             <Avatar.Fallback>{player.personaName.slice(0, 2)}</Avatar.Fallback>
           </Avatar>
           <div className="flex flex-col gap-1">
