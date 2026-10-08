@@ -45,6 +45,8 @@ tags: ["nextjs"]
 
 Set `published: false` to hide a draft.
 
+**Scheduling**: a post dated in the future is already visible on previews and locally, but production lists it only from its `date` on (Paris time). Merge it ahead of time; on the day, `.github/workflows/publish-scheduled-posts.yml` redeploys production through a Vercel deploy hook (repository secret `VERCEL_DEPLOY_HOOK_URL`, a hook on `main`) so it appears that morning. Run that workflow by hand to publish at once.
+
 ## Project structure
 
 See [AGENTS.md](AGENTS.md) for the architecture, conventions and known gotchas.
