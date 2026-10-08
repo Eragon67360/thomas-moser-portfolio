@@ -38,6 +38,7 @@ description: One-line summary
 slug: my-post
 date: 2024-04-29 # ISO; add `updated: YYYY-MM-DD` after a substantial revision
 lang: en # or fr
+type: tutorial # tutorial, build-log, quick-lesson or story: drives the /blog filter
 translation: fr-my-post # optional: slug of the same post in the other language
 tags: ["nextjs"]
 ---

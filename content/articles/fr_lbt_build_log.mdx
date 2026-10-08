@@ -1,0 +1,122 @@
+---
+title: Le Bon Tempérament, journal de bord
+description: Comment le site, le tableau de bord et l'app Flutter d'un chœur et orchestre ont fini dans un seul Turborepo sur Supabase.
+tags: ["turborepo","nextjs","supabase","flutter","build-log"]
+slug: fr-le-bon-temperament-build-log
+date: 2026-10-20
+duration: 6
+lang: fr
+type: build-log
+translation: le-bon-temperament-build-log
+---
+
+## Introduction
+
+Le Bon Tempérament est une association de chœur et d'orchestre. Depuis mars 2024, je construis sa partie numérique : un site public avec un espace membres, un tableau de bord d'administration pour le bureau, et une application mobile pour les membres. Les trois vivent dans un seul dépôt, et c'est le sujet de cet article. C'est un journal de bord plutôt qu'un tutoriel : ce qu'est le projet, comment le monorepo est organisé, quelques choix techniques visibles dans le code, et ce que je referais autrement.
+
+Je joue de la trompette dans l'ensemble depuis octobre 2023. L'ancien site commençait à accuser son âge, alors j'ai proposé d'en faire un nouveau, et le projet a grandi à partir de là.
+
+## Ce qu'est le projet
+
+L'association a trois publics, et chacun a eu sa propre interface.
+
+Le **site web** est la vitrine publique : page d'accueil, concerts, une page découverte, une galerie et un formulaire de contact. Derrière une connexion, il contient aussi l'espace membres : un calendrier des répétitions, le matériel de travail par groupe (partitions et enregistrements stockés dans Google Drive), un annuaire des membres et des documents. Le site parle français à ses visiteurs ; le code, les commentaires et les messages de commit sont en anglais.
+
+Le **tableau de bord d'administration** est le back-office : utilisateurs et rôles, contenu du site public (projets, concerts, médiathèque), événements et répétitions, fichiers Google Drive, signalements de bugs et un fil d'activité.
+
+L'**application mobile** est pour les membres : authentification, calendrier des répétitions et des événements, accès aux fichiers, notifications push, cache hors ligne et mises à jour en temps réel.
+
+Tout repose sur un seul projet Supabase : Postgres, authentification, stockage et edge functions.
+
+## Le monorepo
+
+Le dépôt a démarré en avril 2025 à partir d'un squelette `create-turbo`. Le site existait déjà et y a été déplacé deux semaines plus tard ; l'application mobile a eu son premier commit en juin 2025. Aujourd'hui, l'arborescence ressemble à ceci :
+
+```text:README.md
+├── apps
+│   ├── website/        # Public Next.js site
+│   ├── admin/          # Next.js dashboard
+│   ├── e2e/            # Playwright suite (runs against deployed URLs)
+│   └── mobile_app/     # Flutter app (not a turbo workspace)
+├── packages
+│   ├── domain/         # @repo/domain: shared types and utils
+│   ├── eslint-config/
+│   └── typescript-config/
+├── supabase/           # migrations + edge functions
+└── turbo.json
+```
+
+Les workspaces npm sont `apps/website`, `apps/admin`, `apps/e2e` et `packages/*`. L'application Flutter vit dans la même arborescence mais n'est pas un workspace npm : Turborepo ne la connaît pas, et ses propres jobs de CI ne tournent que quand `apps/mobile_app` change.
+
+La pièce qui justifie le monorepo, c'est `@repo/domain`. Il contient les types Supabase générés depuis la base (`database.types.ts`, régénéré avec `npm run db:types`), les types métier pour les concerts, événements, répétitions et projets, et de petits utilitaires avec leurs tests. Les deux applications Next.js l'importent, donc une colonne ajoutée dans Postgres apparaît comme une erreur de type dans le site et dans l'admin en même temps.
+
+Turborepo lui-même ne fait guère plus que lancer `build`, `lint` et `check-types` sur les workspaces dans le bon ordre :
+
+```json:turbo.json
+"tasks": {
+  "build": {
+    "dependsOn": ["^build"],
+    "inputs": ["$TURBO_DEFAULT$", ".env*"],
+    "outputs": [".next/**", "!.next/cache/**"]
+  },
+  "lint": { "dependsOn": ["^lint"] },
+  "check-types": { "dependsOn": ["^check-types"] },
+  "dev": { "cache": false, "persistent": true }
+}
+```
+
+C'est aussi dans ce fichier qu'est déclaré le nom de chaque variable d'environnement qu'un build peut lire, ce qui me permet de savoir quel service chaque application utilise.
+
+## La stack
+
+Les deux applications web partagent la même base : Next.js 16 avec l'App Router, React 19, TypeScript 7 et Tailwind CSS v4, sur Node.js 24. Elles diffèrent par leur couche d'interface. Le site utilise HeroUI 3, avec motion et GSAP pour les animations. L'admin utilise shadcn/ui sur les primitives Radix, TanStack Query pour les données, et react-hook-form avec zod pour les formulaires.
+
+L'application mobile est en Flutter avec Dart 3.9 ou plus récent, Riverpod 3 pour l'état, go_router pour la navigation, `supabase_flutter` pour les données et l'authentification, Hive et shared_preferences pour le cache hors ligne, et Firebase Cloud Messaging pour les notifications push.
+
+Une particularité à noter : les applications sont vérifiées avec TypeScript 7, mais la racine du dépôt fixe TypeScript 5.9.3, parce que le parseur TypeScript d'ESLint ne supporte pas encore la version 7. Les vérifications de types passent donc par Turbo, workspace par workspace, et pas depuis la racine.
+
+Pourquoi ces deux-là ? J'ai choisi Supabase parce que je débutais encore en développement web quand j'ai commencé : c'était l'option la plus simple à apprendre, et elle fonctionne bien avec Next.js. J'ai choisi Flutter parce que je voulais écrire une seule application pour Android et pour iPhone.
+
+## Deux choix visibles dans le code
+
+**Les tâches planifiées vivent dans Postgres.** Les répétitions ne sont pas saisies à la main : une edge function lit le Google Calendar de l'association et écrit des lignes dans `rehearsals`. Elle est planifiée avec `pg_cron` et `pg_net`, depuis la base elle-même. L'expression cron se déclenche toutes les heures, et le corps SQL vérifie s'il est 7 h ou 19 h à Paris : c'est Postgres qui gère l'heure d'été, pas moi en modifiant une ligne cron deux fois par an.
+
+```sql:supabase/migrations/20260626091000_cron_sync_rehearsals.sql
+SELECT net.http_post(
+  url := (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'project_url')
+         || '/functions/v1/sync-rehearsals-from-calendar?mode=cron',
+  headers := jsonb_build_object(
+    'Content-Type', 'application/json',
+    'Authorization', 'Bearer ' || (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'anon_key'),
+    'x-sync-secret', (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'sync_cron_secret')
+  ),
+  body := '{}'::jsonb,
+  timeout_milliseconds := 120000
+) AS request_id
+FROM (SELECT 1) AS _guard
+WHERE EXTRACT(HOUR FROM now() AT TIME ZONE 'Europe/Paris')::int IN (7, 19);
+```
+
+Le même principe pilote les notifications push : un trigger sur `rehearsals`, `events` et `concerts` appelle la fonction `send-push-notification` après chaque insertion, modification ou suppression, et la fonction envoie le message FCM à l'application. Le projet compte aujourd'hui quinze edge functions, dont la synchronisation de l'index Google Drive et un ensemble de fonctions pour les tournées de livraison de l'association (optimisation d'itinéraire, SMS et avis d'arrivée).
+
+**Les sauvegardes sont un workflow, pas un changement d'offre.** L'offre gratuite de Supabase n'a pas de sauvegarde quotidienne, donc un workflow GitHub Actions exporte les rôles, le schéma et les données deux fois par jour avec la CLI Supabase, chiffre l'archive en AES-256 et la garde comme artefact de workflow pendant 30 jours. Le dépôt est public et toute personne connectée à GitHub peut télécharger les artefacts, d'où le chiffrement. La phrase de passe est dans un gestionnaire de mots de passe, pas dans le dépôt.
+
+La CI suit la même logique d'économie. Chaque job laisse un artefact marqueur indexé par le hash de l'arborescence qu'il a vérifiée, et l'exécution suivante saute tout job déjà réussi sur exactement le même code. La pull request de release de `dev` vers `main` vérifie en général la même arborescence que la PR de montée de version fusionnée juste avant, donc elle réutilise presque tout.
+
+Le déploiement se fait sur Vercel pour les deux applications web, chacune construite depuis la racine du dépôt avec `turbo build --filter=website` ou `--filter=admin`, et `turbo-ignore` annule les builds dont l'application ne dépend pas. À chaque release sur `main` qui touche l'application, un workflow construit le bundle Android et l'envoie sur la piste interne du Play Store, et un autre construit l'application iPhone et l'envoie sur TestFlight. Au moment où j'écris, l'application iPhone est entre les mains de quelques testeurs internes et sur le point d'ouvrir aux membres.
+
+## Ce qui a été difficile
+
+Le plus dur, ça a été les permissions : qui peut lire et modifier quoi dans la base, et garder ces accès sécurisés. Le RGPD s'est ajouté par-dessus plus récemment.
+
+L'autre coût récurrent : trois applications, trois cibles de déploiement et une seule base de données, ça veut dire qu'un changement de schéma n'est jamais petit. Les types générés protègent le côté web ; les modèles Flutter doivent être mis à jour à la main.
+
+## Ce que je referais autrement
+
+Si je recommençais, j'utiliserais le moins possible de dépendances payantes. Pas de Supabase : un bon vieux Docker et une base de données hébergée chez Hetzner, par exemple, ou sur AWS. Ce serait moins cher au global.
+
+Les paiements sont un endroit où le plan a changé. Le dépôt contient encore Stripe pour un catalogue de CD en cours de suppression ; les dons sont passés sur une campagne HelloAsso, qui émet les reçus fiscaux. Les tables de dons de l'époque Stripe restent dans la base comme archives.
+
+## Conclusion
+
+Le Bon Tempérament est en cours depuis mars 2024, et c'est le monorepo qui le rend gérable : un seul endroit pour les types, un seul endroit pour les noms de variables d'environnement, un seul numéro de version (`2.0.139` au moment où j'écris) partagé par le site, l'admin et l'application. Le site est en ligne sur [lebontemperament.com](https://www.lebontemperament.com), et le code est public sur [github.com/Eragon67360/lebontemperament_turbo](https://github.com/Eragon67360/lebontemperament_turbo).

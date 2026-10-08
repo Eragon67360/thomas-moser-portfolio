@@ -1,0 +1,122 @@
+---
+title: Le Bon Tempérament, a build log
+description: How a choir and orchestra's website, admin dashboard and Flutter app ended up in one Turborepo backed by Supabase.
+tags: ["turborepo","nextjs","supabase","flutter","build-log"]
+slug: le-bon-temperament-build-log
+date: 2026-10-20
+duration: 6
+lang: en
+type: build-log
+translation: fr-le-bon-temperament-build-log
+---
+
+## Introduction
+
+Le Bon Tempérament is a choir and orchestra association. Since March 2024 I have been building its digital side: a public website with a members area, an admin dashboard for the board, and a mobile app for the members. All three live in one repository, which is what this post is about. It is a build log rather than a tutorial: what the project is, how the monorepo is laid out, a few technical choices visible in the code, and the parts I would do differently.
+
+I have played the trumpet in the ensemble since October 2023. Its old website was showing its age, so I offered to build a new one, and the project grew from there.
+
+## What the project is
+
+The association has three audiences, and each got its own front.
+
+The **website** is the public face: homepage, concerts, a discover page, a gallery and a contact form. Behind a login it also holds the members area: a rehearsal calendar, work materials per group (scores and recordings stored in Google Drive), a member directory and documents. The site speaks French to its visitors; the code, comments and commit messages are in English.
+
+The **admin dashboard** is the back office: users and roles, public-site content (projects, concerts, media library), events and rehearsals, Google Drive files, bug reports and an activity feed.
+
+The **mobile app** is for the members: authentication, the rehearsal and event calendar, file access, push notifications, an offline cache and real-time updates.
+
+Everything sits on one Supabase project: Postgres, auth, storage and edge functions.
+
+## The monorepo
+
+The repository started in April 2025 from a `create-turbo` scaffold. The website existed before that and was moved in two weeks later; the mobile app got its first commit in June 2025. Today the layout looks like this:
+
+```text:README.md
+├── apps
+│   ├── website/        # Public Next.js site
+│   ├── admin/          # Next.js dashboard
+│   ├── e2e/            # Playwright suite (runs against deployed URLs)
+│   └── mobile_app/     # Flutter app (not a turbo workspace)
+├── packages
+│   ├── domain/         # @repo/domain: shared types and utils
+│   ├── eslint-config/
+│   └── typescript-config/
+├── supabase/           # migrations + edge functions
+└── turbo.json
+```
+
+The npm workspaces are `apps/website`, `apps/admin`, `apps/e2e` and `packages/*`. The Flutter app lives in the same tree but is not an npm workspace: Turborepo does not know about it, and its own CI jobs only run when `apps/mobile_app` changes.
+
+The piece that makes the monorepo worth it is `@repo/domain`. It holds the Supabase types generated from the database (`database.types.ts`, regenerated with `npm run db:types`), the domain types for concerts, events, rehearsals and projects, and small utilities with their tests. Both Next.js apps import from it, so a column added in Postgres shows up as a type error in the website and the admin at the same time.
+
+Turborepo itself does little more than run `build`, `lint` and `check-types` across the workspaces with the right ordering:
+
+```json:turbo.json
+"tasks": {
+  "build": {
+    "dependsOn": ["^build"],
+    "inputs": ["$TURBO_DEFAULT$", ".env*"],
+    "outputs": [".next/**", "!.next/cache/**"]
+  },
+  "lint": { "dependsOn": ["^lint"] },
+  "check-types": { "dependsOn": ["^check-types"] },
+  "dev": { "cache": false, "persistent": true }
+}
+```
+
+The same file is where every environment variable name a build may read is declared, which is also how I keep track of which service each app touches.
+
+## The stack
+
+The two web apps share the same base: Next.js 16 with the App Router, React 19, TypeScript 7 and Tailwind CSS v4, on Node.js 24. They differ in their UI layer. The website uses HeroUI 3 with motion and GSAP for animation. The admin uses shadcn/ui on Radix primitives, TanStack Query for data, and react-hook-form with zod for forms.
+
+The mobile app is Flutter with Dart 3.9 or later, Riverpod 3 for state, go_router for navigation, `supabase_flutter` for data and auth, Hive and shared_preferences for the offline cache, and Firebase Cloud Messaging for push.
+
+One quirk worth noting: the apps type-check with TypeScript 7, but the repository root pins TypeScript 5.9.3, because ESLint's TypeScript parser does not support version 7 yet. Type checks therefore run through Turbo, per workspace, not from the root.
+
+Why these two? I picked Supabase because I was still fairly new to web development when I started: it was the simplest option to learn, and it works well with Next.js. I picked Flutter because I wanted to write one app for both Android and iPhone.
+
+## Two choices visible in the code
+
+**Scheduled work lives in Postgres.** Rehearsals are not entered by hand: an edge function reads the association's Google Calendar and writes `rehearsals` rows. It is scheduled with `pg_cron` and `pg_net` from inside the database. The cron expression fires every hour, and the SQL body decides whether it is 07:00 or 19:00 in Paris, so daylight saving time is handled by Postgres rather than by me editing a cron line twice a year:
+
+```sql:supabase/migrations/20260626091000_cron_sync_rehearsals.sql
+SELECT net.http_post(
+  url := (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'project_url')
+         || '/functions/v1/sync-rehearsals-from-calendar?mode=cron',
+  headers := jsonb_build_object(
+    'Content-Type', 'application/json',
+    'Authorization', 'Bearer ' || (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'anon_key'),
+    'x-sync-secret', (SELECT decrypted_secret FROM vault.decrypted_secrets WHERE name = 'sync_cron_secret')
+  ),
+  body := '{}'::jsonb,
+  timeout_milliseconds := 120000
+) AS request_id
+FROM (SELECT 1) AS _guard
+WHERE EXTRACT(HOUR FROM now() AT TIME ZONE 'Europe/Paris')::int IN (7, 19);
+```
+
+The same pattern drives push notifications: a trigger on `rehearsals`, `events` and `concerts` calls the `send-push-notification` function after every insert, update or delete, and the function sends the FCM message to the app. The project has fifteen edge functions today, including the Google Drive index sync and a set of functions for the association's delivery rounds (route optimisation, SMS and arrival notices).
+
+**Backups are a workflow, not a plan upgrade.** The Supabase Free plan has no daily backups, so a GitHub Actions workflow dumps roles, schema and data twice a day with the Supabase CLI, encrypts the archive with AES-256 and keeps it as a workflow artifact for 30 days. The repository is public and anyone signed in to GitHub can download artifacts, hence the encryption. The passphrase lives in a password manager, not in the repo.
+
+CI follows the same economy. Each job leaves a marker artifact keyed by the hash of the tree it checked, and the next run skips any job that already passed on the exact same code. The release pull request from `dev` to `main` usually checks the same tree as the version-bump PR merged just before it, so it reuses nearly everything.
+
+Deployment is Vercel for both web apps, each built from the repository root with `turbo build --filter=website` or `--filter=admin`, and `turbo-ignore` cancelling builds the app does not depend on. On each release to `main` that touches the app, one workflow builds the Android bundle and uploads it to the Play Store's internal track, and another builds the iPhone app and uploads it to TestFlight. As I write this, the iPhone app is with a few internal testers and about to open to the members.
+
+## What was hard
+
+The hardest part has been permissions: who can read and change what in the database, and keeping that access secure. GDPR came on top of that more recently.
+
+The other recurring cost: three apps, three deployment targets and one database means a schema change is never small. The generated types catch the web side; the Flutter models have to be updated by hand.
+
+## What I would redo
+
+If I started again, I would use as few paid dependencies as possible. No Supabase: a good old Docker setup and a database hosted at Hetzner, for example, or on AWS. It would be cheaper overall.
+
+Payments are one place where the plan changed. The repository still carries Stripe for a CD catalogue that is being removed; donations have moved to a HelloAsso campaign, which issues the tax receipts. The Stripe-era donation tables stay in the database as records.
+
+## Conclusion
+
+Le Bon Tempérament has been in progress since March 2024, and the monorepo is what keeps it manageable: one place for types, one place for environment names, one release version (`2.0.139` at the time of writing) shared by the website, the admin and the app. The site is live at [lebontemperament.com](https://www.lebontemperament.com), and the code is public at [github.com/Eragon67360/lebontemperament_turbo](https://github.com/Eragon67360/lebontemperament_turbo).
