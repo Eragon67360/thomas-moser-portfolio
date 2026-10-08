@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { POST_TYPE_LABELS } from "@/components/blog/postTypes";
 import { formatPostDate } from "@/lib/dates";
 import type { PostMeta } from "@/types/post";
 
@@ -17,8 +16,6 @@ function PostListItem({ post }: { post: PostMeta }) {
           <h2 className="text-lg font-bold">{post.title}</h2>
           <p className="flex items-center gap-2 text-xs text-muted">
             <span className="rounded bg-accent/10 px-1.5 py-0.5 font-jet text-accent uppercase">{post.lang}</span>
-            <span>{POST_TYPE_LABELS[post.type].one}</span>
-            <span aria-hidden>·</span>
             <time dateTime={post.date}>{formatPostDate(post.date, post.lang)}</time>
           </p>
           <p className="text-base font-extralight text-muted">{post.description}</p>
