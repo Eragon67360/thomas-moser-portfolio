@@ -1,0 +1,135 @@
+---
+title: TypeScript 7 broke ESLint, so I switched my Next.js site to oxlint
+description: Why typescript-eslint can't run on TypeScript 7, and how to lint a Next.js 16 project with oxlint and type-aware rules instead.
+tags: ["nextjs","typescript","oxlint","tooling"]
+slug: typescript-7-eslint-to-oxlint
+date: 2026-10-20
+duration: 8
+lang: en
+---
+
+{/* TODO Thomas: opening in your own words. Why did you upgrade to TypeScript 7 in the first place (speed, curiosity, keeping the site current)? Two or three sentences replace the first paragraph below. */}
+
+## Introduction
+On 27 September I upgraded this site to TypeScript 7, the new native compiler. The type check got faster, but the linter could not follow: ESLint's TypeScript support needs an API that TypeScript 7 no longer ships. In this article we'll see why, and how I replaced ESLint with **oxlint**, including the type-aware rules, on a Next.js 16 project.
+
+Everything here comes from this site's own repository, so you can check every file on [GitHub](https://github.com/Eragon67360/thomas-moser-portfolio).
+
+## Why ESLint can't run on TypeScript 7
+TypeScript 7 is a rewrite of the compiler in Go. You still get a `tsc` binary, but the JavaScript package no longer contains the compiler itself. Here is what `require("typescript")` returns with TypeScript 7.0.2:
+
+```bash
+$ node -e 'const ts = require("typescript"); console.log(Object.keys(ts), typeof ts.createProgram)'
+[ 'version', 'versionMajorMinor' ] undefined
+```
+
+Only the version. `typescript-eslint`, the parser and rules that let ESLint understand TypeScript, is built on that missing API (`createProgram` and friends). And `eslint-config-next` depends on `typescript-eslint`. So as soon as TypeScript 7 is installed, the standard Next.js lint setup has nothing to load.
+
+There was a second surprise. Before the upgrade, my `lint` script was still `next lint`, and Next.js 16 removed that command. Running it on the old version of the site now prints:
+
+```plaintext
+Invalid project directory provided, no such directory: .../lint
+```
+
+My old `.eslintrc.json` was out of date too: ESLint 9 expects the new flat config by default. In other words, the linter had already stopped checking anything before I touched TypeScript. When I ran ESLint 9 by hand on that old code, it found 2 errors and 3 warnings, including a component created during render in the blog.
+
+{/* TODO Thomas: did you know the lint script was broken before? One honest sentence here makes the post more human. */}
+
+## What oxlint is
+[oxlint](https://oxc.rs/docs/guide/usage/linter) is the linter of the Oxc project, written in Rust. Two things made it the right replacement here:
+
+- **The rules I needed are built in.** It ports the rules of the Next.js, React, React Hooks, jsx-a11y and import plugins, so there is nothing to install per plugin.
+- **Type-aware rules run on TypeScript 7.** They go through `oxlint-tsgolint`, which is built on the Go compiler instead of the old JavaScript API.
+
+## Step 1: remove ESLint
+Uninstall the ESLint packages and delete the old config:
+
+```bash
+npm uninstall eslint eslint-config-next
+rm .eslintrc.json
+```
+
+## Step 2: install oxlint
+```bash
+npm install -D oxlint oxlint-tsgolint
+```
+
+These are the versions this site runs today: `oxlint` 1.86, `oxlint-tsgolint` 7.0 and `typescript` 7.0.
+
+## Step 3: configure it
+oxlint reads `.oxlintrc.json` at the root of the project. This is the site's full config:
+
+```json:.oxlintrc.json
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "nextjs", "jsx-a11y", "import", "unicorn", "oxc"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/consistent-type-imports": "error",
+    "import/no-cycle": "error",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "eqeqeq": "error",
+    "import/no-unassigned-import": ["warn", { "allow": ["server-only", "**/*.css"] }]
+  },
+  "ignorePatterns": [".next/**", "public/**", "next-env.d.ts", "resources/**"]
+}
+```
+
+A few choices worth explaining:
+
+- **`plugins`** turns on the rule sets. `nextjs`, `react` and `jsx-a11y` cover what `eslint-config-next` used to give me.
+- **`categories`** enables whole groups at once: every `correctness` rule fails the build, every `suspicious` rule warns.
+- **`react/react-in-jsx-scope`** is off because React 19 doesn't need `import React` in every file.
+- **`import/no-cycle`** keeps the architecture honest: on this site, imports must point one way only (pages, then components, then hooks and helpers).
+- **`import/no-unassigned-import`** allows `import "server-only"` and CSS imports, which are imported for their side effect on purpose.
+
+## Step 4: update the scripts
+```json:package.json
+"scripts": {
+  "lint": "oxlint --type-aware",
+  "typecheck": "next typegen && tsc --noEmit",
+  "format": "oxfmt",
+  "format:check": "oxfmt --check",
+  "knip": "knip",
+  "check": "npm run typecheck && npm run lint && npm run format:check && npm run knip"
+}
+```
+
+- **`--type-aware`** turns on the rules that need type information, such as `typescript/no-unsafe-type-assertion`.
+- **`next typegen`** runs before `tsc`. Next.js 16 generates route types (for example `PageProps<"/blog/[slug]">`) into `.next/types`, and `tsc` can't find them until they exist.
+- I took the chance to add **oxfmt**, the formatter from the same project, and **knip**, which finds unused files, exports and dependencies. `npm run check` runs all four, locally and in CI.
+
+## Step 5: disable a rule only where you mean it
+Sometimes a rule is right in general and wrong in one place. Disable it for one line and always say why after `--`:
+
+```tsx:components/seo/JsonLd.tsx
+// oxlint-disable-next-line react/no-danger -- JSON-LD must be emitted verbatim; `<` is escaped.
+```
+
+The site has four of these comments in total, each with its reason. I never turn a rule off globally.
+
+## The result
+I measured both linters on this site, on a 4-core machine. They don't check exactly the same code: ESLint ran on the version before the upgrade (80 files), oxlint on today's version (102 files).
+
+| Run | Files | Time |
+| --- | --- | --- |
+| ESLint 9 with `eslint-config-next` (no type information) | 80 | 4.4 to 5.2 s |
+| oxlint, no type information | 102 | 0.55 s |
+| oxlint `--type-aware` (262 rules) | 102 | 3.1 to 3.8 s |
+| `tsc --noEmit` with TypeScript 7 | 102 | 4.6 to 4.8 s |
+
+Without type information, oxlint is about eight times faster on more files. With type information it checks more than the old setup ever did and is still faster.
+
+{/* TODO Thomas: your verdict. What did you miss from ESLint, if anything? Would you recommend the switch to someone not on TypeScript 7 yet? */}
+
+## Conclusion
+If you move to TypeScript 7, ESLint will stop working until `typescript-eslint` supports the new compiler. oxlint covers the Next.js, React and accessibility rules out of the box, runs type-aware rules on TypeScript 7, and takes one config file. Check that your `lint` script still runs while you're at it: mine had been doing nothing for a while.
+
+The full setup is in the [repository of this site](https://github.com/Eragon67360/thomas-moser-portfolio), in `.oxlintrc.json` and `package.json`.
