@@ -74,7 +74,7 @@ proxy.ts        Next.js 16 proxy: records home page views (non-blocking via wait
 - `lib/seo/*` is the one part of `lib/` that reads `content/*` and `config/`: it turns site content into metadata, JSON-LD, `llms.txt` and social cards.
 - **Structured data** (`lib/seo/structured-data.ts`, rendered by `components/seo/JsonLd.tsx`): Person + WebSite on every page, ProfilePage on /about, CollectionPage on /projects, Blog on /blog, BlogPosting + BreadcrumbList on posts. Built from `content/*` only; the content-accuracy rule applies.
 - **Generated files**: `app/sitemap.ts`, `app/robots.ts`, `app/feed.xml` (RSS), `app/llms.txt` and the `opengraph-image` routes (`lib/seo/og-image.tsx`, fonts in `assets/fonts/`). Don't reintroduce `next-sitemap` or files in `public/` with these names: they would shadow the routes.
-- **Posts**: frontmatter `date`/`updated` are ISO `YYYY-MM-DD`; `lang` (`en` | `fr`) and `translation` (slug of the other language) drive hreflang, `lang` attributes and the "read in" link. Set `translation` on both posts of a pair. A future `date` schedules a post: production shows it from that day (see README, "Scheduling").
+- **Posts**: frontmatter `date`/`updated` are ISO `YYYY-MM-DD`; `lang` (`en` | `fr`) and `translation` (slug of the other language) drive hreflang, `lang` attributes and the "read in" link. Set `translation` on both posts of a pair. `type` (`tutorial` | `build-log` | `quick-lesson` | `story`, required) records the post's slot in the weekly rotation and drives the type menu on /blog. A future `date` schedules a post: production shows it from that day (see README, "Scheduling").
 - AI crawlers mostly don't run JavaScript: keep anything worth citing in Server Components.
 
 ## HeroUI v3 cheatsheet

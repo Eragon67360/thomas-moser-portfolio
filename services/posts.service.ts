@@ -4,7 +4,7 @@ import path from "node:path";
 import { cache } from "react";
 import matter from "gray-matter";
 import { getAllPostViews } from "@/services/views.service";
-import type { Post, PostMeta, PostWithViews } from "@/types/post";
+import { POST_TYPES, type Post, type PostMeta, type PostType, type PostWithViews } from "@/types/post";
 
 const ARTICLES_DIR = path.join(process.cwd(), "content", "articles");
 
@@ -29,10 +29,14 @@ function isoDate(file: string, field: string, value: unknown): string | undefine
   return iso;
 }
 
+function isPostType(value: unknown): value is PostType {
+  return POST_TYPES.some((type) => type === value);
+}
+
 function parseFrontmatter(file: string, data: Record<string, unknown>): Omit<Post, "body"> | null {
   if (data.published === false) return null;
 
-  const { slug, title, description, tags, duration, lang, translation } = data;
+  const { slug, title, description, tags, duration, lang, type, translation } = data;
   const date = isoDate(file, "date", data.date);
   if (typeof slug !== "string" || typeof title !== "string" || !date) {
     throw new Error(`${file}: frontmatter requires string "slug", "title" and "date"`);
@@ -40,12 +44,16 @@ function parseFrontmatter(file: string, data: Record<string, unknown>): Omit<Pos
   if (lang !== undefined && lang !== "en" && lang !== "fr") {
     throw new Error(`${file}: frontmatter "lang" must be "en" or "fr"`);
   }
+  if (!isPostType(type)) {
+    throw new Error(`${file}: frontmatter "type" must be one of ${POST_TYPES.join(", ")}`);
+  }
   return {
     slug,
     title,
     date,
     updated: isoDate(file, "updated", data.updated),
     lang: lang ?? "en",
+    type,
     translation: typeof translation === "string" ? translation : undefined,
     description: typeof description === "string" ? description : "",
     tags: Array.isArray(tags) ? tags.map(String) : [],

@@ -61,11 +61,18 @@ jobs:
 
       - name: Install Chromium
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
 
       - name: Install Chromium system dependencies
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npx playwright install-deps chromium
+        # apt on the runner sometimes hangs (twice on 2026-10-08, until the job's 20-minute limit).
+        # Each attempt gets 3 minutes; a healthy install takes about 15 seconds.
+        timeout-minutes: 10
+        run: |
+          for attempt in 1 2 3; do
+            timeout 180 npx playwright install-deps chromium && exit 0
+            echo "::warning::Installing Chromium's system packages failed or hung (attempt $attempt), retrying"
+          done
+          exit 1
 
       - name: Smoke suite
         run: npm run test:e2e
