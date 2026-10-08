@@ -8,10 +8,8 @@ duration: 8
 lang: en
 ---
 
-{/* TODO Thomas: opening in your own words. Why did you upgrade to TypeScript 7 in the first place (speed, curiosity, keeping the site current)? Two or three sentences replace the first paragraph below. */}
-
 ## Introduction
-On 27 September I upgraded this site to TypeScript 7, the new native compiler. The type check got faster, but the linter could not follow: ESLint's TypeScript support needs an API that TypeScript 7 no longer ships. In this article we'll see why, and how I replaced ESLint with **oxlint**, including the type-aware rules, on a Next.js 16 project.
+On 27 September I upgraded every package of this site to its latest version, mainly to keep the project up to date. That included TypeScript 7, the new native compiler, which is much faster than the old one. The type check got faster, but the linter could not follow: ESLint's TypeScript support needs an API that TypeScript 7 no longer ships. In this article we'll see why, and how I replaced ESLint with **oxlint**, including the type-aware rules, on a Next.js 16 project.
 
 Everything here comes from this site's own repository, so you can check every file on [GitHub](https://github.com/Eragon67360/thomas-moser-portfolio).
 
@@ -33,7 +31,7 @@ Invalid project directory provided, no such directory: .../lint
 
 My old `.eslintrc.json` was out of date too: ESLint 9 expects the new flat config by default. In other words, the linter had already stopped checking anything before I touched TypeScript. When I ran ESLint 9 by hand on that old code, it found 2 errors and 3 warnings, including a component created during render in the blog.
 
-{/* TODO Thomas: did you know the lint script was broken before? One honest sentence here makes the post more human. */}
+I have to be honest: I didn't know.
 
 ## What oxlint is
 [oxlint](https://oxc.rs/docs/guide/usage/linter) is the linter of the Oxc project, written in Rust. Two things made it the right replacement here:
