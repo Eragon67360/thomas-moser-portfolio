@@ -51,8 +51,12 @@ const securityHeaders = [
   },
 ];
 
+/** The build's day in Paris (YYYY-MM-DD): production hides posts dated later (services/posts.service.ts). */
+const buildDay = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris" }).format(new Date());
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  env: { POSTS_BUILD_DAY: buildDay },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

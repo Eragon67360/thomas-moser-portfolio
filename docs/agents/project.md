@@ -42,6 +42,7 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 
 - **TypeScript 7**: no ESLint (oxlint instead), `tsc` CLI only, `next typegen` before typechecking. See AGENTS.md "Gotchas".
 - **CI and tests**: `.github/workflows/ci.yml` (check name `CI`) runs `npm run check`, `npm run build` and the Playwright smoke suite (`tests/e2e/`) on pull requests and pushes to `dev`, with no credentials. Dependabot (`.github/dependabot.yml`) opens monthly grouped update PRs against `dev`. Unit tests: none.
+- **Scheduled posts**: production hides posts dated after its build day (`POSTS_BUILD_DAY`, inlined by `next.config.ts`). `.github/workflows/publish-scheduled-posts.yml` (05:10 and 09:10 UTC, on `main`) redeploys production through the deploy hook in the repository secret `VERCEL_DEPLOY_HOOK_URL` when a post that came due this week answers 404 on the live site. The secret is the only one GitHub Actions holds; the owner creates the hook (Vercel → project → Settings → Git → Deploy Hooks, branch `main`).
 - **Branch rules**: the "Protect main and dev" ruleset requires a PR and the `CI` check, and blocks force-pushes and deletion on `main` and `dev`; Dependabot alerts and security updates, secret scanning and push protection are on (2026-10-02).
 - **oxfmt ignores** `content/**`, `public/**`, `resources/**` and the lockfile: format content by hand.
 - **Always dark**: `<html class="dark">` is hard-coded; there is no light theme.

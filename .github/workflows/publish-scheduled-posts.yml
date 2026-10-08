@@ -1,0 +1,58 @@
+name: Publish scheduled posts
+
+# Production lists a post only from its `date` on, as of the day the site was built
+# (services/posts.service.ts). When a post released ahead of time is due and not live yet, this
+# redeploys main through a Vercel deploy hook so it appears that morning. Scheduled workflows run
+# on the default branch, so this acts once it is on main.
+
+on:
+  schedule:
+    # 05:10 and 09:10 UTC (07:10/11:10 Paris in summer): the second run covers a skipped or late first one.
+    - cron: "10 5 * * *"
+    - cron: "10 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-scheduled-posts
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Find due posts that are not live yet
+        id: due
+        run: |
+          today=$(TZ=Europe/Paris date +%F)
+          week_ago=$(TZ=Europe/Paris date -d '7 days ago' +%F)
+          missing=""
+          for file in content/articles/*.mdx content/articles/*.md; do
+            [ -e "$file" ] || continue
+            grep -qE '^published:[[:space:]]*false' "$file" && continue
+            date=$(sed -n 's/^date:[[:space:]]*["'\'']\{0,1\}\([0-9-]\{10\}\).*/\1/p' "$file" | head -n 1)
+            slug=$(sed -n 's/^slug:[[:space:]]*["'\'']\{0,1\}\([A-Za-z0-9_-]*\).*/\1/p' "$file" | head -n 1)
+            # Only posts that came due this week: older ones are live already or deliberately absent.
+            if [ -n "$date" ] && [ -n "$slug" ] && [[ "$date" > "$week_ago" ]] && [[ ! "$date" > "$today" ]]; then
+              status=$(curl -s -o /dev/null -w '%{http_code}' "https://www.thomasmoserdev.com/blog/$slug")
+              echo "$slug ($date): HTTP $status"
+              [ "$status" = "404" ] && missing="$missing $slug"
+            fi
+          done
+          echo "missing=${missing# }" >> "$GITHUB_OUTPUT"
+
+      - name: Redeploy production
+        if: steps.due.outputs.missing != ''
+        env:
+          DEPLOY_HOOK: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "::error::Due posts are not live (${{ steps.due.outputs.missing }}) and the VERCEL_DEPLOY_HOOK_URL secret is not set."
+            exit 1
+          fi
+          curl -fsS -X POST -o /dev/null "$DEPLOY_HOOK"
+          echo "Redeploy requested for: ${{ steps.due.outputs.missing }}"
