@@ -6,6 +6,7 @@ slug: fr-le-bon-temperament-build-log
 date: 2026-10-20
 duration: 6
 lang: fr
+type: build-log
 translation: le-bon-temperament-build-log
 ---
 
@@ -13,9 +14,7 @@ translation: le-bon-temperament-build-log
 
 Le Bon Tempérament est une association de chœur et d'orchestre. Depuis mars 2024, je construis sa partie numérique : un site public avec un espace membres, un tableau de bord d'administration pour le bureau, et une application mobile pour les membres. Les trois vivent dans un seul dépôt, et c'est le sujet de cet article. C'est un journal de bord plutôt qu'un tutoriel : ce qu'est le projet, comment le monorepo est organisé, quelques choix techniques visibles dans le code, et ce que je referais autrement.
 
-{/* TODO Thomas : quel est ton lien avec l'ensemble (membre, musicien dedans, famille, une demande du bureau) ? Une ou deux phrases sur pourquoi tu t'es lancé. */}
-
-Je joue de la trompette et du piano, donc un projet autour des répétitions, des partitions et des concerts n'était pas un sujet étranger.
+Je joue de la trompette dans l'ensemble depuis octobre 2023. L'ancien site commençait à accuser son âge, alors j'ai proposé d'en faire un nouveau, et le projet a grandi à partir de là.
 
 ## Ce qu'est le projet
 
@@ -76,7 +75,7 @@ L'application mobile est en Flutter avec Dart 3.9 ou plus récent, Riverpod 3 po
 
 Une particularité à noter : les applications sont vérifiées avec TypeScript 7, mais la racine du dépôt fixe TypeScript 5.9.3, parce que le parseur TypeScript d'ESLint ne supporte pas encore la version 7. Les vérifications de types passent donc par Turbo, workspace par workspace, et pas depuis la racine.
 
-{/* TODO Thomas : pourquoi Supabase, et pourquoi Flutter plutôt que React Native pour l'app ? Le dépôt montre les choix mais pas les raisons. */}
+Pourquoi ces deux-là ? J'ai choisi Supabase parce que je débutais encore en développement web quand j'ai commencé : c'était l'option la plus simple à apprendre, et elle fonctionne bien avec Next.js. J'ai choisi Flutter parce que je voulais écrire une seule application pour Android et pour iPhone.
 
 ## Deux choix visibles dans le code
 
@@ -104,24 +103,20 @@ Le même principe pilote les notifications push : un trigger sur `rehearsals`, `
 
 La CI suit la même logique d'économie. Chaque job laisse un artefact marqueur indexé par le hash de l'arborescence qu'il a vérifiée, et l'exécution suivante saute tout job déjà réussi sur exactement le même code. La pull request de release de `dev` vers `main` vérifie en général la même arborescence que la PR de montée de version fusionnée juste avant, donc elle réutilise presque tout.
 
-Le déploiement se fait sur Vercel pour les deux applications web, chacune construite depuis la racine du dépôt avec `turbo build --filter=website` ou `--filter=admin`, et `turbo-ignore` annule les builds dont l'application ne dépend pas. À chaque release sur `main` qui touche l'application, un workflow construit le bundle Android et l'envoie sur la piste interne du Play Store, et un autre construit l'application iPhone et l'envoie sur TestFlight.
-
-{/* TODO Thomas : le workflow iOS existe dans le dépôt, mais l'app iPhone est-elle vraiment sur TestFlight pour les membres ? Sinon, écris « est prêt à » ou supprime la partie iPhone. */}
+Le déploiement se fait sur Vercel pour les deux applications web, chacune construite depuis la racine du dépôt avec `turbo build --filter=website` ou `--filter=admin`, et `turbo-ignore` annule les builds dont l'application ne dépend pas. À chaque release sur `main` qui touche l'application, un workflow construit le bundle Android et l'envoie sur la piste interne du Play Store, et un autre construit l'application iPhone et l'envoie sur TestFlight. Au moment où j'écris, l'application iPhone est entre les mains de quelques testeurs internes et sur le point d'ouvrir aux membres.
 
 ## Ce qui a été difficile
 
-{/* TODO Thomas : quelle a été la partie la plus difficile ? Pistes visibles dans l'historique : garder les versions du site, de l'admin et de l'app alignées (version.json est partagé par les trois), le cache hors ligne de l'app, l'intégration Google Drive, ou tout autre chose. */}
+Le plus dur, ça a été les permissions : qui peut lire et modifier quoi dans la base, et garder ces accès sécurisés. Le RGPD s'est ajouté par-dessus plus récemment.
 
-Une chose que je peux dire en regardant le dépôt : trois applications, trois cibles de déploiement et une seule base de données, ça veut dire qu'un changement de schéma n'est jamais petit. Les types générés protègent le côté web ; les modèles Flutter doivent être mis à jour à la main.
+L'autre coût récurrent : trois applications, trois cibles de déploiement et une seule base de données, ça veut dire qu'un changement de schéma n'est jamais petit. Les types générés protègent le côté web ; les modèles Flutter doivent être mis à jour à la main.
 
 ## Ce que je referais autrement
 
-{/* TODO Thomas : qu'est-ce que tu ferais différemment (par exemple partir du monorepo dès le premier jour, choisir une seule bibliothèque d'interface pour les deux applications web, garder Stripe ou non) ? */}
+Si je recommençais, j'utiliserais le moins possible de dépendances payantes. Pas de Supabase : un bon vieux Docker et une base de données hébergée chez Hetzner, par exemple, ou sur AWS. Ce serait moins cher au global.
 
 Les paiements sont un endroit où le plan a changé. Le dépôt contient encore Stripe pour un catalogue de CD en cours de suppression ; les dons sont passés sur une campagne HelloAsso, qui émet les reçus fiscaux. Les tables de dons de l'époque Stripe restent dans la base comme archives.
 
 ## Conclusion
 
 Le Bon Tempérament est en cours depuis mars 2024, et c'est le monorepo qui le rend gérable : un seul endroit pour les types, un seul endroit pour les noms de variables d'environnement, un seul numéro de version (`2.0.139` au moment où j'écris) partagé par le site, l'admin et l'application. Le site est en ligne sur [lebontemperament.com](https://www.lebontemperament.com), et le code est public sur [github.com/Eragon67360/lebontemperament_turbo](https://github.com/Eragon67360/lebontemperament_turbo).
-
-{/* TODO Thomas : ajoute une phrase de conclusion avec tes mots, ou supprime ce commentaire. */}

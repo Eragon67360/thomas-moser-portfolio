@@ -6,6 +6,7 @@ slug: le-bon-temperament-build-log
 date: 2026-10-20
 duration: 6
 lang: en
+type: build-log
 translation: fr-le-bon-temperament-build-log
 ---
 
@@ -13,9 +14,7 @@ translation: fr-le-bon-temperament-build-log
 
 Le Bon Tempérament is a choir and orchestra association. Since March 2024 I have been building its digital side: a public website with a members area, an admin dashboard for the board, and a mobile app for the members. All three live in one repository, which is what this post is about. It is a build log rather than a tutorial: what the project is, how the monorepo is laid out, a few technical choices visible in the code, and the parts I would do differently.
 
-{/* TODO Thomas: what is your link to the ensemble (member, musician in it, family, a request from the board)? One or two sentences on why you took this on. */}
-
-I play the trumpet and the piano, so a project about rehearsals, scores and concerts was not a foreign subject.
+I have played the trumpet in the ensemble since October 2023. Its old website was showing its age, so I offered to build a new one, and the project grew from there.
 
 ## What the project is
 
@@ -76,7 +75,7 @@ The mobile app is Flutter with Dart 3.9 or later, Riverpod 3 for state, go_route
 
 One quirk worth noting: the apps type-check with TypeScript 7, but the repository root pins TypeScript 5.9.3, because ESLint's TypeScript parser does not support version 7 yet. Type checks therefore run through Turbo, per workspace, not from the root.
 
-{/* TODO Thomas: why Supabase, and why Flutter rather than React Native for the app? The repo states the choices but not the reasons. */}
+Why these two? I picked Supabase because I was still fairly new to web development when I started: it was the simplest option to learn, and it works well with Next.js. I picked Flutter because I wanted to write one app for both Android and iPhone.
 
 ## Two choices visible in the code
 
@@ -104,24 +103,20 @@ The same pattern drives push notifications: a trigger on `rehearsals`, `events` 
 
 CI follows the same economy. Each job leaves a marker artifact keyed by the hash of the tree it checked, and the next run skips any job that already passed on the exact same code. The release pull request from `dev` to `main` usually checks the same tree as the version-bump PR merged just before it, so it reuses nearly everything.
 
-Deployment is Vercel for both web apps, each built from the repository root with `turbo build --filter=website` or `--filter=admin`, and `turbo-ignore` cancelling builds the app does not depend on. On each release to `main` that touches the app, one workflow builds the Android bundle and uploads it to the Play Store's internal track, and another builds the iPhone app and uploads it to TestFlight.
-
-{/* TODO Thomas: the iOS workflow exists in the repo, but is the iPhone app actually on TestFlight for members yet? If not, say "is ready to" or drop the iPhone part. */}
+Deployment is Vercel for both web apps, each built from the repository root with `turbo build --filter=website` or `--filter=admin`, and `turbo-ignore` cancelling builds the app does not depend on. On each release to `main` that touches the app, one workflow builds the Android bundle and uploads it to the Play Store's internal track, and another builds the iPhone app and uploads it to TestFlight. As I write this, the iPhone app is with a few internal testers and about to open to the members.
 
 ## What was hard
 
-{/* TODO Thomas: what was the hardest part? Candidates visible in the history: keeping the web, admin and app versions in step (version.json is shared by all three), the offline cache in the app, the Google Drive integration, or something else entirely. */}
+The hardest part has been permissions: who can read and change what in the database, and keeping that access secure. GDPR came on top of that more recently.
 
-One thing I can say from the repository: three apps, three deployment targets and one database means a schema change is never small. The generated types catch the web side; the Flutter models have to be updated by hand.
+The other recurring cost: three apps, three deployment targets and one database means a schema change is never small. The generated types catch the web side; the Flutter models have to be updated by hand.
 
 ## What I would redo
 
-{/* TODO Thomas: what would you do differently (for example start in the monorepo from day one, pick one UI library for both web apps, keep Stripe or not)? */}
+If I started again, I would use as few paid dependencies as possible. No Supabase: a good old Docker setup and a database hosted at Hetzner, for example, or on AWS. It would be cheaper overall.
 
 Payments are one place where the plan changed. The repository still carries Stripe for a CD catalogue that is being removed; donations have moved to a HelloAsso campaign, which issues the tax receipts. The Stripe-era donation tables stay in the database as records.
 
 ## Conclusion
 
 Le Bon Tempérament has been in progress since March 2024, and the monorepo is what keeps it manageable: one place for types, one place for environment names, one release version (`2.0.139` at the time of writing) shared by the website, the admin and the app. The site is live at [lebontemperament.com](https://www.lebontemperament.com), and the code is public at [github.com/Eragon67360/lebontemperament_turbo](https://github.com/Eragon67360/lebontemperament_turbo).
-
-{/* TODO Thomas: add a closing line in your own words, or remove this comment. */}
