@@ -18,7 +18,7 @@ const CHANNELS: Channel[] = [
   { label: "Book a call", detail: "Calendly", href: profile.Calendly, Icon: FaCalendarAlt, external: true },
   { label: "LinkedIn", detail: "thomas-moser67", href: profile.LinkedIn, Icon: FaLinkedin, external: true },
   { label: "GitHub", detail: "Eragon67360", href: profile.Github, Icon: FaGithub, external: true },
-  { label: "Instagram", detail: "thomas_msr_67", href: profile.Instagram, Icon: FaInstagram, external: true },
+  { label: "Instagram", detail: "th_mr_67", href: profile.Instagram, Icon: FaInstagram, external: true },
   { label: "YouTube", detail: "My channel", href: profile.Youtube, Icon: FaYoutube, external: true },
   { label: "MuseScore", detail: "My arrangements", href: profile.MuseScore, Icon: FaMusic, external: true },
 ];
