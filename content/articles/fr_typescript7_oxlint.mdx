@@ -1,0 +1,134 @@
+---
+title: TypeScript 7 a cassé ESLint, alors j'ai migré mon site Next.js vers oxlint
+description: Pourquoi typescript-eslint ne fonctionne pas avec TypeScript 7, et comment linter un projet Next.js 16 avec oxlint et ses règles basées sur les types.
+tags: ["nextjs","typescript","oxlint","tooling"]
+slug: fr-typescript-7-eslint-to-oxlint
+date: 2026-10-20
+duration: 8
+lang: fr
+translation: typescript-7-eslint-to-oxlint
+---
+
+## Introduction
+Le 27 septembre, j'ai mis à jour tous les paquets de ce site vers leur dernière version, surtout pour garder le projet à jour. Parmi eux, TypeScript 7, le nouveau compilateur natif, bien plus rapide que l'ancien. La vérification des types est devenue plus rapide, mais le linter n'a pas suivi : le support TypeScript d'ESLint a besoin d'une API que TypeScript 7 ne fournit plus. Dans cet article, nous allons voir pourquoi, et comment j'ai remplacé ESLint par **oxlint**, y compris les règles basées sur les types, sur un projet Next.js 16.
+
+Tout ce qui suit vient du dépôt de ce site : vous pouvez vérifier chaque fichier sur [GitHub](https://github.com/Eragon67360/thomas-moser-portfolio).
+
+## Pourquoi ESLint ne fonctionne pas avec TypeScript 7
+TypeScript 7 est une réécriture du compilateur en Go. Vous avez toujours un binaire `tsc`, mais le paquet JavaScript ne contient plus le compilateur lui-même. Voici ce que renvoie `require("typescript")` avec TypeScript 7.0.2 :
+
+```bash
+$ node -e 'const ts = require("typescript"); console.log(Object.keys(ts), typeof ts.createProgram)'
+[ 'version', 'versionMajorMinor' ] undefined
+```
+
+Seulement la version. `typescript-eslint`, le parseur et les règles qui permettent à ESLint de comprendre TypeScript, repose sur cette API disparue (`createProgram` et compagnie). Et `eslint-config-next` dépend de `typescript-eslint`. Dès que TypeScript 7 est installé, la configuration de lint standard de Next.js n'a donc plus rien à charger.
+
+Il y a eu une deuxième surprise. Avant la mise à jour, mon script `lint` était encore `next lint`, et Next.js 16 a supprimé cette commande. Sur l'ancienne version du site, elle affiche maintenant :
+
+```plaintext
+Invalid project directory provided, no such directory: .../lint
+```
+
+Mon ancien `.eslintrc.json` était lui aussi dépassé : ESLint 9 attend par défaut le nouveau format de configuration « flat config ». Autrement dit, le linter ne vérifiait déjà plus rien avant même que je touche à TypeScript. Quand j'ai lancé ESLint 9 à la main sur cet ancien code, il a trouvé 2 erreurs et 3 avertissements, dont un composant créé pendant le rendu dans le blog.
+
+Je dois être honnête : je ne le savais pas.
+
+## Qu'est-ce qu'oxlint ?
+[oxlint](https://oxc.rs/docs/guide/usage/linter) est le linter du projet Oxc, écrit en Rust. Deux raisons en ont fait le bon remplaçant ici :
+
+- **Les règles dont j'avais besoin sont intégrées.** Il reprend les règles des plugins Next.js, React, React Hooks, jsx-a11y et import : il n'y a rien à installer plugin par plugin.
+- **Les règles basées sur les types fonctionnent avec TypeScript 7.** Elles passent par `oxlint-tsgolint`, construit sur le compilateur Go au lieu de l'ancienne API JavaScript.
+
+## Étape 1 : supprimer ESLint
+Désinstallez les paquets ESLint et supprimez l'ancienne configuration :
+
+```bash
+npm uninstall eslint eslint-config-next
+rm .eslintrc.json
+```
+
+## Étape 2 : installer oxlint
+```bash
+npm install -D oxlint oxlint-tsgolint
+```
+
+Voici les versions utilisées aujourd'hui par ce site : `oxlint` 1.86, `oxlint-tsgolint` 7.0 et `typescript` 7.0.
+
+## Étape 3 : le configurer
+oxlint lit le fichier `.oxlintrc.json` à la racine du projet. Voici la configuration complète du site :
+
+```json:.oxlintrc.json
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "nextjs", "jsx-a11y", "import", "unicorn", "oxc"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  },
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "error",
+    "typescript/no-explicit-any": "error",
+    "typescript/consistent-type-imports": "error",
+    "import/no-cycle": "error",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "eqeqeq": "error",
+    "import/no-unassigned-import": ["warn", { "allow": ["server-only", "**/*.css"] }]
+  },
+  "ignorePatterns": [".next/**", "public/**", "next-env.d.ts", "resources/**"]
+}
+```
+
+Quelques choix qui méritent une explication :
+
+- **`plugins`** active les ensembles de règles. `nextjs`, `react` et `jsx-a11y` couvrent ce que m'apportait `eslint-config-next`.
+- **`categories`** active des groupes entiers d'un coup : chaque règle `correctness` fait échouer le build, chaque règle `suspicious` produit un avertissement.
+- **`react/react-in-jsx-scope`** est désactivée, car React 19 n'a plus besoin d'`import React` dans chaque fichier.
+- **`import/no-cycle`** garde l'architecture propre : sur ce site, les imports ne vont que dans un sens (pages, puis composants, puis hooks et utilitaires).
+- **`import/no-unassigned-import`** autorise `import "server-only"` et les imports CSS, qui sont importés volontairement pour leur effet de bord.
+
+## Étape 4 : mettre à jour les scripts
+```json:package.json
+"scripts": {
+  "lint": "oxlint --type-aware",
+  "typecheck": "next typegen && tsc --noEmit",
+  "format": "oxfmt",
+  "format:check": "oxfmt --check",
+  "knip": "knip",
+  "check": "npm run typecheck && npm run lint && npm run format:check && npm run knip"
+}
+```
+
+- **`--type-aware`** active les règles qui ont besoin des informations de type, comme `typescript/no-unsafe-type-assertion`.
+- **`next typegen`** s'exécute avant `tsc`. Next.js 16 génère les types des routes (par exemple `PageProps<"/blog/[slug]">`) dans `.next/types`, et `tsc` ne les trouve pas tant qu'ils n'existent pas.
+- J'en ai profité pour ajouter **oxfmt**, le formateur du même projet, et **knip**, qui trouve les fichiers, exports et dépendances inutilisés. `npm run check` lance les quatre, en local comme en CI.
+
+## Étape 5 : désactiver une règle seulement là où c'est voulu
+Parfois, une règle est juste en général mais fausse à un endroit précis. Désactivez-la pour une seule ligne et expliquez toujours pourquoi après `--` :
+
+```tsx:components/seo/JsonLd.tsx
+// oxlint-disable-next-line react/no-danger -- JSON-LD must be emitted verbatim; `<` is escaped.
+```
+
+Le site compte quatre commentaires de ce type au total, chacun avec sa raison. Je ne désactive jamais une règle globalement.
+
+## Le résultat
+J'ai mesuré les deux linters sur ce site, sur une machine à 4 cœurs. Ils ne vérifient pas exactement le même code : ESLint a tourné sur la version d'avant la mise à jour (80 fichiers), oxlint sur la version actuelle (102 fichiers).
+
+| Exécution | Fichiers | Durée |
+| --- | --- | --- |
+| ESLint 9 avec `eslint-config-next` (sans informations de type) | 80 | 4,4 à 5,2 s |
+| oxlint, sans informations de type | 102 | 0,55 s |
+| oxlint `--type-aware` (262 règles) | 102 | 3,1 à 3,8 s |
+| `tsc --noEmit` avec TypeScript 7 | 102 | 4,6 à 4,8 s |
+
+Sans informations de type, oxlint est environ huit fois plus rapide, sur plus de fichiers. Avec les informations de type, il vérifie plus de choses que l'ancienne configuration ne l'a jamais fait, et reste plus rapide.
+
+Mon verdict : ESLint ne m'a manqué en rien depuis la migration, et oxlint fait tout ce dont j'ai besoin. Mais je ne migrerais pas juste pour le principe. Si vous n'êtes pas encore sur TypeScript 7, vous pouvez attendre que le reste de vos paquets soit compatible.
+
+## Conclusion
+Si vous passez à TypeScript 7, ESLint ne fonctionnera plus tant que `typescript-eslint` ne supportera pas le nouveau compilateur. oxlint couvre d'emblée les règles Next.js, React et accessibilité, fait tourner les règles basées sur les types avec TypeScript 7, et ne demande qu'un fichier de configuration. Profitez-en pour vérifier que votre script `lint` fonctionne encore : le mien ne faisait plus rien depuis un moment.
+
+Toute la configuration est dans le [dépôt de ce site](https://github.com/Eragon67360/thomas-moser-portfolio), dans `.oxlintrc.json` et `package.json`.
