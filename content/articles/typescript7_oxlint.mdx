@@ -125,7 +125,7 @@ I measured both linters on this site, on a 4-core machine. They don't check exac
 
 Without type information, oxlint is about eight times faster on more files. With type information it checks more than the old setup ever did and is still faster.
 
-{/* TODO Thomas: your verdict. What did you miss from ESLint, if anything? Would you recommend the switch to someone not on TypeScript 7 yet? */}
+My verdict: I haven't missed anything from ESLint since the switch, and oxlint does everything I need. But I wouldn't switch just for the sake of it. If you're not on TypeScript 7 yet, you can wait until the rest of your packages are compatible with it.
 
 ## Conclusion
 If you move to TypeScript 7, ESLint will stop working until `typescript-eslint` supports the new compiler. oxlint covers the Next.js, React and accessibility rules out of the box, runs type-aware rules on TypeScript 7, and takes one config file. Check that your `lint` script still runs while you're at it: mine had been doing nothing for a while.
