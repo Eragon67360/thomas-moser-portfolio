@@ -7,7 +7,7 @@ import { blogPage } from "@/lib/seo/structured-data";
 import { getPostSummaries } from "@/services/posts.service";
 
 const DESCRIPTION =
-  "Hands-on tutorials on Next.js, TypeScript and web APIs, written in English and French by full-stack developer Thomas Moser.";
+  "Tutorials, build logs and career notes on Next.js, TypeScript and web development, written in English and French by full-stack developer Thomas Moser.";
 
 export const metadata: Metadata = pageMetadata({ title: "Blog", description: DESCRIPTION, path: "/blog" });
 

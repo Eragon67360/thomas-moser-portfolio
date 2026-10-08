@@ -1,0 +1,91 @@
+---
+title: request.ip a disparu de Next.js 15 et 16, alors où lire l'IP du visiteur ?
+description: NextRequest a perdu ses propriétés ip et geo dans Next.js 15. Ce que ça a changé pour le compteur de vues de mon blog, et les deux façons de les lire aujourd'hui.
+tags: ["nextjs","vercel","quick-lesson"]
+slug: fr-nextjs-request-ip-removed
+date: 2026-10-27
+duration: 4
+lang: fr
+translation: nextjs-request-ip-removed
+---
+
+## Introduction
+Ce blog compte les vues de chaque article, et ne compte chaque visiteur qu'une fois par jour. Pour reconnaître un visiteur, il a besoin de son adresse IP. Jusqu'à fin septembre, le code la lisait dans `req.ip`. Quand j'ai fait passer le site de Next.js 14 à Next.js 16, cette propriété n'existait plus.
+
+C'est une leçon courte : ce qui a changé, pourquoi c'est important, et comment lire l'IP et le pays aujourd'hui.
+
+## Ce qui a changé
+Next.js 15 a supprimé les propriétés `ip` et `geo` de `NextRequest`. Le guide de migration explique pourquoi : ces valeurs viennent de l'hébergeur, pas de Next.js. Next.js 16 garde ce choix.
+
+Voici la route qu'utilisait mon blog avant la migration, réduite à la partie qui compte :
+
+```ts:app/api/redis/route.ts
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  // ...
+  const ip = req.ip;
+  // Hash the IP and turn it into a hex string
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(ip));
+  // ...
+}
+```
+
+Avec TypeScript, la migration échoue bruyamment : `Property 'ip' does not exist on type 'NextRequest'`. Sans les types, elle échoue en silence, ce qui est pire. `req.ip` vaut simplement `undefined`, et `new TextEncoder().encode(undefined)` encode une chaîne vide. Tous les visiteurs obtiennent le même hash, et le compteur croit que le monde entier est une seule personne.
+
+Les statistiques de la page d'accueil avaient le même problème avec `req.geo?.country`, qui valait désormais `undefined`.
+
+## Option 1 : lire les en-têtes soi-même
+Sur Vercel, la plateforme transmet l'IP et la localisation du client dans des en-têtes de requête. Vercel écrase `x-forwarded-for` et ne transmet pas une IP envoyée par le client, donc un visiteur ne peut pas la falsifier. Voici le helper qu'utilise le site aujourd'hui :
+
+```ts:lib/request.ts
+import type { NextRequest } from "next/server";
+
+// `NextRequest.ip` and `.geo` were removed in Next.js 15; Vercel exposes both as headers.
+
+export function getClientIp(req: NextRequest): string {
+  return req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown";
+}
+
+export function getClientCountry(req: NextRequest): string | undefined {
+  return req.headers.get("x-vercel-ip-country") ?? undefined;
+}
+```
+
+- **`x-forwarded-for`** peut contenir une liste d'adresses. La première est celle du client.
+- **`x-real-ip`** sert de solution de repli.
+- **`x-vercel-ip-country`** contient un code pays sur deux lettres, comme `FR` ou `DE`.
+
+La route des vues et le `proxy.ts` qui enregistre les visites de la page d'accueil passent tous les deux par ces deux fonctions : aucun autre fichier ne lit directement un en-tête.
+
+## Option 2 : `@vercel/functions`
+Si vous êtes sur Vercel et préférez une fonction toute faite, le guide de migration renvoie au paquet `@vercel/functions` :
+
+```ts
+import { geolocation, ipAddress } from "@vercel/functions";
+import type { NextRequest } from "next/server";
+
+export function proxy(request: NextRequest) {
+  const ip = ipAddress(request);
+  const { country } = geolocation(request);
+  // ...
+}
+```
+
+Il existe aussi un codemod qui installe le paquet et réécrit `req.ip` et `req.geo` à votre place : `npx @next/codemod@latest next-request-geo-ip .`
+
+J'ai gardé mon propre helper : il fait six lignes et n'ajoute aucune dépendance. Si vous êtes hébergé ailleurs, aucune des deux options n'est universelle : vérifiez quel en-tête votre hébergeur fournit.
+
+## Un bug en prime
+En relisant l'ancienne route pour cet article, j'ai trouvé un deuxième bug juste à côté de `req.ip` :
+
+```ts:app/api/redis/route.ts
+if (!isNew) {
+  new NextResponse(null, { status: 202 });
+}
+
+await redisObject.incr(["pageviews", "posts", slug].join(":"));
+```
+
+La réponse est créée mais jamais renvoyée, donc le compteur augmentait de toute façon à chaque visite. Le nouveau compteur de vues s'arrête tout de suite pour une visite répétée, et il ne garde plus de hash de l'IP brute : il hache l'IP avec un sel aléatoire qui change chaque jour.
+
+## Conclusion
+Si vous migrez depuis Next.js 14, cherchez `.ip` et `.geo` sur les requêtes dans votre code avant de faire confiance à un chiffre qui en dépend. Sur Vercel, lisez `x-forwarded-for` et `x-vercel-ip-country`, ou utilisez `@vercel/functions`. Le helper complet est dans le [dépôt de ce site](https://github.com/Eragon67360/thomas-moser-portfolio/blob/main/lib/request.ts).
