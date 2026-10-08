@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PostList } from "@/components/blog/PostList";
+import { PostBrowser } from "@/components/blog/PostBrowser";
 import { SectionHeader } from "@/components/ui/Typography";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { pageMetadata } from "@/lib/seo/metadata";
@@ -19,7 +19,7 @@ export default async function BlogPage() {
       <JsonLd data={blogPage(posts)} />
       <SectionHeader as="h1" title="Posts" subtitle={DESCRIPTION} />
       <div className="w-full max-w-4xl py-8">
-        <PostList posts={posts} />
+        <PostBrowser posts={posts} />
       </div>
     </div>
   );
