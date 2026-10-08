@@ -8,6 +8,17 @@ import type { Post, PostMeta, PostWithViews } from "@/types/post";
 
 const ARTICLES_DIR = path.join(process.cwd(), "content", "articles");
 
+/**
+ * Production shows a post only once its `date` has come, judged on the day of the build (Paris time,
+ * inlined by next.config.ts) so that an ISR revalidation never lists a post whose page wasn't built.
+ * A daily workflow redeploys main when a post is due (.github/workflows/publish-scheduled-posts.yml).
+ * Previews and local runs show scheduled posts so they can be reviewed.
+ */
+function isDue(date: string): boolean {
+  const buildDay = process.env.POSTS_BUILD_DAY;
+  return process.env.VERCEL_ENV !== "production" || !buildDay || date <= buildDay;
+}
+
 /** YAML turns an unquoted `2024-04-29` into a Date; accept that or an ISO string. */
 function isoDate(file: string, field: string, value: unknown): string | undefined {
   if (value === undefined) return undefined;
@@ -56,7 +67,7 @@ export const getPosts = cache(async (): Promise<Post[]> => {
 
   // Newest first; on the same day the English original comes before its translation.
   return posts
-    .filter((post): post is Post => post !== null)
+    .filter((post): post is Post => post !== null && isDue(post.date))
     .toSorted((a, b) => b.date.localeCompare(a.date) || Number(b.lang === "en") - Number(a.lang === "en"));
 });
 

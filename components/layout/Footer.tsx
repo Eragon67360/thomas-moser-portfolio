@@ -3,6 +3,9 @@ import { footerNav, profile, site } from "@/config/site";
 import { LastPlayed } from "@/components/deezer/LastPlayed";
 import { ExternalLink } from "@/components/ui/ExternalLink";
 
+// Read once when the module loads (the footer is prerendered with each build), not during render.
+const COPYRIGHT_YEAR = new Date().getFullYear();
+
 export function Footer() {
   return (
     <footer className="mx-auto flex w-full max-w-7xl justify-center px-8 py-8 font-jet">
@@ -21,7 +24,7 @@ export function Footer() {
             <ExternalLink href={profile.License} className="text-accent hover:underline">
               MIT License
             </ExternalLink>{" "}
-            © {new Date().getFullYear()} {site.author}.
+            © {COPYRIGHT_YEAR} {site.author}.
           </p>
         </div>
 

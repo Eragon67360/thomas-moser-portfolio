@@ -27,8 +27,7 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 
 - Every variable in Vercel targets Development, Preview **and** Production with the same value, except `NEXT_STEAM_API_KEY` (a Sensitive value for Preview/Production, a separate Development value). So **local and preview runs read the production Redis**; since #32 they no longer write to it (counters are written only when `VERCEL_ENV` is `production`, or with `REDIS_ALLOW_WRITES=1`).
 - Used by the code: `NEXT_UPSTASH_REDIS_URL`, `NEXT_UPSTASH_REDIS_TOKEN`, `DEEZER_TOKEN`, `NEXT_STEAM_API_KEY`, `NEXT_STEAM_ID`, `NEXT_PUBLIC_COMMENT_REPOID`, `NEXT_PUBLIC_COMMENT_CATEGORYID` (see `.env.example`, `config/env.ts`).
-- **Legacy names still defined in Vercel** and not read by the code any more (measured: grep finds no reference): `NEXT_SPOTIFY_*`, `NEXT_GITHUB_TOKEN`, `NEXT_REDIS_TOKEN`, `STEAM_TOKEN`, `STEAM_ID`, `DEEZER_ID`, `NEXT_STEAM_API_KEY_TEST`, `AD_SLOT`, `SITE_URL`, `NEXT_REDIRECT_TARGET`, and `NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID` since AdSense was removed (#17). Vercel flags several of them, and the live Redis token, as "readable secret" (stored as plain encrypted, not Sensitive).
-- `NEXT_PUBLIC_UPSTASH_REDIS_URL` / `_TOKEN` are still defined in Vercel but no longer read (the fallback was removed in #34): the owner deletes them, with the legacy names above.
+- **Vercel holds exactly the variables above** (checked 2026-10-03 with `vercel env ls`, names only): the unused legacy names (`NEXT_SPOTIFY_*`, `NEXT_GITHUB_TOKEN`, `NEXT_REDIS_TOKEN`, `STEAM_TOKEN`, `STEAM_ID`, `DEEZER_ID`, `NEXT_STEAM_API_KEY_TEST`, `AD_SLOT`, `SITE_URL`, `NEXT_REDIRECT_TARGET`, `NEXT_PUBLIC_GOOGLE_ADS_CLIENT_ID`, `NEXT_PUBLIC_UPSTASH_REDIS_*`) were deleted that day. A variable the code stops reading is deleted in Vercel once the code that drops it is in production.
 
 ## Content
 
@@ -43,6 +42,7 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 
 - **TypeScript 7**: no ESLint (oxlint instead), `tsc` CLI only, `next typegen` before typechecking. See AGENTS.md "Gotchas".
 - **CI and tests**: `.github/workflows/ci.yml` (check name `CI`) runs `npm run check`, `npm run build` and the Playwright smoke suite (`tests/e2e/`) on pull requests and pushes to `dev`, with no credentials. Dependabot (`.github/dependabot.yml`) opens monthly grouped update PRs against `dev`. Unit tests: none.
+- **Scheduled posts**: production hides posts dated after its build day (`POSTS_BUILD_DAY`, inlined by `next.config.ts`). `.github/workflows/publish-scheduled-posts.yml` (05:10 and 09:10 UTC, on `main`) redeploys production through the deploy hook in the repository secret `VERCEL_DEPLOY_HOOK_URL` when a post that came due this week answers 404 on the live site. The secret is the only one GitHub Actions holds; the owner creates the hook (Vercel → project → Settings → Git → Deploy Hooks, branch `main`).
 - **Branch rules**: the "Protect main and dev" ruleset requires a PR and the `CI` check, and blocks force-pushes and deletion on `main` and `dev`; Dependabot alerts and security updates, secret scanning and push protection are on (2026-10-02).
 - **oxfmt ignores** `content/**`, `public/**`, `resources/**` and the lockfile: format content by hand.
 - **Always dark**: `<html class="dark">` is hard-coded; there is no light theme.
