@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { site } from "@/config/site";
-import { postShareImage } from "@/lib/media";
-import { ogImageSize, renderOgImage } from "@/lib/seo/og-image";
+import { postHeaderImage } from "@/lib/media";
+import { ogImageSize, publicImageDataUrl, renderOgImage } from "@/lib/seo/og-image";
 import { getPost, getPosts } from "@/services/posts.service";
 
 // Next only allows a static alt here; it still beats a generic "cover".
@@ -22,6 +22,6 @@ export default async function Image({ params }: { params: Promise<{ slug: string
     kicker: post.lang === "fr" ? "Article" : "Blog post",
     title: post.title,
     subtitle: post.description,
-    background: postShareImage(slug),
+    background: await publicImageDataUrl(postHeaderImage(slug)),
   });
 }

@@ -64,7 +64,7 @@ proxy.ts        Next.js 16 proxy: records home page views (non-blocking via wait
 ## Content accuracy (projects and about)
 
 - `content/projects.ts` and `content/about.ts` describe a real person's work and career. Every fact must trace to his own answers, his CV, or his repositories; never add employers, dates, titles or claims from inference.
-- Project screenshots are 1440x900 captures uploaded to Cloudinary under `images/upload/thomasmoserdev.com/projects/v2/`; the `screenshot` field is the id relative to `projects/`. Omit it when no honest screenshot exists: the card renders a placeholder.
+- Project screenshots are 1440x900 JPEG captures in `public/images/projects/v2/`; the `screenshot` field is the path relative to `public/images/projects/`, without `.jpg` (`lib/media.ts`). Omit it when no honest screenshot exists: the card renders a placeholder.
 - `config/site.ts` is bundled into client code, so `profile` lists only public fields.
 
 ## SEO and GEO
@@ -75,6 +75,7 @@ proxy.ts        Next.js 16 proxy: records home page views (non-blocking via wait
 - **Structured data** (`lib/seo/structured-data.ts`, rendered by `components/seo/JsonLd.tsx`): Person + WebSite on every page, ProfilePage on /about, CollectionPage on /projects, Blog on /blog, BlogPosting + BreadcrumbList on posts. Built from `content/*` only; the content-accuracy rule applies.
 - **Generated files**: `app/sitemap.ts`, `app/robots.ts`, `app/feed.xml` (RSS), `app/llms.txt` and the `opengraph-image` routes (`lib/seo/og-image.tsx`, fonts in `assets/fonts/`). Don't reintroduce `next-sitemap` or files in `public/` with these names: they would shadow the routes.
 - **Posts**: frontmatter `date`/`updated` are ISO `YYYY-MM-DD`; `lang` (`en` | `fr`) and `translation` (slug of the other language) drive hreflang, `lang` attributes and the "read in" link. Set `translation` on both posts of a pair. `type` (`tutorial` | `build-log` | `quick-lesson` | `story`, required) records the post's slot in the weekly rotation and drives the type menu on /blog. A future `date` schedules a post: production shows it from that day (see README, "Scheduling").
+- **Images live in the repo**, not on a CDN: post headers in `public/images/blog/<slug>/header.jpg` (JPEG, about 1920x1080; the post's social card reads it too), project screenshots in `public/images/projects/`. next/image optimizes them. The site left Cloudinary in October 2026 after a spike from another project put the shared free account over quota; don't reintroduce it.
 - AI crawlers mostly don't run JavaScript: keep anything worth citing in Server Components.
 
 ## HeroUI v3 cheatsheet

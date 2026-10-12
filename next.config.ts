@@ -71,7 +71,6 @@ const nextConfig: NextConfig = {
     // Paths are scoped to the images the site shows, so the optimizer can't be used to transform
     // arbitrary files from these hosts.
     remotePatterns: [
-      { protocol: "https", hostname: "res.cloudinary.com", pathname: "/dluezegi8/image/upload/**" },
       // Deezer album covers and artist pictures
       { protocol: "https", hostname: "cdn-images.dzcdn.net", pathname: "/images/cover/**" },
       { protocol: "https", hostname: "cdn-images.dzcdn.net", pathname: "/images/artist/**" },

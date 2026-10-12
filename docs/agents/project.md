@@ -19,7 +19,6 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 | Upstash Redis (`NEXT_UPSTASH_REDIS_*`)                  | post view counters (`pageviews:posts:*`), view deduplication (hashed IP, 24 h), home-page analytics per country (`analytics::*`, 7 days) | yes, from every environment                    |
 | Deezer API (`DEEZER_TOKEN`)                             | recently played, top tracks and artists on `/activities` and the footer                                                                  | read-only, rate-limited (quota errors retried) |
 | Steam Web API (`NEXT_STEAM_API_KEY`, `NEXT_STEAM_ID`)   | player and games on `/activities`                                                                                                        | read-only                                      |
-| Cloudinary (`res.cloudinary.com/dluezegi8`)             | project screenshots                                                                                                                      | read-only from the site                        |
 | Giscus (`NEXT_PUBLIC_COMMENT_REPOID`, `..._CATEGORYID`) | blog comments, stored as GitHub Discussions                                                                                              | by visitors, on GitHub                         |
 | Vercel Analytics                                        | page views                                                                                                                               | third-party                                    |
 
@@ -32,7 +31,7 @@ What an agent must know before touching thomasmoserdev.com, beyond the architect
 ## Content
 
 - `content/articles/*.mdx`: blog posts (frontmatter in README; `lang` `en`/`fr`, `translation` pairs them).
-- `content/projects.ts`: project cards (`slug`, `title`, `summary`, `stack`, `credits`, `period`, `links.live`/`links.repo`, `screenshot` on Cloudinary, `video` in `public/videos/projects/`, `featured`).
+- `content/projects.ts`: project cards (`slug`, `title`, `summary`, `stack`, `credits`, `period`, `links.live`/`links.repo`, `screenshot` in `public/images/projects/`, `video` in `public/videos/projects/`, `featured`).
 - `content/about.ts`: current role, location, intro, career timeline. `content/profile.json`: public contact links (published on purpose; don't add anything private).
 - `public/spline/scroll-to-top.splinecode`: the 3D scroll-to-top scene, a copy of its Spline export (served from the site for privacy; re-download it after editing the scene, see `components/layout/ScrollToTopButton.tsx`).
 - `resources/`: sources for generated assets: CV (`public/pdf/CV_Thomas_Moser_{EN,FR,DE}.pdf`), LinkedIn banner, and the **hover-video kit** with the sources of other projects' hover videos (`resources/hover-videos/projects/<slug>/`; captures and renders are git-ignored).

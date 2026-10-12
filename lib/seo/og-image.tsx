@@ -7,6 +7,7 @@ import { site } from "@/config/site";
 export const ogImageSize = { width: 1200, height: 630 };
 
 const FONTS_DIR = path.join(process.cwd(), "assets", "fonts");
+const PUBLIC_DIR = path.join(process.cwd(), "public");
 const ACCENT = "#ffbf00";
 
 type OgImageInput = {
@@ -16,6 +17,15 @@ type OgImageInput = {
   /** Photo shown dimmed behind the text (post header). Must be PNG or JPEG. */
   background?: string;
 };
+
+/**
+ * A JPEG from `public/` as a data URL, for `background`: next/og renders at build time, before the
+ * file is served anywhere, so it can't load it by URL.
+ */
+export async function publicImageDataUrl(publicPath: string): Promise<string> {
+  const file = await readFile(path.join(PUBLIC_DIR, publicPath));
+  return `data:image/jpeg;base64,${file.toString("base64")}`;
+}
 
 /** Social card in the site's look: dark ground, amber accent, JetBrains Mono title. */
 export async function renderOgImage({ kicker, title, subtitle, background }: OgImageInput): Promise<ImageResponse> {
