@@ -86,9 +86,10 @@ export default function PrivacyPage() {
 
         <h3>Images and activity widgets</h3>
         <p>
-          Project screenshots, album covers and game images are served through the site&apos;s own image service, so
-          your browser does not contact Cloudinary, Deezer or Steam. The listening and gaming activity on the activities
-          page is {site.author}&apos;s own, fetched by the server; nothing about you is sent to Deezer or Steam.
+          Project screenshots and blog images are hosted on the site itself, and album covers and game images are served
+          through the site&apos;s own image service, so your browser does not contact Deezer or Steam. The listening and
+          gaming activity on the activities page is {site.author}&apos;s own, fetched by the server; nothing about you
+          is sent to Deezer or Steam.
         </p>
 
         <h3>Contacting me</h3>
