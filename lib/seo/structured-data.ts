@@ -12,7 +12,7 @@ import type {
 import { profile, site } from "@/config/site";
 import { currentRole, education, intro, languages, location, stack } from "@/content/about";
 import { absoluteUrl } from "@/lib/seo/metadata";
-import { postShareImage, projectScreenshot } from "@/lib/media";
+import { postHeaderImage, projectScreenshot } from "@/lib/media";
 import type { PostMeta } from "@/types/post";
 import type { Project } from "@/types/project";
 
@@ -117,7 +117,7 @@ export function blogPosting(post: PostMeta, translation?: PostMeta): Graph {
     mainEntityOfPage: url,
     headline: post.title,
     description: post.description,
-    image: postShareImage(post.slug),
+    image: absoluteUrl(postHeaderImage(post.slug)),
     datePublished: post.date,
     dateModified: post.updated ?? post.date,
     inLanguage: post.lang,
@@ -159,7 +159,7 @@ function creativeWork(project: Project): CreativeWork {
     description: project.summary,
     url: project.links.live ?? project.links.repo,
     ...(project.links.live && project.links.repo && { sameAs: project.links.repo }),
-    ...(project.screenshot && { image: projectScreenshot(project.screenshot) }),
+    ...(project.screenshot && { image: absoluteUrl(projectScreenshot(project.screenshot)) }),
     ...(project.period && { dateCreated: project.period.start }),
     keywords: project.stack,
     creator: project.credits.developedBy.map((name) =>
