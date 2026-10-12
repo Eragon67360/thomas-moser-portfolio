@@ -22,7 +22,13 @@ jobs:
         run: |
           set -euo pipefail
           base=https://res.cloudinary.com/dluezegi8/image/upload
-          get() { mkdir -p "$(dirname "$2")"; curl -fsSL --retry 4 -o "$2" "$1"; }
+          failed=0
+          get() {
+            mkdir -p "$(dirname "$2")"
+            code=$(curl -sSL --retry 4 -D /tmp/h -o "$2" -w '%{http_code}' "$1")
+            echo "$code $1"
+            if [ "$code" != 200 ]; then grep -i '^x-cld-error' /tmp/h || true; rm -f "$2"; failed=1; fi
+          }
           for slug in connect-deezer-api-to-nextjs fr-connect-deezer-api-to-nextjs le-bon-temperament-build-log fr-le-bon-temperament-build-log living-in-france-coding-in-germany fr-living-in-france-coding-in-germany nextjs-request-ip-removed fr-nextjs-request-ip-removed typescript-7-eslint-to-oxlint fr-typescript-7-eslint-to-oxlint; do
             get "$base/images/upload/thomasmoserdev.com/blog/$slug/header.jpg" "public/images/blog/$slug/header.jpg"
           done
@@ -39,6 +45,7 @@ jobs:
           done
           file public/images/blog/*/header.jpg public/images/projects/*.jpg public/images/projects/v2/*.jpg
           du -sh public/images
+          exit $failed
 
       - name: Commit
         run: |
