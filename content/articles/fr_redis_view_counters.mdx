@@ -1,0 +1,230 @@
+---
+title: Des compteurs de vues avec Upstash Redis, sans casser les pages statiques
+description: Comment mon blog Next.js 16 compte les vues de chaque article avec Upstash Redis tout en gardant des pages statiques, avec une vue par visiteur et par jour et aucune adresse IP stockée.
+tags: ["nextjs","redis","upstash","vercel"]
+slug: fr-redis-view-counters-static-pages
+date: 2026-11-10
+duration: 9
+lang: fr
+type: tutorial
+translation: redis-view-counters-static-pages
+---
+
+## Introduction
+Chaque article de ce blog affiche son nombre de lecteurs, et la page d'accueil liste les articles les plus lus. Ces deux chiffres sont stockés dans Upstash Redis. Et ces deux pages sont statiques : Next.js les génère à l'avance et les rafraîchit en arrière-plan, donc un visiteur n'attend jamais une base de données.
+
+Ces deux objectifs tirent dans des sens opposés. Lisez un compteur de la mauvaise façon, et Next.js génère la page à chaque requête. Écrivez-le de la mauvaise façon, et vous comptez les robots, comptez deux fois chaque rafraîchissement ou stockez des adresses IP. Ce tutoriel montre comment le site s'y prend aujourd'hui, fichier par fichier, avec le code du dépôt.
+
+## Le principe
+Le compteur a trois parties, et une seule tourne pendant le rendu de la page :
+
+- **La lecture** se fait sur le serveur, pendant que Next.js génère la page. La page est statique et régénérée au plus une fois par minute, donc le chiffre peut avoir jusqu'à une minute de retard.
+- **L'écriture** se fait dans le navigateur du visiteur, une fois la page chargée : un petit composant client envoie un `POST` à une route d'API.
+- **Redis** garde un entier par article, sous une clé du type `pageviews:posts:<slug>`.
+
+C'est parce que l'écriture reste en dehors du rendu que la page reste statique. La page n'a jamais besoin de savoir qui la lit.
+
+## Étape 1 : un client Redis qui ne force pas le rendu dynamique
+Le client `@upstash/redis` parle à Redis en HTTP, avec `fetch`. Par défaut, il envoie chaque requête avec `cache: "no-store"`. Dans l'App Router, un `fetch` en `no-store` pendant le rendu indique à Next.js que la page ne peut pas être mise en cache : toute la page devient dynamique.
+
+La correction tient en une option :
+
+```ts:lib/redis.ts
+import "server-only";
+import { Redis } from "@upstash/redis";
+import { env } from "@/config/env";
+
+let client: Redis | undefined;
+
+export function getRedis(): Redis {
+  // Upstash defaults to `cache: "no-store"`, which would force every page that
+  // reads a counter into dynamic rendering. Its requests are POSTs, which Next
+  // never caches, so "default" keeps reads fresh while pages can use ISR.
+  client ??= new Redis({ ...env.redis(), cache: "default" });
+  return client;
+}
+```
+
+Upstash envoie ses commandes en `POST`, et Next.js ne met jamais en cache les réponses à un `POST`. Donc `cache: "default"` ne fige pas le compteur dans un cache. Il empêche juste le client de sortir la page du rendu statique.
+
+La ligne `import "server-only"` fait échouer le build si un composant client importe un jour ce fichier : le token Redis ne peut pas finir dans le code envoyé au navigateur.
+
+## Étape 2 : lire le compteur pendant le rendu
+La page d'un article lit son compteur comme n'importe quelle autre donnée, puis indique à Next.js à quelle fréquence la rafraîchir :
+
+```tsx:app/blog/[slug]/page.tsx
+export const revalidate = 60;
+
+export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
+  const { slug } = await params;
+  const post = await getPost(slug);
+  if (!post) notFound();
+
+  const [{ Content, headings }, views, translation] = await Promise.all([
+    compileMdx(post.body),
+    getPostViews(slug).catch(() => 0),
+    getTranslation(post),
+  ]);
+  // ...
+}
+```
+
+`revalidate = 60` signifie que la page est servie depuis le cache et régénérée en arrière-plan au plus une fois par minute. Le `.catch(() => 0)` est voulu : si Redis est en panne, l'article s'affiche quand même, avec 0 vue au lieu d'une page d'erreur.
+
+La lecture elle-même est un simple `GET` :
+
+```ts:services/views.service.ts
+export async function getPostViews(slug: string): Promise<number> {
+  return Number(await getRedis().get(viewsKey(slug))) || 0;
+}
+```
+
+## Étape 3 : compter la vue depuis le navigateur
+L'écriture part d'un composant client qui n'affiche rien :
+
+```tsx:components/blog/ViewTracker.tsx
+"use client";
+import { useEffect } from "react";
+
+/** Records one view of the post per mount; renders nothing. */
+export function ViewTracker({ slug }: { slug: string }) {
+  useEffect(() => {
+    void fetch("/api/views", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug }),
+    });
+  }, [slug]);
+
+  return null;
+}
+```
+
+La page de l'article affiche `<ViewTracker slug={slug} />` à côté de l'en-tête. Comme la requête ne part que dans `useEffect`, elle ne tourne que dans les vrais navigateurs qui exécutent JavaScript, pas pendant le build ni chez la plupart des robots d'indexation.
+
+## Étape 4 : une route d'API qui n'accepte que les vraies vues
+N'importe qui peut envoyer un `POST` à une URL publique, donc la route vérifie quelques points avant de toucher à Redis :
+
+```ts:app/api/views/route.ts
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  // Only the site's own pages count views: browsers send Sec-Fetch-Site, and a JSON body can't be
+  // posted cross-site without a CORS preflight, which this route never answers.
+  const fetchSite = req.headers.get("sec-fetch-site");
+  if (fetchSite && fetchSite !== "same-origin") {
+    return NextResponse.json({ error: "Cross-site request" }, { status: 403 });
+  }
+  if (!req.headers.get("content-type")?.startsWith("application/json")) {
+    return NextResponse.json({ error: "Expected JSON" }, { status: 415 });
+  }
+
+  const body: unknown = await req.json().catch(() => null);
+  const slug = typeof body === "object" && body !== null && "slug" in body ? body.slug : undefined;
+  if (typeof slug !== "string" || slug.length === 0) {
+    return NextResponse.json({ error: "Missing slug" }, { status: 400 });
+  }
+  // Only count existing posts, so arbitrary slugs can't create Redis keys.
+  if (!(await getPost(slug))) {
+    return NextResponse.json({ error: "Unknown post" }, { status: 404 });
+  }
+
+  try {
+    await recordPostView(slug, getClientIp(req));
+  } catch (error) {
+    console.error(error);
+  }
+  return new NextResponse(null, { status: 202 });
+}
+```
+
+- **`Sec-Fetch-Site`** est rempli par le navigateur, et une page ne peut pas le modifier. Le script d'un autre site enverrait `cross-site` et recevrait une 403.
+- **Le type de contenu JSON** compte aussi. Un `POST` d'un autre site avec `application/json` exige une requête préalable CORS, à laquelle cette route ne répond jamais.
+- **Un slug inconnu reçoit une 404**, pour que personne ne remplisse la base avec des clés inventées.
+- **Une erreur Redis est journalisée, pas renvoyée.** La page du visiteur se moque de savoir si le comptage a marché.
+
+Rien de tout ça n'arrête quelqu'un qui utilise `curl` avec les bons en-têtes. Mais ça garde le compteur assez honnête pour un blog personnel, et le dédoublonnage ci-dessous limite ce qu'une seule personne peut ajouter.
+
+## Étape 5 : une vue par visiteur et par jour, sans stocker d'IP
+Rafraîchir une page ne devrait pas ajouter de vue. Pour reconnaître un visiteur qui revient, le site a besoin de quelque chose de stable chez lui, et la seule chose qu'il a, c'est son adresse IP. (Lire cette IP dans Next.js 15 et 16 a son propre piège, que j'ai raconté dans [request.ip a disparu de Next.js 15 et 16](/blog/fr-nextjs-request-ip-removed).)
+
+Je ne veux pas stocker d'adresses IP, donc le service n'en stocke jamais. Il stocke une empreinte (un hash) de l'IP, du slug et d'un sel aléatoire qui change chaque jour :
+
+```ts:services/views.service.ts
+export async function recordPostView(slug: string, visitorIp: string): Promise<void> {
+  if (!redisWritesAllowed()) return;
+  const redis = getRedis();
+  const salts = await dedupeSalts(Date.now());
+  const visitKey = async (salt: string) => `${DEDUPE_PREFIX}:${await sha256Hex(`${salt}:${visitorIp}:${slug}`)}`;
+
+  // A visit late yesterday is still inside today's 24 h window.
+  if (salts.yesterday && (await redis.exists(await visitKey(salts.yesterday)))) return;
+
+  const isNewVisit = await redis.set(await visitKey(salts.today), true, { nx: true, ex: DEDUPE_WINDOW_SECONDS });
+  if (isNewVisit) {
+    await redis.incr(viewsKey(slug));
+  }
+}
+```
+
+La ligne clé, c'est le `set` avec `nx: true` et `ex`. `nx` n'écrit la clé que si elle n'existe pas encore, et Redis indique s'il l'a écrite. `ex` supprime la clé au bout de 24 heures. La première visite du jour crée donc la clé et incrémente le compteur, et toutes les visites suivantes trouvent la clé et s'arrêtent là.
+
+Les sels rendent les empreintes inutilisables une fois qu'ils ont disparu :
+
+```ts:services/views.service.ts
+async function dedupeSalts(now: number): Promise<{ today: string; yesterday: string | null }> {
+  const redis = getRedis();
+  const today = saltKey(utcDay(now));
+  await redis.set(today, toHex(crypto.getRandomValues(new Uint8Array(32))), {
+    nx: true,
+    ex: 2 * DEDUPE_WINDOW_SECONDS,
+  });
+  // Upstash parses stored values as JSON when it can: an all-digit salt would come back as a number.
+  const [todaySalt, yesterdaySalt] = await redis.mget<(string | number | null)[]>(today, saltKey(utcDay(now - DAY_MS)));
+  if (todaySalt === null) throw new Error("View dedupe salt is missing");
+  return { today: String(todaySalt), yesterday: yesterdaySalt === null ? null : String(yesterdaySalt) };
+}
+```
+
+- Chaque jour reçoit un nouveau sel aléatoire de 32 octets, créé par la première requête qui arrive (encore `nx`, pour que deux requêtes simultanées ne créent pas deux sels différents).
+- Un sel vit 48 heures, pour que celui de la veille soit encore là quand une fenêtre de 24 heures a commencé la veille au soir.
+- Une fois le sel expiré, personne ne peut relier une empreinte stockée à une IP, même pas moi avec un accès complet à la base.
+- Le slug fait partie de l'empreinte, donc les clés d'un même visiteur ne peuvent pas être rapprochées d'un article à l'autre.
+
+## Étape 6 : seule la production écrit
+Le développement local et les déploiements de prévisualisation Vercel utilisent la même base Redis que la production. Sans garde-fou, chaque fois que j'ouvrirais un article en travaillant sur le site, son compteur monterait. Le service vérifie donc une fonction avant d'écrire :
+
+```ts:config/env.ts
+redisWritesAllowed: () => process.env.VERCEL_ENV === "production" || process.env.REDIS_ALLOW_WRITES === "1",
+```
+
+Les lectures fonctionnent partout, donc les prévisualisations affichent les vrais chiffres. Les écritures n'ont lieu que sur le déploiement de production, ou quand je mets volontairement `REDIS_ALLOW_WRITES=1` pour les tester.
+
+## Bonus : la liste des articles les plus lus
+La page d'accueil a besoin de tous les compteurs, pas d'un seul. Redis n'a pas de commande « donne-moi toutes les clés avec ce préfixe » en un seul appel, donc le service parcourt les clés avec `SCAN`, puis récupère toutes les valeurs d'un coup avec `MGET` :
+
+```ts:services/views.service.ts
+export async function getAllPostViews(): Promise<{ slug: string; views: number }[]> {
+  const redis = getRedis();
+  const keys = new Set<string>();
+  let cursor = "0";
+  do {
+    const [next, batch] = await redis.scan(cursor, { match: `${VIEWS_PREFIX}:*`, count: 100 });
+    batch.forEach((key) => keys.add(key));
+    cursor = next;
+  } while (cursor !== "0");
+
+  if (keys.size === 0) return [];
+
+  const slugs = [...keys];
+  const counts = await redis.mget<(string | number | null)[]>(...slugs);
+  return slugs
+    .map((key, i) => ({ slug: key.slice(VIEWS_PREFIX.length + 1), views: Number(counts[i]) || 0 }))
+    .toSorted((a, b) => b.views - a.views);
+}
+```
+
+`SCAN` peut renvoyer deux fois la même clé, c'est pourquoi les clés passent par un `Set`. La page d'accueil utilise le même `revalidate = 60` que les articles, donc ce code tourne au plus une fois par minute, pas une fois par visiteur.
+
+## Conclusion
+Le principe tient en une phrase : lire pendant le rendu avec un client qui autorise le cache, et écrire depuis le navigateur via une route qui vérifie ce qu'elle reçoit. Des pages statiques, des chiffres assez frais, et aucune adresse IP dans la base.
+
+Tout le code est dans le dépôt de ce site sur [GitHub](https://github.com/Eragon67360/thomas-moser-portfolio), surtout dans `services/views.service.ts`, `app/api/views/route.ts` et `lib/redis.ts`.
