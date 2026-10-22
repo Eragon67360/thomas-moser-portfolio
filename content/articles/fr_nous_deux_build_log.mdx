@@ -1,0 +1,115 @@
+---
+title: "Nous Deux, journal de bord : une app de couple respectueuse de la vie privée, en Flutter et Supabase"
+description: Comment j'ai construit Nous Deux, une app de couple avec un calendrier partagé, un suivi des règles et un partage de position optionnel, et comment sa base de données décide qui voit quoi.
+tags: ["flutter","supabase","privacy","build-log"]
+slug: fr-nous-deux-build-log
+date: 2026-11-17
+duration: 6
+lang: fr
+type: build-log
+translation: nous-deux-build-log
+---
+
+## Introduction
+
+Nous Deux est une application mobile pour les couples : un calendrier partagé, un suivi des règles et, si on le souhaite, le partage de sa position. Chacune de ces fonctions touche à des données qu'on ne partage pas à la légère, donc tout le projet tourne autour d'une question : qui peut voir quoi ?
+
+C'est un journal de bord plutôt qu'un tutoriel : ce que fait l'application, comment elle est construite, et les choix dans le code qui gardent les données de chacun là où elles doivent être.
+
+{/* TODO Thomas : pourquoi as-tu créé Nous Deux ? Quelques lignes avec tes mots : l'idée, pour qui, est-ce que tu l'utilises toi-même. */}
+
+## Ce que fait l'application
+
+Deux personnes se connectent, associent leurs comptes, et partagent ensuite trois choses :
+
+- **Un calendrier** que les deux peuvent modifier. On peut aussi y importer les événements du calendrier du téléphone.
+- **Le suivi des règles**, avec des rappels, de courts guides et une liste de sources vérifiées pour aller plus loin. Quand l'un des deux enregistre ses règles, l'autre reçoit une notification.
+- **Le partage de position**, désactivé par défaut. Quand il est activé, le ou la partenaire voit votre position actuelle sur une carte.
+
+On se connecte avec un numéro de téléphone (code à usage unique), Google ou Apple. L'application parle français et anglais.
+
+## La stack
+
+L'application est écrite en **Flutter** : un seul code pour Android et iPhone. L'état passe par **Riverpod**, la navigation par **go_router**.
+
+Le backend, c'est **Supabase** : Postgres, l'authentification, le temps réel et une edge function. **Firebase Cloud Messaging** envoie les notifications push et **Mapbox** dessine la carte. Un petit site vitrine en **Next.js** vit dans son propre dépôt.
+
+Le dépôt de l'application compte 63 commits, du 9 au 16 février 2026 : la première version a pris forme en une semaine environ.
+
+{/* TODO Thomas : c'est bien ça, une semaine intense ? Quelque chose à ajouter sur ta façon de travailler (le soir, des outils d'IA, une échéance) ? */}
+
+## Associer deux comptes
+
+Un couple commence avec une seule personne. Elle crée une ligne de couple, et l'application génère un code de six caractères, tiré d'un alphabet sans les caractères qu'on confond (pas de `0`, `O`, `1` ni `I`) :
+
+```dart:lib/core/constants/app_constants.dart
+static const int pairingCodeLength = 6;
+static const String pairingCodeChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+```
+
+Le code s'affiche en texte et en QR code. L'autre personne le tape ou le scanne, et l'application l'enregistre comme second membre du couple. Un trigger de la base relie ensuite les deux profils, parce qu'aucun utilisateur n'a le droit de modifier directement le profil de l'autre :
+
+```sql:supabase/migrations/20250209000008_couple_pairing_trigger.sql
+CREATE OR REPLACE FUNCTION public.on_couple_paired()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.user2_id IS NOT NULL AND (OLD.user2_id IS NULL OR OLD.user2_id IS DISTINCT FROM NEW.user2_id) THEN
+    UPDATE public.profiles SET partner_id = NEW.user2_id, updated_at = NOW() WHERE id = NEW.user1_id;
+    UPDATE public.profiles SET partner_id = NEW.user1_id, updated_at = NOW() WHERE id = NEW.user2_id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+```
+
+## La vie privée se joue dans la base de données
+
+L'application parle à Supabase avec la clé publique (anon), donc les règles ne peuvent pas vivre dans le code Flutter : n'importe qui pourrait appeler l'API directement. Chaque table a la sécurité au niveau des lignes (RLS), et les politiques disent exactement qui lit quoi. Deux petites fonctions renvoient « mon ou ma partenaire » et « mes couples », et les politiques s'appuient dessus.
+
+Le suivi des règles illustre le mieux l'idée. Vous gérez vos propres entrées, et votre partenaire peut les lire, mais seulement tant que vous êtes dans le même couple :
+
+```sql:supabase/migrations/20250209000006_rls_and_triggers.sql
+CREATE POLICY "Users can manage own period logs"
+  ON public.period_logs FOR ALL
+  USING (user_id = auth.uid())
+  WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users can read partner period logs in same couple"
+  ON public.period_logs FOR SELECT
+  USING (
+    couple_id IN (SELECT public.my_couple_ids())
+    AND user_id = public.my_partner_id()
+  );
+```
+
+Votre partenaire peut lire vos entrées mais jamais les modifier. Personne en dehors du couple ne peut les voir.
+
+Quelques autres choix suivent la même logique :
+
+- **La position ne garde aucun historique.** La table contient une ligne par personne, mise à jour sur place, avec `is_sharing` à `false` par défaut. Il n'y a aucune trace de là où vous êtes allé, seulement de là où vous êtes, et seulement si vous avez dit oui.
+- **Les notifications restent vagues.** Quand des règles sont enregistrées, un webhook de la base appelle une edge function qui envoie une notification au ou à la partenaire. Elle dit qu'une entrée a été ajoutée, rien sur son contenu.
+- **Quitter le couple efface tout ce qui était partagé.** Une fonction `leave_couple` détache les deux profils et supprime la ligne du couple. Les clés étrangères suppriment en cascade le calendrier partagé, le suivi des règles et les positions.
+
+{/* TODO Thomas : que veut dire « respectueuse de la vie privée » pour toi dans cette app ? Y a-t-il une fonction que tu as abandonnée ou limitée pour cette raison ? */}
+
+## Les petits détails que j'aime
+
+Certaines parties du code n'existent que pour l'utilisateur :
+
+- **La carte suit la lumière.** Le style de la carte change selon l'heure, et sur Android l'application lit aussi le capteur de luminosité, donc la carte s'assombrit dans un tunnel. Sur iPhone, qui ne donne pas accès à ce capteur, elle se rabat sur l'heure.
+- **Les sources sont vérifiées chaque semaine.** Les guides sur les règles renvoient vers des sources extérieures. Un workflow GitHub Actions vérifie ces liens à chaque modification de la liste et tous les lundis, pour qu'un lien mort ne reste pas dans l'application sans qu'on le voie.
+- **Les versions Android partent toutes seules.** Un push sur `main` construit un bundle signé, l'envoie sur la piste de test interne de Google Play et joint les fichiers à une release GitHub.
+
+## Ce qui a été difficile
+
+{/* TODO Thomas : quelle a été la partie la plus difficile ? Les permissions, les notifications, la connexion Apple, la validation des stores, autre chose ? Quelques lignes avec tes mots. */}
+
+## Ce que je referais autrement
+
+{/* TODO Thomas : quelque chose que tu referais ou que tu veux faire ensuite ? L'app est-elle sur les stores, ou encore en test ? */}
+
+## Conclusion
+
+Nous Deux est une petite application, mais elle manipule certaines des données les plus personnelles qu'un téléphone puisse contenir. Mettre les règles dans la base, avec la sécurité au niveau des lignes, un trigger pour l'association et des suppressions en cascade pour le départ, garantit que l'application ne peut pas montrer plus qu'elle ne doit, même si le code Flutter se trompe.
+
+Le code est ouvert sur [GitHub](https://github.com/Eragon67360/nous-deux), et le projet a sa page dans [mes projets](/projects).
