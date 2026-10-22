@@ -1,0 +1,115 @@
+---
+title: "Nous Deux, a build log: a privacy-first couple app in Flutter and Supabase"
+description: How I built Nous Deux, a couple app with a shared calendar, period tracking and optional location sharing, and how its database decides who can see what.
+tags: ["flutter","supabase","privacy","build-log"]
+slug: nous-deux-build-log
+date: 2026-11-17
+duration: 6
+lang: en
+type: build-log
+translation: fr-nous-deux-build-log
+---
+
+## Introduction
+
+Nous Deux ("the two of us" in French) is a mobile app for couples: a shared calendar, period tracking and, if you want it, location sharing. Each of those features touches data people don't share lightly, so the whole project is built around one question: who can see what?
+
+This is a build log rather than a tutorial: what the app does, how it is put together, and the choices in the code that keep each partner's data where it belongs.
+
+{/* TODO Thomas: why did you build Nous Deux? A few lines in your own words: the idea, who it is for, whether you use it yourself. */}
+
+## What the app does
+
+Two people sign in, pair their accounts, and from then on share three things:
+
+- **A calendar** both partners can edit. Events can also be imported from the phone's own calendar.
+- **Period tracking**, with reminders, short guides and a list of verified sources to read more. When one partner logs a period, the other gets a notification.
+- **Location sharing**, off by default. When it is on, the partner sees your current position on a map.
+
+Sign-in works with a phone number (one-time code), Google or Apple. The app speaks French and English.
+
+## The stack
+
+The app is written in **Flutter**, so one codebase targets Android and iPhone. State lives in **Riverpod**, navigation in **go_router**.
+
+The backend is **Supabase**: Postgres, auth, real-time updates and one edge function. **Firebase Cloud Messaging** delivers push notifications and **Mapbox** draws the map. There is also a small **Next.js** marketing website in its own repository.
+
+The app repository has 63 commits, from 9 to 16 February 2026: the first version came together in about a week.
+
+{/* TODO Thomas: is that right, one intense week? Anything to add about how you worked (evenings, AI tools, a deadline)? */}
+
+## Pairing two accounts
+
+A couple starts with one partner. They create a couple row, and the app generates a six-character code from an alphabet without the characters people confuse (no `0`, `O`, `1` or `I`):
+
+```dart:lib/core/constants/app_constants.dart
+static const int pairingCodeLength = 6;
+static const String pairingCodeChars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+```
+
+The code is shown as text and as a QR code. The other partner types it or scans it, and the app sets them as the second member of the couple. A database trigger then links the two profiles, because neither user is allowed to edit the other's profile directly:
+
+```sql:supabase/migrations/20250209000008_couple_pairing_trigger.sql
+CREATE OR REPLACE FUNCTION public.on_couple_paired()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.user2_id IS NOT NULL AND (OLD.user2_id IS NULL OR OLD.user2_id IS DISTINCT FROM NEW.user2_id) THEN
+    UPDATE public.profiles SET partner_id = NEW.user2_id, updated_at = NOW() WHERE id = NEW.user1_id;
+    UPDATE public.profiles SET partner_id = NEW.user1_id, updated_at = NOW() WHERE id = NEW.user2_id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+```
+
+## Privacy lives in the database
+
+The app talks to Supabase with the public anon key, so the rules can't live in the Flutter code: anyone could call the API directly. Every table has row-level security, and the policies say exactly who reads what. Two small helper functions return "my partner" and "my couples", and the policies build on them.
+
+Period logs show the idea best. You manage your own logs, and your partner can read them, but only while you are in the same couple:
+
+```sql:supabase/migrations/20250209000006_rls_and_triggers.sql
+CREATE POLICY "Users can manage own period logs"
+  ON public.period_logs FOR ALL
+  USING (user_id = auth.uid())
+  WITH CHECK (user_id = auth.uid());
+
+CREATE POLICY "Users can read partner period logs in same couple"
+  ON public.period_logs FOR SELECT
+  USING (
+    couple_id IN (SELECT public.my_couple_ids())
+    AND user_id = public.my_partner_id()
+  );
+```
+
+Your partner can read your logs but never change them. Nobody outside the couple can see them at all.
+
+A few other choices follow the same idea:
+
+- **Location keeps no history.** The table holds one row per person, updated in place, with `is_sharing` set to `false` by default. There is no trail of where you have been, only where you are now, and only if you said yes.
+- **Notifications stay vague.** When a period is logged, a database webhook calls an edge function that sends the partner a push. The notification says that a log was added, and nothing about its content.
+- **Leaving deletes everything shared.** A `leave_couple` function unlinks both profiles and deletes the couple row. The foreign keys cascade, so the shared calendar, the period logs and the location rows go with it.
+
+{/* TODO Thomas: what does "privacy-first" mean to you for this app? Was there a feature you dropped or limited because of it? */}
+
+## Small details I like
+
+Some parts of the code exist for nobody but the user:
+
+- **The map follows the light.** The map style changes with the time of day, and on Android the app also reads the ambient light sensor, so the map darkens in a tunnel. On iPhone, which doesn't expose that sensor, it falls back to the time of day.
+- **The sources are checked every week.** The period guides link to outside sources. A GitHub Actions workflow checks those links whenever the list changes and every Monday, so a dead link doesn't sit in the app unnoticed.
+- **Android releases are automatic.** A push to `main` builds a signed app bundle, uploads it to Google Play's internal track and attaches the files to a GitHub release.
+
+## What was hard
+
+{/* TODO Thomas: what was the hardest part? Permissions, notifications, Apple sign-in, store review, something else? A few lines in your own words. */}
+
+## What I would do differently
+
+{/* TODO Thomas: anything you would redo or do next? Is the app on the stores, or still being tested? */}
+
+## Conclusion
+
+Nous Deux is a small app, but it handles some of the most personal data a phone can hold. Putting the rules in the database, with row-level security, a trigger for pairing and cascading deletes for leaving, means the app can't show more than it should, even if the Flutter code gets something wrong.
+
+The code is open on [GitHub](https://github.com/Eragon67360/nous-deux), and the project has its page in [my projects](/projects).
