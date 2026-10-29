@@ -1,0 +1,71 @@
+---
+title: Deezer répond à ses erreurs par un HTTP 200, et votre cache le croit
+description: L'API Deezer signale la plupart de ses échecs avec un HTTP 200 et l'erreur dans le corps. La détecter est facile ; le vrai piège, c'est de la garder hors du cache.
+tags: ["nextjs","deezerapi","caching","quick-lesson"]
+slug: fr-deezer-errors-http-200
+date: 2026-11-24
+duration: 4
+lang: fr
+type: quick-lesson
+translation: deezer-errors-http-200
+---
+
+## Introduction
+Le pied de page de ce site affiche le dernier morceau que j'ai écouté sur Deezer, et la [page activités](/activities) montre mes titres et artistes les plus écoutés. Tout cela vient de l'API Deezer, qui a une habitude contraire à ce qu'on attend d'une API : quand une requête échoue, elle répond en général quand même **HTTP 200**, et l'erreur se trouve dans le JSON.
+
+Mon [tutoriel Deezer](/blog/fr-connect-deezer-api-to-nextjs) explique comment la détecter. Cette courte leçon parle du deuxième endroit où elle pose problème : le cache.
+
+## L'erreur qui ressemble à un succès
+Un appel Deezer raté revient avec le statut 200 et un corps de cette forme :
+
+```ts
+type DeezerError = { error: { type: string; message: string; code: number } };
+```
+
+Les codes les plus courants sont `300` pour un jeton d'accès invalide, `200` pour une permission manquante et `4` quand le quota de requêtes est dépassé (environ 50 requêtes toutes les 5 secondes). `response.ok` vaut donc `true`, et il faut regarder dans le corps :
+
+```ts:services/deezer.service.ts
+const response = await fetch(url, { cache: "no-store" });
+await assertOk(response, `Deezer ${path}`);
+const body = await readJson<T | DeezerError>(response);
+if (typeof body !== "object" || body === null || !("error" in body)) return body;
+// sinon : on relance une erreur de quota avec un délai, ou on lève une erreur
+```
+
+## Là où le cache se fait avoir
+Les widgets de chaque visiteur interrogent régulièrement les routes API du site, et je ne voulais pas que chacune de ces requêtes aille jusqu'à Deezer. La solution évidente avec Next.js, c'est de mettre le fetch lui-même en cache, avec `next: { revalidate: 600 }`.
+
+Le problème, c'est la façon dont ce cache choisit ce qu'il garde. Le cache de fetch de Next enregistre toute réponse HTTP 200. Pour lui, une erreur Deezer est une réponse tout à fait valable. Un jeton expiré ou une erreur de quota, et le corps de l'erreur est enregistré puis resservi pendant toute la durée du cache : dix minutes pour mes classements, au lieu d'une demi-seconde pour une erreur de quota que la requête suivante aurait passée sans problème.
+
+C'est le même problème que la détection, une couche plus haut. Tout ce qui ne regarde que le code de statut prend une erreur Deezer pour un succès.
+
+{/* TODO Thomas : est-ce que c'est arrivé en production, ou tu l'as repéré en ajoutant le cache ? Une ou deux lignes avec tes mots (facultatif). */}
+
+## La solution : mettre en cache ce qu'on a vérifié
+Le fetch reste en `no-store`. Le cache remonte d'un niveau, autour de la fonction qui a déjà lu et vérifié le corps. `unstable_cache` enregistre ce que renvoie sa fonction, et une fonction qui lève une erreur n'enregistre rien :
+
+```ts:services/deezer.service.ts
+const inflight = new Map<string, Promise<unknown>>();
+
+function shared<T>(key: string, revalidate: number, load: () => Promise<T>): () => Promise<T> {
+  const read = unstable_cache(load, ["deezer", key], { revalidate });
+  return () => {
+    const pending = inflight.get(key);
+    if (pending) return pending as Promise<T>;
+    const loading = read().finally(() => inflight.delete(key));
+    inflight.set(key, loading);
+    return loading;
+  };
+}
+```
+
+`deezerGet` lève une erreur quand Deezer en renvoie une, donc une erreur n'atteint jamais le cache, et la requête suivante réessaie. La map `inflight` est un petit bonus : quand plusieurs requêtes arrivent en même temps sur la même instance, elles partagent un seul appel à Deezer.
+
+La même règle s'applique en bordure de réseau. Le helper des routes API laisse le CDN de Vercel partager un succès pendant 30 secondes à dix minutes selon la route, mais un échec répond avec `Cache-Control: private, no-store`, parce qu'une erreur en cache survivrait à la panne.
+
+Steam, que ce site interroge aussi, signale ses échecs avec de vrais codes de statut. Là, mettre le fetch en cache ne pose pas de problème, et c'est toujours ce que fait le service Steam.
+
+## La leçon
+Mettez en cache ce que vous avez vérifié, pas ce que le réseau vous a donné. Si une API signale ses erreurs dans le corps (Deezer le fait, et beaucoup de serveurs GraphQL répondent 200 avec un tableau `errors`), tout cache qui ne lit que le code de statut gardera vos erreurs sans broncher.
+
+Si vous voulez toute la mise en place de Deezer, du jeton d'accès au widget « dernier titre écouté », elle est dans mon [tutoriel Deezer](/blog/fr-connect-deezer-api-to-nextjs). Le résultat est visible en direct sur la [page activités](/activities).
