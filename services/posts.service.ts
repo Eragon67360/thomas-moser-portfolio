@@ -93,6 +93,20 @@ export async function getPostSummaries(limit?: number): Promise<PostMeta[]> {
   return (await getPosts()).slice(0, limit).map(({ body: _body, ...meta }) => meta);
 }
 
+/** The first `limit` posts, one per article: a post is skipped once its other-language version is in. */
+export function onePerArticle<T extends PostMeta>(posts: T[], limit: number): T[] {
+  const seen = new Set<string>();
+  const picked: T[] = [];
+  for (const post of posts) {
+    if (picked.length === limit) break;
+    if (seen.has(post.slug)) continue;
+    seen.add(post.slug);
+    if (post.translation) seen.add(post.translation);
+    picked.push(post);
+  }
+  return picked;
+}
+
 /** Posts that have recorded views, most viewed first. */
 export async function getMostViewedPosts(): Promise<PostWithViews[]> {
   const [posts, views] = await Promise.all([getPosts(), getAllPostViews()]);
