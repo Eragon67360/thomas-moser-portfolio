@@ -1,8 +1,11 @@
 import Link from "next/link";
-import { getMostViewedPosts, getPostSummaries } from "@/services/posts.service";
+import { getMostViewedPosts, getPostSummaries, onePerArticle } from "@/services/posts.service";
 import type { PostMeta } from "@/types/post";
 
 type PostCardData = PostMeta & { views?: number };
+
+/** Cards on the home page: two rows of two, however many posts the blog has. */
+const HOME_POST_LIMIT = 4;
 
 function PostCard({ post }: { post: PostCardData }) {
   return (
@@ -24,13 +27,19 @@ function PostCard({ post }: { post: PostCardData }) {
   );
 }
 
-/** Most viewed posts; the latest ones when view counts are unavailable, so the home page always links to the blog. */
+/**
+ * The most viewed articles, one card per article (not one per language), topped up with the latest ones when fewer
+ * have views or view counts are unavailable, so the home page always shows the same number of cards.
+ */
 export async function MostViewedPosts() {
-  const mostViewed: PostCardData[] = await getMostViewedPosts().catch((error: unknown) => {
-    console.error("Could not load post views", error);
-    return [];
-  });
-  const posts = mostViewed.length > 0 ? mostViewed : await getPostSummaries(4);
+  const [mostViewed, latest] = await Promise.all([
+    getMostViewedPosts().catch((error: unknown) => {
+      console.error("Could not load post views", error);
+      return [];
+    }),
+    getPostSummaries(),
+  ]);
+  const posts: PostCardData[] = onePerArticle<PostCardData>([...mostViewed, ...latest], HOME_POST_LIMIT);
   if (posts.length === 0) return null;
 
   return (
@@ -42,6 +51,11 @@ export async function MostViewedPosts() {
         {posts.map((post) => (
           <PostCard key={post.slug} post={post} />
         ))}
+      </div>
+      <div className="mt-3 flex justify-center lg:justify-end">
+        <Link href="/blog" className="py-1 text-sm text-muted transition-colors hover:text-accent">
+          All posts →
+        </Link>
       </div>
     </section>
   );
